@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Scripting Tool</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg-card: #141414;
+    --bg-card-hover: #1a1a1a;
+    --border: #262626;
+    --border-light: #333;
+    --accent: #f97316;
+    --accent-dim: #c2590c;
+    --text: #e5e5e5;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+    --success: #22c55e;
+    --error: #ef4444;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 14px; line-height: 1.5; }
+  a { color: var(--accent); text-decoration: none; }
+  button { cursor: pointer; font-family: inherit; }
+  input, textarea { font-family: inherit; font-size: 14px; }
+
+  /* Layout */
+  .app { max-width: 1100px; margin: 0 auto; padding: 24px 20px; }
+  .app-header { text-align: center; margin-bottom: 32px; }
+  .app-header h1 { font-size: 22px; font-weight: 700; color: var(--text); letter-spacing: -0.5px; }
+  .app-header h1 span { color: var(--accent); }
+  .app-header p { color: var(--text-muted); font-size: 13px; margin-top: 4px; }
+
+  /* Main Tabs */
+  .tabs { display: flex; gap: 4px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px; margin-bottom: 24px; }
+  .tab-btn { flex: 1; padding: 10px 16px; border: none; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600; border-radius: var(--radius-sm); transition: all .15s; }
+  .tab-btn:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+  .tab-btn.active { background: var(--accent); color: #000; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Sub-tabs (for Analyze) */
+  .sub-tabs { display: flex; gap: 2px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+  .sub-tab-btn { padding: 10px 20px; border: none; background: transparent; color: var(--text-muted); font-size: 13px; font-weight: 600; border-bottom: 2px solid transparent; transition: all .15s; }
+  .sub-tab-btn:hover { color: var(--text-secondary); }
+  .sub-tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+  .sub-panel { display: none; }
+  .sub-panel.active { display: block; }
+
+  /* Cards */
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+
+  /* Form elements */
+  .input-group { margin-bottom: 16px; }
+  .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .input { width: 100%; padding: 10px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); font-size: 14px; outline: none; transition: border .15s; }
+  .input:focus { border-color: var(--accent); }
+  textarea.input { resize: vertical; min-height: 80px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; transition: all .15s; }
+  .btn-primary { background: var(--accent); color: #000; }
+  .btn-primary:hover { background: #fb923c; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-secondary { background: var(--bg-card); color: var(--text-secondary); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--border-light); color: var(--text); }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  /* Status / progress */
+  .status-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-top: 16px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); }
+  .status-dot.active { background: var(--accent); animation: pulse 1.5s infinite; }
+  .status-dot.done { background: var(--success); }
+  .status-dot.error { background: var(--error); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .status-text { font-size: 13px; color: var(--text-secondary); }
+
+  /* Analysis bars */
+  .pattern-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .pattern-row:last-child { border-bottom: none; }
+  .pattern-id { font-size: 12px; font-weight: 700; color: var(--accent); width: 40px; flex-shrink: 0; }
+  .pattern-bar-wrap { flex: 1; }
+  .pattern-name { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .pattern-name-fr { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .pattern-bar { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+  .pattern-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width .5s ease; }
+  .pattern-pct { font-size: 12px; font-weight: 600; color: var(--text-secondary); width: 50px; text-align: right; flex-shrink: 0; }
+  .pattern-examples { margin-top: 6px; }
+  .pattern-example { font-size: 11px; color: var(--text-muted); padding: 4px 0; font-style: italic; }
+
+  /* Script grid */
+  .script-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+
+  .script-card { position: relative; border-radius: var(--radius); overflow: hidden; cursor: pointer; border: 1px solid var(--border); transition: all .2s; min-height: 220px; display: flex; flex-direction: column; }
+  .script-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(249,115,22,0.1); }
+  .script-card-bg { position: absolute; inset: 0; z-index: 0; }
+  .script-card-content { position: relative; z-index: 1; padding: 20px; flex: 1; display: flex; flex-direction: column; }
+  .script-card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .tag { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+  .tag-hook { background: rgba(249,115,22,0.2); color: var(--accent); }
+  .tag-structure { background: rgba(34,197,94,0.15); color: var(--success); }
+  .script-card-preview { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.6; flex: 1; }
+  .script-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .score-badge { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+  .score-high { background: rgba(34,197,94,0.15); color: var(--success); }
+  .score-mid { background: rgba(249,115,22,0.15); color: var(--accent); }
+  .score-low { background: rgba(239,68,68,0.15); color: var(--error); }
+  .word-count { font-size: 11px; color: var(--text-muted); }
+
+  /* Gradient backgrounds for script cards */
+  .gradient-1 { background: linear-gradient(135deg, #1a0a00 0%, #0d1117 60%, #141414 100%); }
+  .gradient-2 { background: linear-gradient(135deg, #0a1a0a 0%, #0d1117 60%, #141414 100%); }
+  .gradient-3 { background: linear-gradient(135deg, #0a0a1a 0%, #0d1117 60%, #141414 100%); }
+  .gradient-4 { background: linear-gradient(135deg, #1a0a1a 0%, #0d1117 60%, #141414 100%); }
+
+  /* Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 24px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; max-width: 700px; width: 100%; max-height: 80vh; overflow-y: auto; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--border); }
+  .modal-header h3 { font-size: 16px; font-weight: 700; }
+  .modal-close { background: none; border: none; color: var(--text-muted); font-size: 20px; padding: 4px 8px; }
+  .modal-close:hover { color: var(--text); }
+  .modal-body { padding: 24px; }
+  .modal-body .script-text { font-size: 14px; line-height: 1.8; color: var(--text); white-space: pre-wrap; }
+  .modal-body .score-section { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+  .score-detail { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
+  .score-detail .label { color: var(--text-secondary); }
+  .score-detail .value { color: var(--text); font-weight: 600; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+
+  /* Chat UI */
+  .chat-container { display: flex; flex-direction: column; height: 500px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .chat-bubble { max-width: 80%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; }
+  .chat-bubble.agent { align-self: flex-start; background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.2); color: var(--text); border-bottom-left-radius: 4px; }
+  .chat-bubble.user { align-self: flex-end; background: var(--accent); color: #000; border-bottom-right-radius: 4px; }
+  .chat-bubble.system { align-self: center; background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: var(--success); text-align: center; font-size: 13px; }
+  .chat-input-row { display: flex; gap: 8px; padding: 12px 16px; border-top: 1px solid var(--border); background: var(--bg); }
+  .chat-input { flex: 1; padding: 10px 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-size: 14px; outline: none; }
+  .chat-input:focus { border-color: var(--accent); }
+  .chat-send { width: 40px; height: 40px; border-radius: 50%; border: none; background: var(--accent); color: #000; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+  .chat-send:hover { background: #fb923c; }
+  .chat-send:disabled { opacity: 0.4; }
+  .niche-result { margin-top: 16px; padding: 16px; background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.2); border-radius: var(--radius-sm); }
+  .niche-result h4 { font-size: 13px; font-weight: 700; color: var(--success); margin-bottom: 8px; }
+  .niche-result .kv { display: flex; gap: 8px; padding: 4px 0; font-size: 13px; }
+  .niche-result .kv .k { color: var(--text-muted); min-width: 120px; }
+  .niche-result .kv .v { color: var(--text); }
+
+  /* Empty states */
+  .empty { text-align: center; padding: 48px 24px; color: var(--text-muted); }
+  .empty p { margin-top: 8px; font-size: 13px; }
+
+  .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--border-light); border-top-color: var(--accent); border-radius: 50%; animation: spin .6s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Structure card */
+  .structure-card { padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 12px; }
+  .structure-card h4 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+  .structure-card .pct { font-size: 20px; font-weight: 800; color: var(--accent); }
+  .structure-card p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="app-header">
+    <h1>Content <span>Scripting</span> Tool</h1>
+    <p>Scrape, analyze, and generate viral video scripts</p>
+  </div>
+
+  <!-- Main Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="scrape">Scrape</button>
+    <button class="tab-btn" data-tab="analyze">Analyze</button>
+    <button class="tab-btn" data-tab="generate">Generate</button>
+    <button class="tab-btn" data-tab="niche">My Niche</button>
+  </div>
+
+  <!-- ============ TAB: SCRAPE ============ -->
+  <div id="tab-scrape" class="tab-panel active">
+    <div class="card">
+      <div class="card-title">Scrape Instagram Reels</div>
+      <div class="input-group">
+        <label>Instagram Profile</label>
+        <div style="display:flex; gap:8px;">
+          <input class="input" id="scrape-profile" placeholder="@username" style="flex:1;">
+          <button class="btn btn-primary" id="btn-scrape">Scrape</button>
+          <button class="btn btn-secondary" id="btn-stop-scrape" style="display:none;">Stop</button>
+        </div>
+      </div>
+      <div id="scrape-status" class="status-bar" style="display:none;">
+        <div class="status-dot" id="scrape-dot"></div>
+        <span class="status-text" id="scrape-text"></span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Transcribe Audio</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Uses local Whisper to transcribe all downloaded videos.</p>
+      <div style="display:flex; gap:8px; align-items:center;">
+        <button class="btn btn-primary" id="btn-transcribe">Transcribe</button>
+        <span id="transcribe-count" style="font-size:13px; color:var(--text-secondary);"></span>
+      </div>
+      <div id="transcribe-status" class="status-bar" style="display:none;">
+        <div class="status-dot" id="transcribe-dot"></div>
+        <span class="status-text" id="transcribe-text"></span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <div class="card-title">Search Transcripts</div>
+      <input class="input" id="search-input" placeholder="Search keywords...">
+      <div id="search-results" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: ANALYZE ============ -->
+  <div id="tab-analyze" class="tab-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div></div>
+      <button class="btn btn-primary" id="btn-analyze">Run Analysis</button>
+    </div>
+
+    <div class="card" id="analysis-card" style="display:none;">
+      <div class="sub-tabs">
+        <button class="sub-tab-btn active" data-sub="hooks">Hook</button>
+        <button class="sub-tab-btn" data-sub="middles">Middle</button>
+        <button class="sub-tab-btn" data-sub="closings">Closing</button>
+        <button class="sub-tab-btn" data-sub="structure">Structure</button>
+      </div>
+
+      <div id="sub-hooks" class="sub-panel active"></div>
+      <div id="sub-middles" class="sub-panel"></div>
+      <div id="sub-closings" class="sub-panel"></div>
+      <div id="sub-structure" class="sub-panel"></div>
+    </div>
+
+    <div id="analysis-empty" class="empty">
+      <p style="font-size:20px;">&#128202;</p>
+      <p>Click "Run Analysis" to extract the content framework from your transcripts.</p>
+    </div>
+  </div>
+
+  <!-- ============ TAB: GENERATE ============ -->
+  <div id="tab-generate" class="tab-panel">
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">Generate Scripts</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div class="input-group" style="margin:0;">
+          <label>Topic</label>
+          <input class="input" id="gen-topic" placeholder="e.g., Why robots need universal charging">
+        </div>
+        <div class="input-group" style="margin:0;">
+          <label>Trending News (optional)</label>
+          <input class="input" id="gen-trend" placeholder="e.g., Tesla just announced...">
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-generate" style="margin-top:12px;">Generate 3 Scripts</button>
+      <div id="gen-loading" style="display:none; margin-top:12px; font-size:13px; color:var(--text-muted);"><span class="loading-spinner"></span> Generating scripts...</div>
+    </div>
+
+    <div id="scripts-grid" class="script-grid"></div>
+
+    <div id="gen-empty" class="empty">
+      <p style="font-size:20px;">&#9997;&#65039;</p>
+      <p>Enter a topic and generate scripts based on the extracted framework.</p>
+    </div>
+
+    <!-- Script history -->
+    <div id="scripts-history" style="margin-top:32px; display:none;">
+      <h3 style="font-size:14px; font-weight:700; color:var(--text-secondary); margin-bottom:12px;">Previous Batches</h3>
+      <div id="history-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: NICHE ============ -->
+  <div id="tab-niche" class="tab-panel">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+      <div>
+        <h3 style="font-size:16px; font-weight:700;">Niche Agent</h3>
+        <p style="font-size:12px; color:var(--text-muted);">Answer 5 questions so I can understand your business.</p>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="btn-reset-niche">Reset</button>
+    </div>
+
+    <div class="chat-container" id="chat-container">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input class="chat-input" id="chat-input" placeholder="Type your answer..." disabled>
+        <button class="chat-send" id="chat-send" disabled>&#8594;</button>
+      </div>
+    </div>
+
+    <div id="niche-saved" style="display:none;"></div>
+  </div>
+</div>
+
+<!-- Modal for expanded script -->
+<div class="modal-overlay" id="script-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-title">Script</h3>
+      <button class="modal-close" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="script-card-tags" id="modal-tags"></div>
+      <div class="script-text" id="modal-script-text"></div>
+      <div class="score-section" id="modal-score-section"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary btn-sm" id="modal-copy">Copy Script</button>
+      <button class="btn btn-primary btn-sm" id="modal-regenerate">Regenerate</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== TAB SWITCHING =====
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// Sub-tabs
+document.querySelectorAll('.sub-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('sub-' + btn.dataset.sub).classList.add('active');
+  });
+});
+
+// ===== SCRAPE =====
+const btnScrape = document.getElementById('btn-scrape');
+const btnStopScrape = document.getElementById('btn-stop-scrape');
+const btnTranscribe = document.getElementById('btn-transcribe');
+let pollInterval = null;
+
+btnScrape.addEventListener('click', async () => {
+  const profile = document.getElementById('scrape-profile').value.trim();
+  if (!profile) return;
+  const res = await fetch('/scrape', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ profile }) });
+  if (res.ok) {
+    btnScrape.disabled = true;
+    btnStopScrape.style.display = '';
+    startPoll();
+  } else {
+    const d = await res.json();
+    alert(d.error);
+  }
+});
+
+btnStopScrape.addEventListener('click', async () => {
+  await fetch('/stop-scrape', { method: 'POST' });
+  btnStopScrape.style.display = 'none';
+  btnScrape.disabled = false;
+});
+
+btnTranscribe.addEventListener('click', async () => {
+  const res = await fetch('/transcribe', { method: 'POST' });
+  if (res.ok) {
+    btnTranscribe.disabled = true;
+    startPoll();
+  }
+});
+
+function startPoll() {
+  if (pollInterval) return;
+  pollInterval = setInterval(updateStatus, 2000);
+  updateStatus();
+}
+
+async function updateStatus() {
+  try {
+    const res = await fetch('/status');
+    const s = await res.json();
+
+    // Scrape status
+    const scrapeBar = document.getElementById('scrape-status');
+    const scrapeDot = document.getElementById('scrape-dot');
+    const scrapeText = document.getElementById('scrape-text');
+    if (s.scraping || s.scrape_done || s.scrape_count > 0) {
+      scrapeBar.style.display = '';
+      scrapeDot.className = 'status-dot ' + (s.scraping ? 'active' : s.scrape_done ? 'done' : '');
+      scrapeText.textContent = s.scraping ? 'Scraping... ' + s.scrape_count + ' videos' : s.scrape_done ? 'Done: ' + s.scrape_count + ' videos' : s.scrape_count + ' videos';
+      if (!s.scraping) { btnScrape.disabled = false; btnStopScrape.style.display = 'none'; }
+    }
+
+    // Transcribe status
+    const transBar = document.getElementById('transcribe-status');
+    const transDot = document.getElementById('transcribe-dot');
+    const transText = document.getElementById('transcribe-text');
+    document.getElementById('transcribe-count').textContent = s.transcribed_count > 0 ? s.transcribed_count + ' transcribed' : '';
+    if (s.transcribing || s.transcribe_done) {
+      transBar.style.display = '';
+      transDot.className = 'status-dot ' + (s.transcribing ? 'active' : 'done');
+      transText.textContent = s.transcribing ? 'Transcribing... ' + s.transcribed_count + ' done' : 'Transcription complete: ' + s.transcribed_count;
+      if (!s.transcribing) btnTranscribe.disabled = false;
+    }
+
+    if (s.error) {
+      scrapeDot.className = 'status-dot error';
+      scrapeText.textContent = 'Error: ' + s.error;
+    }
+
+    if (!s.scraping && !s.transcribing) {
+      clearInterval(pollInterval);
+      pollInterval = null;
+    }
+  } catch(e) {}
+}
+
+// Search
+let searchTimeout = null;
+document.getElementById('search-input').addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => doSearch(e.target.value), 300);
+});
+
+async function doSearch(q) {
+  const res = await fetch('/transcripts/search?q=' + encodeURIComponent(q));
+  const data = await res.json();
+  const container = document.getElementById('search-results');
+  if (!data.results || data.results.length === 0) {
+    container.innerHTML = '<p style="color:var(--text-muted); font-size:13px;">No results.</p>';
+    return;
+  }
+  container.innerHTML = data.results.slice(0, 20).map(r =>
+    '<div style="padding:8px 0; border-bottom:1px solid var(--border);">' +
+      '<div style="font-size:12px; color:var(--accent); font-weight:600;">' + escapeHtml(r.name) + '</div>' +
+      '<div style="font-size:13px; color:var(--text-secondary); margin-top:2px;">' + escapeHtml(r.snippet || r.text || '') + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ===== ANALYZE =====
+const btnAnalyze = document.getElementById('btn-analyze');
+let analysisData = null;
+
+btnAnalyze.addEventListener('click', async () => {
+  btnAnalyze.disabled = true;
+  btnAnalyze.innerHTML = '<span class="loading-spinner"></span> Analyzing...';
+  try {
+    const res = await fetch('/analyze', { method: 'POST' });
+    if (!res.ok) { alert((await res.json()).error); return; }
+    analysisData = await res.json();
+    renderAnalysis(analysisData);
+  } finally {
+    btnAnalyze.disabled = false;
+    btnAnalyze.textContent = 'Run Analysis';
+  }
+});
+
+// Load existing analysis on page load
+(async () => {
+  try {
+    const res = await fetch('/analysis');
+    if (res.ok) {
+      analysisData = await res.json();
+      renderAnalysis(analysisData);
+    }
+  } catch {}
+})();
+
+function renderAnalysis(data) {
+  document.getElementById('analysis-empty').style.display = 'none';
+  document.getElementById('analysis-card').style.display = '';
+
+  renderPatternList('sub-hooks', data.hooks, data.total_transcripts);
+  renderPatternList('sub-middles', data.middles, data.total_transcripts);
+  renderPatternList('sub-closings', data.closings, data.total_transcripts);
+  renderStructure(data);
+}
+
+function renderPatternList(containerId, patterns, total) {
+  const el = document.getElementById(containerId);
+  const maxPct = Math.max(...patterns.map(p => p.percentage), 1);
+  el.innerHTML = '<p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">Based on ' + total + ' transcripts</p>' +
+    patterns.filter(p => p.count > 0).map(p => {
+      let examplesHtml = '';
+      if (p.examples && p.examples.length > 0) {
+        examplesHtml = '<div class="pattern-examples">' +
+          p.examples.slice(0, 2).map(ex =>
+            '<div class="pattern-example">"' + escapeHtml(ex.text.slice(0, 120)) + '"</div>'
+          ).join('') + '</div>';
+      }
+      return '<div class="pattern-row">' +
+        '<div class="pattern-id">' + escapeHtml(p.id) + '</div>' +
+        '<div class="pattern-bar-wrap">' +
+          '<div class="pattern-name">' + escapeHtml(p.name) + '</div>' +
+          (p.name_fr ? '<div class="pattern-name-fr">' + escapeHtml(p.name_fr) + '</div>' : '') +
+          '<div class="pattern-bar"><div class="pattern-bar-fill" style="width:' + (p.percentage / maxPct * 100).toFixed(0) + '%"></div></div>' +
+          examplesHtml +
+        '</div>' +
+        '<div class="pattern-pct">' + p.percentage + '%</div>' +
+      '</div>';
+    }).join('');
+}
+
+function renderStructure(data) {
+  const el = document.getElementById('sub-structure');
+  el.innerHTML =
+    '<p style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Most common script structures found across ' + data.total_transcripts + ' transcripts</p>' +
+    '<div class="structure-card"><h4>Bold Claim &rarr; Explain Why &rarr; Takeaway</h4><div class="pct">~50%</div><p>Opens with a strong opinion, backs it up, ends with a lesson. The dominant pattern.</p></div>' +
+    '<div class="structure-card"><h4>Personal Story &rarr; Insight</h4><div class="pct">~21%</div><p>"I did/saw X... and here\'s what I learned." Builds relatability then delivers value.</p></div>' +
+    '<div class="structure-card"><h4>Myth &rarr; Bust &rarr; Reality</h4><div class="pct">~8%</div><p>"People think X. But actually Y." Challenges assumptions for engagement.</p></div>' +
+    '<div class="structure-card"><h4>Other patterns</h4><div class="pct">~21%</div><p>Various hybrid structures: question-answer, list format, problem-solution, etc.</p></div>';
+}
+
+// ===== GENERATE =====
+const btnGenerate = document.getElementById('btn-generate');
+let currentBatchScripts = [];
+let currentTopic = '';
+let currentTrend = '';
+
+btnGenerate.addEventListener('click', async () => {
+  const topic = document.getElementById('gen-topic').value.trim();
+  const trend = document.getElementById('gen-trend').value.trim();
+  if (!topic) { alert('Enter a topic'); return; }
+
+  currentTopic = topic;
+  currentTrend = trend;
+  btnGenerate.disabled = true;
+  document.getElementById('gen-loading').style.display = '';
+  document.getElementById('gen-empty').style.display = 'none';
+
+  try {
+    const res = await fetch('/generate-scripts', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ topic: topic, trend: trend })
+    });
+    if (!res.ok) { alert((await res.json()).error); return; }
+    const batch = await res.json();
+    if (batch.parsed_scripts && batch.parsed_scripts.length > 0) {
+      currentBatchScripts = batch.parsed_scripts;
+      renderScriptCards(batch.parsed_scripts);
+    } else {
+      // Fallback: show raw text
+      document.getElementById('scripts-grid').innerHTML =
+        '<div class="card" style="grid-column:1/-1;"><pre style="white-space:pre-wrap; font-size:13px; color:var(--text);">' + escapeHtml(batch.scripts) + '</pre></div>';
+    }
+    loadHistory();
+  } finally {
+    btnGenerate.disabled = false;
+    document.getElementById('gen-loading').style.display = 'none';
+  }
+});
+
+function renderScriptCards(scripts) {
+  const grid = document.getElementById('scripts-grid');
+  const gradients = ['gradient-1', 'gradient-2', 'gradient-3', 'gradient-4'];
+  grid.innerHTML = scripts.map((s, i) => {
+    const score = s.score ? s.score.score : 0;
+    const scoreClass = score >= 70 ? 'score-high' : score >= 40 ? 'score-mid' : 'score-low';
+    const words = s.body ? s.body.split(/\s+/).length : 0;
+    const preview = s.body ? escapeHtml(s.body.slice(0, 180)) + (s.body.length > 180 ? '...' : '') : '';
+    const hookTag = s.hook ? '<span class="tag tag-hook">' + escapeHtml(s.hook.split('\u2014')[0].trim()) + '</span>' : '';
+    const structTag = s.structure ? '<span class="tag tag-structure">' + escapeHtml(s.structure.split('>')[0].trim()) + '</span>' : '';
+    return '<div class="script-card" onclick="openScriptModal(' + i + ')">' +
+      '<div class="script-card-bg ' + gradients[i % gradients.length] + '"></div>' +
+      '<div class="script-card-content">' +
+        '<div class="script-card-tags">' + hookTag + structTag + '</div>' +
+        '<div class="script-card-preview">' + preview + '</div>' +
+        '<div class="script-card-footer">' +
+          '<span class="score-badge ' + scoreClass + '">' + score + '/100</span>' +
+          '<span class="word-count">' + words + ' words</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// Script Modal
+function openScriptModal(index) {
+  const s = currentBatchScripts[index];
+  if (!s) return;
+  document.getElementById('modal-title').textContent = 'Script ' + (s.index || (index + 1));
+  document.getElementById('modal-tags').innerHTML =
+    (s.hook ? '<span class="tag tag-hook">' + escapeHtml(s.hook) + '</span>' : '') +
+    (s.structure ? '<span class="tag tag-structure">' + escapeHtml(s.structure) + '</span>' : '');
+  document.getElementById('modal-script-text').textContent = s.body || '';
+
+  // Score breakdown
+  const scoreSection = document.getElementById('modal-score-section');
+  if (s.score && s.score.breakdown) {
+    const bd = s.score.breakdown;
+    scoreSection.innerHTML = '<h4 style="font-size:14px; font-weight:700; margin-bottom:12px;">Score: ' + s.score.score + '/100</h4>' +
+      Object.entries(bd).map(function(entry) {
+        var k = entry[0], v = entry[1];
+        return '<div class="score-detail">' +
+          '<span class="label">' + k.charAt(0).toUpperCase() + k.slice(1).replace('_', ' ') + '</span>' +
+          '<span class="value">' + v.score + '/' + v.max + ' \u2014 ' + escapeHtml(v.detail) + '</span>' +
+        '</div>';
+      }).join('');
+  } else {
+    scoreSection.innerHTML = '';
+  }
+
+  document.getElementById('script-modal').classList.add('show');
+  document.getElementById('modal-regenerate').dataset.index = index;
+}
+
+document.getElementById('modal-close').addEventListener('click', () => {
+  document.getElementById('script-modal').classList.remove('show');
+});
+document.getElementById('script-modal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) e.currentTarget.classList.remove('show');
+});
+
+document.getElementById('modal-copy').addEventListener('click', () => {
+  const text = document.getElementById('modal-script-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('modal-copy');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy Script'; }, 1500);
+  });
+});
+
+document.getElementById('modal-regenerate').addEventListener('click', async () => {
+  const idx = parseInt(document.getElementById('modal-regenerate').dataset.index);
+  const btn = document.getElementById('modal-regenerate');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading-spinner"></span>';
+
+  try {
+    const res = await fetch('/regenerate-script', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ topic: currentTopic, trend: currentTrend, script_number: (idx + 1) })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      currentBatchScripts[idx].body = data.script;
+      renderScriptCards(currentBatchScripts);
+      document.getElementById('modal-script-text').textContent = data.script;
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Regenerate';
+  }
+});
+
+// History
+async function loadHistory() {
+  try {
+    const res = await fetch('/scripts-history');
+    const data = await res.json();
+    if (data.batches && data.batches.length > 0) {
+      const historyDiv = document.getElementById('scripts-history');
+      historyDiv.style.display = '';
+      document.getElementById('history-list').innerHTML = data.batches.slice(0, 10).map(b =>
+        '<div style="padding:10px 0; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">' +
+          '<div>' +
+            '<div style="font-size:13px; font-weight:600; color:var(--text);">' + escapeHtml(b.topic) + '</div>' +
+            '<div style="font-size:11px; color:var(--text-muted);">' + escapeHtml(b.created_at) + (b.trend ? ' &middot; ' + escapeHtml(b.trend.slice(0, 50)) : '') + '</div>' +
+          '</div>' +
+          '<button class="btn btn-secondary btn-sm" onclick="loadBatch(\'' + b.id + '\')">View</button>' +
+        '</div>'
+      ).join('');
+    }
+  } catch(e) {}
+}
+
+function loadBatch(batchId) {
+  fetch('/scripts-history').then(r => r.json()).then(data => {
+    const batch = data.batches.find(b => b.id === batchId);
+    if (batch && batch.parsed_scripts) {
+      currentBatchScripts = batch.parsed_scripts;
+      currentTopic = batch.topic;
+      currentTrend = batch.trend || '';
+      renderScriptCards(batch.parsed_scripts);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+}
+
+// Load history on page load
+loadHistory();
+
+// ===== NICHE CHAT AGENT =====
+const chatMessages = document.getElementById('chat-messages');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+let chatHistory = [];
+let nicheDone = false;
+
+function addChatBubble(role, text) {
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble ' + role;
+  bubble.textContent = text;
+  chatMessages.appendChild(bubble);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addNicheResult(niche) {
+  const div = document.createElement('div');
+  div.className = 'niche-result';
+  div.innerHTML = '<h4>Niche Profile Saved</h4>' +
+    Object.entries(niche).map(function(entry) {
+      return '<div class="kv"><span class="k">' + escapeHtml(entry[0]) + ':</span><span class="v">' + escapeHtml(entry[1]) + '</span></div>';
+    }).join('');
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function initChat() {
+  chatHistory = [];
+  nicheDone = false;
+  chatMessages.innerHTML = '';
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+
+  // Check if niche already saved
+  try {
+    const nicheRes = await fetch('/niche');
+    const niche = await nicheRes.json();
+    if (niche.company) {
+      addChatBubble('system', 'Niche already configured for "' + niche.company + '". Chat to reconfigure or click Reset.');
+      addNicheResult(niche);
+    }
+  } catch(e) {}
+
+  // Get first question
+  const res = await fetch('/niche-chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ messages: [] })
+  });
+  const data = await res.json();
+  addChatBubble('agent', data.reply);
+  chatInput.disabled = false;
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+async function sendChatMessage() {
+  const text = chatInput.value.trim();
+  if (!text || nicheDone) return;
+
+  addChatBubble('user', text);
+  chatHistory.push({ role: 'user', content: text });
+  chatInput.value = '';
+  chatInput.disabled = true;
+  chatSend.disabled = true;
+
+  const res = await fetch('/niche-chat', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ messages: chatHistory })
+  });
+  const data = await res.json();
+
+  if (data.error) {
+    addChatBubble('system', 'Error: ' + data.error);
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    return;
+  }
+
+  addChatBubble('agent', data.reply);
+  chatHistory.push({ role: 'agent', content: data.reply });
+
+  if (data.done) {
+    nicheDone = true;
+    if (data.niche) addNicheResult(data.niche);
+    chatInput.placeholder = 'Niche saved! Click Reset to start over.';
+  } else {
+    chatInput.disabled = false;
+    chatSend.disabled = false;
+    chatInput.focus();
+  }
+}
+
+chatSend.addEventListener('click', sendChatMessage);
+chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChatMessage(); });
+
+document.getElementById('btn-reset-niche').addEventListener('click', () => {
+  initChat();
+});
+
+// Init chat when niche tab is shown
+document.querySelector('[data-tab="niche"]').addEventListener('click', () => {
+  if (chatMessages.children.length === 0) initChat();
+});
+
+// Auto-load status on page load
+updateStatus();
+</script>
+</body>
+</html>

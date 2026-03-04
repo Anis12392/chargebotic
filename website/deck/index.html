@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | Solving Energy for Robotics</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9889;</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            margin: 0 auto;
+            padding: 24px 20px 32px;
+            max-width: 800px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* ── DOWNLOAD BAR ── */
+        .download-bar {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #1a1207 0%, #111 100%);
+            border: 1px solid #2a1f0a;
+            border-radius: 10px;
+        }
+
+        .download-bar a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f97316;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            text-decoration: none;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+        }
+
+        .download-bar a:hover {
+            background: #fb923c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+        }
+
+        .download-bar .dl-hint {
+            font-size: 10px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* ── HEADER ── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .logo-area h1 {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+        }
+
+        .logo-area .tagline {
+            font-size: 11px;
+            font-weight: 400;
+            color: #888;
+            margin-top: 2px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 10px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .header-right strong {
+            color: #aaa;
+        }
+
+        /* ── HERO STATEMENT ── */
+        .hero {
+            background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+            border: 1px solid #222;
+            border-radius: 10px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 16px;
+            font-weight: 500;
+            line-height: 1.55;
+            color: #d4d4d4;
+        }
+
+        .hero strong {
+            color: #ffffff;
+        }
+
+        .hero .accent {
+            color: #f97316;
+            font-weight: 700;
+        }
+
+        /* ── THESIS ── */
+        .section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #f97316;
+            margin-bottom: 8px;
+        }
+
+        .thesis {
+            margin-bottom: 24px;
+        }
+
+        .thesis h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .thesis p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        .thesis p strong {
+            color: #d4d4d4;
+        }
+
+        /* ── HYPOTHESES ── */
+        .hypotheses {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .hypothesis {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .hypothesis .h-number {
+            font-size: 9px;
+            font-weight: 700;
+            color: #f97316;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .hypothesis h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .hypothesis p {
+            font-size: 11px;
+            line-height: 1.5;
+            color: #888;
+        }
+
+        /* ── VERTICALS ── */
+        .verticals {
+            margin-bottom: 20px;
+        }
+
+        .verticals-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 8px;
+        }
+
+        .vertical-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        .vertical-card .v-icon {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .vertical-card .v-name {
+            font-size: 9px;
+            font-weight: 600;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+
+        .vertical-card .v-detail {
+            font-size: 9px;
+            color: #666;
+            margin-top: 3px;
+            line-height: 1.3;
+        }
+
+        /* ── MARKET ── */
+        .market-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .market-stat {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .market-stat .number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #f97316;
+        }
+
+        .market-stat .label {
+            font-size: 9px;
+            font-weight: 500;
+            color: #888;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── APPROACH ── */
+        .approach {
+            background: linear-gradient(135deg, #1a1207 0%, #111 100%);
+            border: 1px solid #2a1f0a;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+
+        .approach h3 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #f97316;
+            margin-bottom: 10px;
+        }
+
+        .approach-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .approach-step {
+            text-align: center;
+        }
+
+        .approach-step .step-num {
+            font-size: 16px;
+            font-weight: 800;
+            color: #f97316;
+            margin-bottom: 3px;
+        }
+
+        .approach-step .step-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #d4d4d4;
+            margin-bottom: 2px;
+        }
+
+        .approach-step .step-detail {
+            font-size: 9px;
+            color: #777;
+            line-height: 1.3;
+        }
+
+        /* ── TEAM ── */
+        .team {
+            margin-bottom: 20px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .team-member {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .team-member .name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1px;
+        }
+
+        .team-member .role {
+            font-size: 10px;
+            font-weight: 600;
+            color: #f97316;
+            margin-bottom: 5px;
+        }
+
+        .team-member .bio {
+            font-size: 10px;
+            line-height: 1.5;
+            color: #888;
+        }
+
+        .team-member .bio strong {
+            color: #bbb;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #1e1e1e;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-left {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .footer-left strong {
+            color: #aaa;
+        }
+
+        .footer-right {
+            font-size: 10px;
+            color: #555;
+            text-align: right;
+        }
+
+        .footer-cta-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-cta-group a {
+            display: inline-block;
+            background: #f97316;
+            color: #000;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 10px 22px;
+            border-radius: 6px;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .footer-cta-group a:hover {
+            background: #fb923c;
+        }
+
+        /* ── MOBILE RESPONSIVE ── */
+        @media (max-width: 680px) {
+            body {
+                padding: 16px 16px 32px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 16px;
+            }
+
+            .header-right {
+                text-align: left;
+            }
+
+            .logo-area h1 {
+                font-size: 24px;
+            }
+
+            .hero {
+                padding: 16px 18px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .thesis h2 {
+                font-size: 16px;
+            }
+
+            .thesis p {
+                font-size: 12px;
+            }
+
+            .hypotheses {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .hypothesis h3 {
+                font-size: 14px;
+            }
+
+            .hypothesis p {
+                font-size: 12px;
+            }
+
+            .verticals-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+            }
+
+            .market-bar {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .market-stat {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+
+            .market-stat .number {
+                font-size: 22px;
+            }
+
+            .market-stat .label {
+                text-align: left;
+                margin-top: 0;
+            }
+
+            .approach-steps {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+
+            .footer-right {
+                text-align: center;
+            }
+
+            .footer-cta-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .download-bar a {
+                font-size: 12px;
+                padding: 12px 24px;
+            }
+        }
+
+        /* ── PRINT (A4 PDF) ── */
+        @media print {
+            body {
+                width: 210mm;
+                height: 297mm;
+                padding: 24px 32px 16px;
+                overflow: hidden;
+                max-width: none;
+            }
+
+            .download-bar {
+                display: none !important;
+            }
+
+            .header { margin-bottom: 14px; }
+            .logo-area h1 { font-size: 26px; }
+            .hero { padding: 16px 24px; margin-bottom: 14px; }
+            .hero p { font-size: 14px; line-height: 1.45; }
+            .section-label { font-size: 8px; margin-bottom: 5px; }
+            .thesis { margin-bottom: 12px; }
+            .thesis h2 { font-size: 15px; margin-bottom: 5px; }
+            .thesis p { font-size: 10.5px; line-height: 1.5; }
+            .hypotheses { gap: 8px; margin-bottom: 12px; }
+            .hypothesis { padding: 10px 14px; }
+            .hypothesis .h-number { font-size: 8px; margin-bottom: 3px; }
+            .hypothesis h3 { font-size: 11px; margin-bottom: 3px; }
+            .hypothesis p { font-size: 9.5px; line-height: 1.4; }
+            .verticals { margin-bottom: 10px; }
+            .verticals-grid { grid-template-columns: repeat(6, 1fr); gap: 6px; }
+            .vertical-card { padding: 8px 6px; }
+            .vertical-card .v-icon { font-size: 18px; margin-bottom: 3px; }
+            .market-bar { gap: 8px; margin-bottom: 10px; }
+            .market-stat { padding: 10px 14px; display: block; text-align: center; }
+            .market-stat .number { font-size: 20px; }
+            .market-stat .label { margin-top: 2px; }
+            .approach { padding: 12px 18px; margin-bottom: 10px; }
+            .approach h3 { font-size: 11px; margin-bottom: 6px; }
+            .approach-step .step-num { font-size: 14px; }
+            .approach-step .step-label { font-size: 9px; }
+            .approach-step .step-detail { font-size: 8px; }
+            .approach-steps { grid-template-columns: repeat(4, 1fr); }
+            .team { margin-bottom: 10px; }
+            .team-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+            .team-member { padding: 10px 14px; }
+            .team-member .name { font-size: 12px; }
+            .team-member .role { font-size: 9px; margin-bottom: 4px; }
+            .team-member .bio { font-size: 9px; line-height: 1.4; }
+            .footer { padding-top: 8px; flex-wrap: nowrap; }
+            .footer-left { font-size: 10px; }
+            .footer-cta-group a { font-size: 9px; padding: 8px 20px; }
+            .footer-cta-group img { width: 52px; height: 52px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- DOWNLOAD BAR -->
+    <div class="download-bar">
+        <a href="chargebotic-onepager.pdf" download>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="vertical-align: middle;">
+                <path d="M8 1v9m0 0L5 7m3 3l3-3M2 12v1.5A1.5 1.5 0 003.5 15h9a1.5 1.5 0 001.5-1.5V12" stroke="#000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Download One Pager (PDF)
+        </a>
+        <div class="dl-hint">A4 format, ready to print or share</div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="logo-area">
+            <h1>Chargebotic</h1>
+            <div class="tagline">Solving Energy for Autonomous Robotics</div>
+        </div>
+        <div class="header-right">
+            <strong>San Francisco, CA</strong><br>
+            Pre-seed &middot; Research Phase<br>
+            chargebotic.com
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <p>
+            We are <strong>3 ex-Tesla, Apple & Meta engineers</strong> in San Francisco,
+            applying our <span class="accent">Electric Vehicle charging expertise</span> to the
+            fastest-growing problem in robotics: <strong>energy.</strong>
+        </p>
+    </div>
+
+    <!-- THESIS -->
+    <div class="thesis">
+        <div class="section-label">Our Thesis</div>
+        <h2>Energy will define which autonomous fleets scale and which die.</h2>
+        <p>
+            Rovers on the Moon die because energy isn't there. Warehouse AMRs spend 30% of their time
+            charging instead of working. Delivery robots have a 4-hour window before they're useless.
+            <strong>Every robotics vertical hits the same wall: energy management is unsolved,
+            fragmented, and costs more than the robots themselves.</strong> We believe whoever builds
+            the universal energy layer for robots wins a generational infrastructure market.
+        </p>
+    </div>
+
+    <!-- HYPOTHESES -->
+    <div class="section-label">Hypotheses We're Validating</div>
+    <div class="hypotheses">
+        <div class="hypothesis">
+            <div class="h-number">Hypothesis 1</div>
+            <h3>Energy is the #1 cost driver for fleet operators</h3>
+            <p>Charging infrastructure, downtime, and battery management account for more operational cost than the robots themselves at scale.</p>
+        </div>
+        <div class="hypothesis">
+            <div class="h-number">Hypothesis 2</div>
+            <h3>No universal charging layer exists today</h3>
+            <p>Every robot brand has its own siloed charging solution. Mixed fleets can't share infrastructure. The "Android moment" for robot energy hasn't happened.</p>
+        </div>
+        <div class="hypothesis">
+            <div class="h-number">Hypothesis 3</div>
+            <h3>Software orchestration beats hardware alone</h3>
+            <p>45% of infrastructure value is shifting to the software & AI layer. The real moat is intelligence: routing, scheduling, and fleet-wide optimization.</p>
+        </div>
+        <div class="hypothesis">
+            <div class="h-number">Hypothesis 4</div>
+            <h3>The problem is universal across verticals</h3>
+            <p>From warehouses to lunar rovers, the energy coordination challenge is structurally the same. One platform can serve them all.</p>
+        </div>
+    </div>
+
+    <!-- VERTICALS -->
+    <div class="verticals">
+        <div class="section-label">Verticals We're Exploring</div>
+        <div class="verticals-grid">
+            <div class="vertical-card">
+                <div class="v-icon">&#9881;</div>
+                <div class="v-name">AMR</div>
+                <div class="v-detail">Warehouses & Factories</div>
+            </div>
+            <div class="vertical-card">
+                <div class="v-icon">&#9992;</div>
+                <div class="v-name">UAV</div>
+                <div class="v-detail">Drones & Aerial</div>
+            </div>
+            <div class="vertical-card">
+                <div class="v-icon">&#128230;</div>
+                <div class="v-name">Last Mile</div>
+                <div class="v-detail">Delivery Robots</div>
+            </div>
+            <div class="vertical-card">
+                <div class="v-icon">&#129302;</div>
+                <div class="v-name">Humanoid</div>
+                <div class="v-detail">Next-gen Workforce</div>
+            </div>
+            <div class="vertical-card">
+                <div class="v-icon">&#127981;</div>
+                <div class="v-name">Industrial</div>
+                <div class="v-detail">Heavy & Outdoor</div>
+            </div>
+            <div class="vertical-card">
+                <div class="v-icon">&#127761;</div>
+                <div class="v-name">Space</div>
+                <div class="v-detail">Lunar & Mars Rovers</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MARKET -->
+    <div class="market-bar">
+        <div class="market-stat">
+            <div class="number">$38B</div>
+            <div class="label">Robot charging infra by 2033</div>
+        </div>
+        <div class="market-stat">
+            <div class="number">3M+</div>
+            <div class="label">Autonomous robots by 2028</div>
+        </div>
+        <div class="market-stat">
+            <div class="number">30%</div>
+            <div class="label">Fleet time lost to charging</div>
+        </div>
+    </div>
+
+    <!-- APPROACH -->
+    <div class="approach">
+        <h3>Our Approach: Research-First, Then Build</h3>
+        <div class="approach-steps">
+            <div class="approach-step">
+                <div class="step-num">01</div>
+                <div class="step-label">Talk to operators</div>
+                <div class="step-detail">Deep interviews across all 6 verticals</div>
+            </div>
+            <div class="approach-step">
+                <div class="step-num">02</div>
+                <div class="step-label">Map the pain</div>
+                <div class="step-detail">Quantify cost of energy per vertical</div>
+            </div>
+            <div class="approach-step">
+                <div class="step-num">03</div>
+                <div class="step-label">Find the wedge</div>
+                <div class="step-detail">Identify highest pain, fastest deploy segment</div>
+            </div>
+            <div class="approach-step">
+                <div class="step-num">04</div>
+                <div class="step-label">Ship & iterate</div>
+                <div class="step-detail">MVP in weeks, not months</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="team">
+        <div class="section-label">Core Team</div>
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="name">Anis Cheriet</div>
+                <div class="role">Co-founder & CEO</div>
+                <div class="bio"><strong>Ex-EV charging infrastructure.</strong> Led Europe's largest charging deployments twice. Deep expertise in energy systems at scale.</div>
+            </div>
+            <div class="team-member">
+                <div class="name">Christopher Redfearn</div>
+                <div class="role">Co-founder & Hardware Lead</div>
+                <div class="bio"><strong>Ex-Apple & Meta.</strong> Hardware lead, MS in CS. Builds space-grade reliable systems from scratch.</div>
+            </div>
+            <div class="team-member" style="opacity: 0.5;">
+                <div class="name">R. M.</div>
+                <div class="role" style="color: #666;">Head of Software (joining post-raise)</div>
+                <div class="bio"><strong>Currently at Tesla.</strong> Working on Optimus robot charger & Robotaxi energy systems. Ph.D. in CS, 6 years in AI & robotics.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-left">
+            <strong>We'd love your feedback.</strong><br>
+            What energy challenges do you see in robotics?
+        </div>
+        <div class="footer-cta-group">
+            <a href="https://chargebotic.com/deck/chargebotic-built.html">See What We've Built &rarr;</a>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF0AAABdCAIAAABIE/2UAAACaElEQVR4nO2cPW7DMAxGk6JT0EXH7Il6TC09QDctZGj+SUmB96YilmXnAxmKFKv74/G4geBDfgTo8pTP9df8/roVGD+/z+aRl9YnuafL23PzGDNjLzrocuVHHisN2a3HfeRgD/smXGAvOuji9qOQj4RuD4UqT2TxOFTuW2AvOugS96N2PMs5w9fkmFDQCYG96KDLKT8ajhAj7d8IQx7Pagd70UGXuB+NlLkajuBZsxXrFcaEIbAXHXRx+9GslbwWOa/xhKr2AqAEe9FBF537gf2jGcn0c8GrHexFB13i+0cj8iPftcTylLLXa3jiUagAyP7RBehyKh7NiG3LS5JQWsQ+7F7QZc/+0exuUcjFkdAjJOzDekGX1rr3rJUFQhMaM8tLoaKE8T7Yiw66FPxo1LaEJPKuUMUglCh53kdewl500MWdH81IPm6Q2yTyDN63CCQ/ugBd9vQzzJQjhMbkXMOTrxkPxV500KW1XjdTBef2yBJyFuNbyMHYiw66FOp1I9IOd6AoLdMiz9M9My+wFx10ce/Djm31AQ/FtrpiFCMeXYAuV37U1ZU6mvp5PAXALq8hP/KCLoX8aNb+36ercCfvMt4w1+ZEPLoAXa78qCtDn91tpe1N3azr8qDL8f46g5f0/ITGYC866HLqvKCRKmUX12PyUrEkjr3ooMup84Jm6vc/9AgD+oL2gi7HzwvqymJCBwd5xnheHnvRQZe3POdk7q8hGFCvC4Mub3Du1r4ydVfMWmAvOuhy/LygkeodyrlGe4kee9FBl+PnBRl4+otCa79iox11Bi/o8rrzgv4j2IsOutxU/gDSaOevLfa8jwAAAABJRU5ErkJggg==" alt="QR Code" style="width: 52px; height: 52px;">
+        </div>
+        <div class="footer-right">
+            anis@chargebotic.com<br>
+            San Francisco, 2025
+        </div>
+    </div>
+
+</body>
+</html>

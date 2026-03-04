@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | Our Advisors</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            min-height: 100vh;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-block;
+            font-size: 10px;
+            color: #f97316;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .page-header p {
+            font-size: 11px;
+            color: #666;
+        }
+
+        .section-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: #f97316;
+            margin-bottom: 10px;
+        }
+
+        .advisors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .advisor-card {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+
+        .advisor-tag {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .advisor-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #ccc;
+        }
+
+        .advisor-bio {
+            font-size: 10px;
+            color: #888;
+            margin-top: 2px;
+            line-height: 1.5;
+        }
+
+        .advisor-bio strong {
+            color: #bbb;
+        }
+
+        /* ── CTA SECTION ── */
+        .cta-section {
+            margin-top: 48px;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .cta-section .cta-sub {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 28px;
+            line-height: 1.6;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background: #f97316;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .cta-btn:hover {
+            background: #fb923c;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.3);
+        }
+
+        /* ── FUNNEL ── */
+        .funnel {
+            display: none;
+            margin-top: 36px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .funnel.active {
+            display: block;
+        }
+
+        .funnel-step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .funnel-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .funnel-question {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .funnel-hint {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .funnel-progress {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .funnel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #222;
+            transition: background 0.3s ease;
+        }
+
+        .funnel-dot.active {
+            background: #f97316;
+        }
+
+        .funnel-dot.done {
+            background: #f97316;
+            opacity: 0.4;
+        }
+
+        .role-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .role-option {
+            background: #111;
+            border: 1px solid #1e1e1e;
+            border-radius: 10px;
+            padding: 18px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .role-option:hover {
+            border-color: #f97316;
+            background: #1a1207;
+        }
+
+        .role-option.selected {
+            border-color: #f97316;
+            background: #1a1207;
+        }
+
+        .role-option .role-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .role-option .role-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .role-option .role-desc {
+            font-size: 9px;
+            color: #666;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        .funnel-input {
+            width: 100%;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            outline: none;
+            margin-bottom: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        .funnel-input:focus {
+            border-color: #f97316;
+        }
+
+        .funnel-input::placeholder {
+            color: #444;
+        }
+
+        .funnel-textarea {
+            width: 100%;
+            background: #111;
+            border: 1px solid #1e1e1e;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            padding: 14px 18px;
+            border-radius: 10px;
+            outline: none;
+            resize: vertical;
+            min-height: 100px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        .funnel-textarea:focus {
+            border-color: #f97316;
+        }
+
+        .funnel-textarea::placeholder {
+            color: #444;
+        }
+
+        .funnel-next {
+            display: inline-block;
+            background: #f97316;
+            color: #000;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .funnel-next:hover {
+            background: #fb923c;
+        }
+
+        .funnel-next:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+
+        .funnel-back {
+            background: none;
+            border: none;
+            color: #555;
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            cursor: pointer;
+            margin-right: 16px;
+            transition: color 0.2s;
+        }
+
+        .funnel-back:hover {
+            color: #f97316;
+        }
+
+        .success-msg {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .success-msg.active {
+            display: block;
+        }
+
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .success-msg h3 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .success-msg p {
+            font-size: 13px;
+            color: #888;
+            line-height: 1.6;
+        }
+
+        .page-footer {
+            text-align: center;
+            margin-top: 48px;
+            padding-top: 16px;
+            border-top: 1px solid #1e1e1e;
+            font-size: 10px;
+            color: #555;
+        }
+
+        .page-footer a {
+            color: #f97316;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <a href="chargebotic-story.html" class="back-link">&larr; Back to Our Story</a>
+
+        <div class="page-header">
+            <h1>Our Advisors</h1>
+            <p>World-class operators at the intersection of autonomous systems, EV charging, and robotics.</p>
+        </div>
+
+        <div class="section-label">Advisors</div>
+
+        <div class="advisors-grid">
+            <div class="advisor-card">
+                <div class="advisor-tag">Advisor &middot; Head of Software (joining post-raise)</div>
+                <div class="advisor-name">R. M.</div>
+                <div class="advisor-bio"><strong>Currently at Tesla.</strong> Working on Optimus robot charger & Robotaxi energy systems. Ph.D. in CS, 6 years in AI & robotics.</div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section" id="ctaSection">
+            <h2>Do you want to help us?</h2>
+            <p class="cta-sub">We're building the energy layer for autonomous robotics.<br>Join us on this journey.</p>
+            <button class="cta-btn" onclick="startFunnel()">I'm interested &rarr;</button>
+        </div>
+
+        <!-- FUNNEL -->
+        <div class="funnel" id="funnel">
+
+            <div class="funnel-progress">
+                <div class="funnel-dot" id="dot1"></div>
+                <div class="funnel-dot" id="dot2"></div>
+                <div class="funnel-dot" id="dot3"></div>
+            </div>
+
+            <!-- STEP 1: Role -->
+            <div class="funnel-step" id="step1">
+                <div class="funnel-question">How would you like to contribute?</div>
+                <div class="funnel-hint">Select the role that fits you best.</div>
+                <div class="role-options">
+                    <div class="role-option" onclick="selectRole(this, 'Advisor')">
+                        <div class="role-icon">&#129309;</div>
+                        <div class="role-label">Advisor</div>
+                        <div class="role-desc">Share your expertise &amp; network</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole(this, 'Angel Investor')">
+                        <div class="role-icon">&#128176;</div>
+                        <div class="role-label">Angel Investor</div>
+                        <div class="role-desc">Back the mission early</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole(this, 'Partner')">
+                        <div class="role-icon">&#127919;</div>
+                        <div class="role-label">Partner</div>
+                        <div class="role-desc">Collaborate or integrate</div>
+                    </div>
+                    <div class="role-option" onclick="selectRole(this, 'Engineer')">
+                        <div class="role-icon">&#9881;</div>
+                        <div class="role-label">Engineer</div>
+                        <div class="role-desc">Join the founding team</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2: Contact info -->
+            <div class="funnel-step" id="step2">
+                <div class="funnel-question">How can we reach you?</div>
+                <div class="funnel-hint">We'll get back to you within 24 hours.</div>
+                <input type="email" class="funnel-input" id="funnelEmail" placeholder="Your email" oninput="checkStep2()">
+                <input type="tel" class="funnel-input" id="funnelPhone" placeholder="Phone number (optional)">
+                <div style="text-align: center; margin-top: 8px;">
+                    <button class="funnel-back" onclick="goStep(1)">&larr; Back</button>
+                    <button class="funnel-next" id="step2Next" onclick="goStep(3)" disabled>Continue &rarr;</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Message -->
+            <div class="funnel-step" id="step3">
+                <div class="funnel-question">Anything you'd like to add?</div>
+                <div class="funnel-hint">Tell us about yourself, your experience, or what excites you about Chargebotic.</div>
+                <textarea class="funnel-textarea" id="funnelMessage" placeholder="Write something... (optional)"></textarea>
+                <div style="text-align: center; margin-top: 8px;">
+                    <button class="funnel-back" onclick="goStep(2)">&larr; Back</button>
+                    <button class="funnel-next" onclick="submitFunnel()">Submit &rarr;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success-msg" id="successMsg">
+            <div class="success-icon">&#9889;</div>
+            <h3>Thank you!</h3>
+            <p>We received your interest and will reach out shortly.<br>In the meantime, feel free to email us at <strong>anis@chargebotic.com</strong></p>
+        </div>
+
+        <div class="page-footer">
+            <p>Chargebotic &middot; San Francisco &middot; <a href="chargebotic-one-pager.html">Back to One Pager</a></p>
+        </div>
+
+    </div>
+
+    <script>
+        var selectedRole = '';
+
+        function startFunnel() {
+            document.getElementById('ctaSection').style.display = 'none';
+            document.getElementById('funnel').classList.add('active');
+            goStep(1);
+        }
+
+        function goStep(n) {
+            document.querySelectorAll('.funnel-step').forEach(function(s) { s.classList.remove('active'); });
+            document.getElementById('step' + n).classList.add('active');
+            // animate in
+            var el = document.getElementById('step' + n);
+            el.style.animation = 'none';
+            el.offsetHeight;
+            el.style.animation = 'fadeIn 0.3s ease';
+            // dots
+            for (var i = 1; i <= 3; i++) {
+                var dot = document.getElementById('dot' + i);
+                dot.className = 'funnel-dot';
+                if (i < n) dot.classList.add('done');
+                if (i === n) dot.classList.add('active');
+            }
+        }
+
+        function selectRole(el, role) {
+            selectedRole = role;
+            document.querySelectorAll('.role-option').forEach(function(o) { o.classList.remove('selected'); });
+            el.classList.add('selected');
+            setTimeout(function() { goStep(2); }, 300);
+        }
+
+        function checkStep2() {
+            var email = document.getElementById('funnelEmail').value.trim();
+            document.getElementById('step2Next').disabled = !(email && email.includes('@'));
+        }
+
+        function submitFunnel() {
+            var data = {
+                role: selectedRole,
+                email: document.getElementById('funnelEmail').value.trim(),
+                phone: document.getElementById('funnelPhone').value.trim(),
+                message: document.getElementById('funnelMessage').value.trim(),
+                _subject: 'Chargebotic — New ' + selectedRole + ' interest',
+                _template: 'table'
+            };
+
+            fetch('https://formsubmit.co/ajax/anis@chargebotic.com', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(function(res) { return res.json(); })
+            .then(function() {
+                document.getElementById('funnel').classList.remove('active');
+                document.getElementById('successMsg').classList.add('active');
+            })
+            .catch(function() {
+                document.getElementById('funnel').classList.remove('active');
+                document.getElementById('successMsg').classList.add('active');
+            });
+        }
+    </script>
+
+</body>
+</html>

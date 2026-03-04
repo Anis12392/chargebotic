@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What We've Built | Chargebotic</title>
+    <meta name="description" content="In 3 months, from zero to a full autonomous charging stack. Spark-E Robot, Induction Charger, Autonomous Navigation, and Charging Orchestration.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Chargebotic</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="built.html" class="active">Built</a></li>
+                <li><a href="story.html">Our Story</a></li>
+                <li><a href="advisors.html">Advisors</a></li>
+                <li><a href="mailto:anis@chargebotic.com" class="nav-cta">Get in Touch</a></li>
+            </ul>
+            <button class="nav-hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="page-hero-content">
+            <a href="/" class="page-hero-back">&larr; Back to Home</a>
+            <h1 class="section-title" style="font-size: clamp(36px, 5vw, 56px); letter-spacing: -2px;">What We've Built</h1>
+            <p class="section-subtitle" style="margin: 16px auto 0; text-align: center;">In 3 months, from zero to a full autonomous charging stack.</p>
+        </div>
+    </section>
+
+    <!-- Hardware -->
+    <section class="section" style="padding-top: 40px;">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Hardware</div>
+            </div>
+            <div class="grid-2 fade-in">
+                <div class="card">
+                    <div class="img-placeholder" style="margin-bottom: 24px; aspect-ratio: 4/3; background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);">
+                        <span style="color: var(--color-text-muted); font-size: 48px;">🤖</span>
+                    </div>
+                    <div class="card-title">Spark-E Robot</div>
+                    <p class="card-text">Mecanum-wheel rover built from scratch. <strong style="color: var(--color-white);">NVIDIA Jetson Orin Nano</strong>, LiDAR, OAK-D Lite depth camera, IMU, ultrasonic sensors, wheel encoders.</p>
+                    <div class="tags">
+                        <span class="tag">NVIDIA Jetson</span>
+                        <span class="tag">LiDAR</span>
+                        <span class="tag">OAK-D Lite</span>
+                        <span class="tag">Mecanum</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="img-placeholder" style="margin-bottom: 24px; aspect-ratio: 4/3; background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);">
+                        <span style="color: var(--color-text-muted); font-size: 48px;">⚡</span>
+                    </div>
+                    <div class="card-title">Induction Charger</div>
+                    <p class="card-text">Wireless charging station. Started at <strong style="color: var(--color-white);">5W</strong>, scaled to <strong style="color: var(--color-white);">100W</strong>. Millimeter-precision docking. Zero human intervention.</p>
+                    <div class="tags">
+                        <span class="tag">Induction</span>
+                        <span class="tag">5W → 100W</span>
+                        <span class="tag">Precision Docking</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Software -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Software</div>
+            </div>
+            <div class="grid-2 fade-in">
+                <div class="card">
+                    <div class="card-title">Autonomous Navigation</div>
+                    <p class="card-text">Proprietary mapping and pathfinding system. <strong style="color: var(--color-white);">Sensor fusion</strong> for obstacle avoidance. Robot maps its environment and navigates to any point.</p>
+                    <div class="tags">
+                        <span class="tag">Sensor Fusion</span>
+                        <span class="tag">SLAM</span>
+                        <span class="tag">Pathfinding</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Charging Orchestration</div>
+                    <p class="card-text">Detects low battery, plans route, docks, charges, resumes mission. <strong style="color: var(--color-white);">Full autonomous loop.</strong> Fleet-aware scheduling and optimization.</p>
+                    <div class="tags">
+                        <span class="tag">Orchestration</span>
+                        <span class="tag">Fleet-aware</span>
+                        <span class="tag">Autonomous Loop</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full System -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">The Full System</div>
+                <h2 class="section-title">Chargebotic V1</h2>
+            </div>
+            <div class="fade-in" style="background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px; padding: 48px;">
+                <p style="font-size: 18px; line-height: 1.7; color: var(--color-text-secondary); max-width: 700px;">
+                    <strong style="color: var(--color-white);">Robotics platform</strong> + <strong style="color: var(--color-white);">Battery</strong> + <strong style="color: var(--color-white);">Charging infrastructure</strong> + <strong style="color: var(--color-white);">Orchestration software</strong>. End-to-end autonomous charging, ready to deploy.
+                </p>
+                <div class="img-placeholder" style="margin-top: 32px; aspect-ratio: 16/9; background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);">
+                    <span style="color: var(--color-text-muted); font-size: 64px;">🔋</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+        <div class="container">
+            <div style="text-align: center;" class="fade-in">
+                <a href="story.html" class="btn-primary" style="font-size: 16px; padding: 18px 40px;">
+                    Our Story: How We Got Here <span class="btn-arrow">&rarr;</span>
+                </a>
+                <p style="font-size: 14px; color: var(--color-text-muted); margin-top: 12px;">From lunar research to a working autonomous charging stack</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="footer-logo">Chargebotic</div>
+                    <div class="footer-text">San Francisco, CA &middot; Pre-seed &middot; 2025</div>
+                </div>
+                <div class="footer-links">
+                    <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
+                    <a href="/">Home</a>
+                    <a href="story.html">Story</a>
+                    <a href="advisors.html">Advisors</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

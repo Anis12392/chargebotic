@@ -1,0 +1,9 @@
+.tmp/
+.env
+__pycache__/
+*.pyc
+.DS_Store
+token.json
+credentials.json
+*.mp4
+*.pdf
