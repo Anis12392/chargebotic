@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | What We've Built</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #e8e8e8;
+            min-height: 100vh;
+            padding: 48px 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ── HEADER ── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            color: #888;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .back-link {
+            display: inline-block;
+            font-size: 11px;
+            color: #f97316;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        /* ── TIMELINE ── */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 12px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #f97316 0%, #333 50%, #1a1a1a 100%);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f97316;
+            border: 3px solid #0a0a0a;
+            box-shadow: 0 0 0 2px #f97316;
+        }
+
+        .timeline-item.future::before {
+            background: #333;
+            box-shadow: 0 0 0 2px #333;
+        }
+
+        .timeline-date {
+            font-size: 10px;
+            font-weight: 700;
+            color: #f97316;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        .timeline-item.future .timeline-date {
+            color: #555;
+        }
+
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .timeline-item.future .timeline-title {
+            color: #666;
+        }
+
+        .timeline-desc {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #888;
+            margin-bottom: 12px;
+        }
+
+        .timeline-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .timeline-images img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #222;
+            background: #111;
+        }
+
+        .timeline-images .img-placeholder {
+            width: 100%;
+            height: 160px;
+            border-radius: 8px;
+            border: 2px dashed #2a2a2a;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .img-placeholder span {
+            font-size: 10px;
+            color: #444;
+            font-weight: 500;
+        }
+
+        .img-placeholder .plus {
+            font-size: 24px;
+            color: #333;
+        }
+
+        /* ── TECH SPECS ── */
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .tech-tag {
+            font-size: 9px;
+            font-weight: 600;
+            color: #888;
+            background: #1a1a1a;
+            border: 1px solid #222;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── FOOTER ── */
+        .page-footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 24px;
+            border-top: 1px solid #1e1e1e;
+        }
+
+        .page-footer p {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .page-footer a {
+            color: #f97316;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <a href="index.html" class="back-link">&larr; Back to One Pager</a>
+
+        <div class="page-header">
+            <h1>What We've Built</h1>
+            <p>Our journey building autonomous charging infrastructure for robots. From concept to working prototype.</p>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="timeline">
+
+            <!-- ITEM 1 -->
+            <div class="timeline-item">
+                <div class="timeline-date">Dec 2025</div>
+                <div class="timeline-title">Lunar Charging Research</div>
+                <div class="timeline-desc">
+                    Started with our core hypothesis: rovers on the Moon die because energy infrastructure doesn't exist. Researched inductive charging through lunar regolith and extreme environment constraints.
+                </div>
+                <div class="timeline-images">
+                    <!-- ADD YOUR IMAGES HERE: replace src with your image path -->
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                </div>
+            </div>
+
+            <!-- ITEM 2 -->
+            <div class="timeline-item">
+                <div class="timeline-date">Jan 2026</div>
+                <div class="timeline-title">Spark-E Robot: Hardware Build</div>
+                <div class="timeline-desc">
+                    Built our own mecanum-wheel rover from scratch. NVIDIA Jetson Orin Nano, LiDAR (RPLiDAR), OAK-D Lite depth camera, IMU, ultrasonic sensors, wheel encoders. Arduino Mega for low-level control.
+                </div>
+                <div class="timeline-images">
+                    <!-- ADD YOUR IMAGES HERE -->
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">NVIDIA Jetson</span>
+                    <span class="tech-tag">ROS 2 Humble</span>
+                    <span class="tech-tag">LiDAR</span>
+                    <span class="tech-tag">OAK-D Lite</span>
+                    <span class="tech-tag">Mecanum Wheels</span>
+                </div>
+            </div>
+
+            <!-- ITEM 3 -->
+            <div class="timeline-item">
+                <div class="timeline-date">Jan 2026</div>
+                <div class="timeline-title">Autonomous Navigation System</div>
+                <div class="timeline-desc">
+                    Integrated SLAM + Nav2 for mapping and navigation. Sensor fusion for obstacle avoidance. The robot can map its environment and navigate autonomously to any point.
+                </div>
+                <div class="timeline-images">
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">SLAM</span>
+                    <span class="tech-tag">Nav2</span>
+                    <span class="tech-tag">Sensor Fusion</span>
+                    <span class="tech-tag">PyTorch</span>
+                    <span class="tech-tag">YOLO</span>
+                </div>
+            </div>
+
+            <!-- ITEM 4 -->
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 2026</div>
+                <div class="timeline-title">Induction Charging Dock</div>
+                <div class="timeline-desc">
+                    Designed and built a universal induction charging station. Wireless power transfer with millimeter precision docking. The robot autonomously locates, navigates to, and docks with the charger. Zero human intervention.
+                </div>
+                <div class="timeline-images">
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">Induction Charging</span>
+                    <span class="tech-tag">Precision Docking</span>
+                    <span class="tech-tag">Computer Vision</span>
+                </div>
+            </div>
+
+            <!-- ITEM 5 -->
+            <div class="timeline-item">
+                <div class="timeline-date">Feb 2026</div>
+                <div class="timeline-title">Full Autonomous Charging Demo</div>
+                <div class="timeline-desc">
+                    End-to-end demo: Spark-E detects low battery, plans route to nearest charger, navigates autonomously, docks with millimeter precision, charges, and resumes its mission. Fully autonomous loop.
+                </div>
+                <div class="timeline-images">
+                    <div class="img-placeholder"><span class="plus">+</span><span>Add image</span></div>
+                </div>
+            </div>
+
+            <!-- ITEM 6: FUTURE -->
+            <div class="timeline-item future">
+                <div class="timeline-date">Next</div>
+                <div class="timeline-title">Finding Product Market Fit</div>
+                <div class="timeline-desc">
+                    Deep customer discovery across AMR, UAV, last-mile delivery, humanoid robots, warehouses, and industrial applications. Identifying the highest pain vertical to deploy first.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="page-footer">
+            <p>Chargebotic &middot; San Francisco &middot; <a href="index.html">Back to One Pager</a></p>
+        </div>
+
+    </div>
+
+</body>
+</html>

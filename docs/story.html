@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story | Chargebotic</title>
+    <meta name="description" content="How we went from a lunar energy hypothesis to a full autonomous charging stack in 3 months.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">Chargebotic</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="built.html">Built</a></li>
+                <li><a href="story.html" class="active">Our Story</a></li>
+                <li><a href="advisors.html">Advisors</a></li>
+                <li><a href="mailto:anis@chargebotic.com" class="nav-cta">Get in Touch</a></li>
+            </ul>
+            <button class="nav-hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Hero -->
+    <section class="page-hero">
+        <div class="hero-bg"></div>
+        <div class="page-hero-content">
+            <a href="built.html" class="page-hero-back">&larr; Back to What We've Built</a>
+            <h1 class="section-title" style="font-size: clamp(36px, 5vw, 56px); letter-spacing: -2px;">Our Story</h1>
+            <p class="section-subtitle" style="margin: 16px auto 0; text-align: center;">How we went from a lunar energy hypothesis to a full autonomous charging stack in 3 months.</p>
+        </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="section" style="padding-top: 40px;">
+        <div class="container" style="max-width: 800px;">
+
+            <div class="timeline">
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Dec 6, 2025</div>
+                    <div class="timeline-title">Rovers Die on the Moon</div>
+                    <p class="timeline-text">A $100M rover dies in 14 days because <strong style="color: var(--color-white);">energy isn't there</strong>. Solar panels only work in sunlight, batteries drain in the lunar night (-173&deg;C). We asked: what if we could deploy energy nodes for opportunity charging?</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Dec 2025</div>
+                    <div class="timeline-title">Induction Is The Way</div>
+                    <p class="timeline-text">Researched how to charge on the Moon. Found that <strong style="color: var(--color-white);">induction is the best method</strong>: no connectors to jam with regolith dust, no moving parts. Discovered Astrobotic's wireless charging research in thermal vacuum testing, confirming the approach.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Dec 2025</div>
+                    <div class="timeline-title">LEN: Lunar Energy Node Network</div>
+                    <p class="timeline-text">Designed the <strong style="color: var(--color-white);">Lunar Energy Node</strong> concept: small, deployable charging modules buried in regolith for thermal protection. Nodes form a mesh network with AI-assisted routing, creating the first multi-node lunar energy grid.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Jan 2026</div>
+                    <div class="timeline-title">LEN-P: The Projectile Battery</div>
+                    <p class="timeline-text">Designed the LEN-P: a rugged cylindrical battery with wireless charging dock, 1-2 kWh storage, shock absorbers, thermal management, and ground-penetration anchoring. Engineered to survive impact.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Jan 2026</div>
+                    <div class="timeline-title">LEN-P Prototype Roadmap</div>
+                    <p class="timeline-text">Mapped out the <strong style="color: var(--color-white);">prototype development phases</strong>: from core electronics (Phase 1) to V0 cylinder, shock buffer, embed/penetrator, charging box, and finally the full-scale 1 kWh form factor. Physical prototypes at each stage.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Jan 5, 2026</div>
+                    <div class="timeline-title">Energy Delivery: Projectile Prototype</div>
+                    <p class="timeline-text">3D-printed the LEN-P projectile at 1/3 scale (155mm form factor reference). Researched artillery shell aerodynamics and impact resistance. The idea: catapult energy to the Moon. Drop it from orbit, it lands and becomes a charging node.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Jan 6, 2026</div>
+                    <div class="timeline-title">Building the V0: Robot + Conductive Charger</div>
+                    <p class="timeline-text"><strong style="color: var(--color-white);">Pivoted from Moon to Earth</strong> to validate the core technology. Built Spark-E from scratch and our first conductive charging station. The team at the Artifact lab in SF, hands-on hardware.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Jan 2026</div>
+                    <div class="timeline-title">Spark-E + Autonomous Conductive Charging</div>
+                    <p class="timeline-text">First autonomous charging demo. Spark-E with NVIDIA Jetson, LiDAR, depth camera detects the ArUco marker, navigates to the conductive pad, and charges itself. Zero human intervention.</p>
+                    <div class="tags timeline-tags">
+                        <span class="tag">NVIDIA Jetson</span>
+                        <span class="tag">ROS 2</span>
+                        <span class="tag">LiDAR</span>
+                        <span class="tag">SLAM + Nav2</span>
+                        <span class="tag">ArUco Detection</span>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Feb 2026</div>
+                    <div class="timeline-title">Rafael Joins the Team</div>
+                    <p class="timeline-text">Rafael M. joins as advisor. His expertise in <strong style="color: var(--color-white);">charging orchestration for autonomous vehicles</strong> transformed our navigation system into a full charging orchestration layer.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Feb 2026</div>
+                    <div class="timeline-title">Navigation Becomes Orchestrator</div>
+                    <p class="timeline-text">Evolved the navigation system into a <strong style="color: var(--color-white);">charging orchestration layer</strong>. The robot detects low battery, plans route to nearest charger, docks with precision, charges, and resumes its mission. Full autonomous loop.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Feb 2026</div>
+                    <div class="timeline-title">Induction Charger: 5W to 100W</div>
+                    <p class="timeline-text">Built our own <strong style="color: var(--color-white);">induction charging pads</strong>. Started at 5W, scaled to <strong style="color: var(--color-white);">100W</strong>. Custom 3D-printed enclosures with copper coils. Wireless, no connectors, no dust issues. The same technology for the Moon works on Earth.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Feb 2026</div>
+                    <div class="timeline-title">Chargebotic V1: Full Stack</div>
+                    <p class="timeline-text"><strong style="color: var(--color-white);">Chargebotic V1 complete.</strong> Mecanum-wheel robot + LiDAR + depth camera + induction charging station + autonomous navigation + charging orchestration. End-to-end autonomous charging loop, fully operational.</p>
+                </div>
+
+                <div class="timeline-item fade-in">
+                    <div class="timeline-date">Now</div>
+                    <div class="timeline-title">Full Stack Complete. Finding PMF.</div>
+                    <p class="timeline-text">Robotics platform + battery + charging infrastructure + orchestration software. Now talking to fleet operators across all verticals to find where to deploy first. Stay tuned.</p>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section" style="padding-top: 0;">
+        <div class="container">
+            <div style="text-align: center;" class="fade-in">
+                <a href="advisors.html" class="btn-primary" style="font-size: 16px; padding: 18px 40px;">
+                    Meet Our Advisors <span class="btn-arrow">&rarr;</span>
+                </a>
+                <p style="font-size: 14px; color: var(--color-text-muted); margin-top: 12px;">Tesla &middot; Airbus &middot; Stanford &middot; Lucid Motors</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <div class="footer-logo">Chargebotic</div>
+                    <div class="footer-text">San Francisco, CA &middot; Pre-seed &middot; 2025</div>
+                </div>
+                <div class="footer-links">
+                    <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
+                    <a href="/">Home</a>
+                    <a href="built.html">Built</a>
+                    <a href="advisors.html">Advisors</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
