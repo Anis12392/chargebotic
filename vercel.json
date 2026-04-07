@@ -1,4 +1,5 @@
 {
-  "buildCommand": "",
-  "outputDirectory": "website"
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/website/$1" }
+  ]
 }
