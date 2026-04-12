@@ -670,6 +670,28 @@ img {
     margin-top: 12px;
 }
 
+.timeline-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+    max-width: 640px;
+}
+
+.timeline-images img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    display: block;
+    cursor: zoom-in;
+    transition: transform 0.2s ease;
+}
+
+.timeline-images img:hover {
+    transform: scale(1.02);
+}
+
 /* ---- Image Placeholder ---- */
 .img-placeholder {
     background: var(--color-bg-elevated);
