@@ -3,301 +3,431 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chargebotic | Autonomous Charging for Autonomous Fleets</title>
-    <meta name="description" content="Chargebotic builds autonomous charging infrastructure for robot fleets. From lunar rovers to delivery robots.">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <title>Chargebotic | Solving Energy for Robotics</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;600;700;800;900&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --orange: #f97316;
-            --orange-glow: rgba(249, 115, 22, 0.15);
-            --orange-dim: rgba(249, 115, 22, 0.4);
-            --bg: #030305;
-            --bg-elevated: #08080d;
-            --border: #12121a;
-            --text: #b0b0bc;
-            --text-dim: #55556a;
-            --white: #eeeef2;
+            --orange-dim: #f9731640;
+            --dark: #050508;
+            --card: #0a0a0f;
+            --card-border: #151520;
+            --text: #c8c8d0;
+            --text-dim: #666680;
+            --white: #f0f0f5;
+            --grid-color: rgba(249, 115, 22, 0.03);
         }
 
-        html {
-            scroll-behavior: smooth;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--bg);
+            background: var(--dark);
             color: var(--text);
             overflow-x: hidden;
+            cursor: default;
         }
 
-        /* ═══ CANVAS ═══ */
-        #bg-canvas {
+        /* ── CANVAS BG ── */
+        #particles-canvas {
             position: fixed;
-            inset: 0;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ═══ NAV ═══ */
-        .nav {
+        /* ── GRID OVERLAY ── */
+        .grid-overlay {
             position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 100;
-            padding: 0 48px;
-            background: rgba(3, 3, 5, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--border);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 20%, transparent 70%);
         }
 
-        .nav-inner {
-            max-width: 1200px;
+        /* ── MAIN CONTENT ── */
+        .content {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
             margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* ── NAV ── */
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5, 5, 8, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--card-border);
         }
 
         .nav-logo {
-            font-size: 16px;
-            font-weight: 800;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
             color: var(--white);
-            text-decoration: none;
-            letter-spacing: -0.3px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span {
+            color: var(--orange);
         }
 
         .nav-links {
             display: flex;
-            align-items: center;
-            gap: 32px;
+            gap: 28px;
             list-style: none;
         }
 
         .nav-links a {
-            font-size: 12px;
-            font-weight: 500;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
             color: var(--text-dim);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 1.2px;
+            letter-spacing: 1.5px;
             transition: color 0.3s;
         }
 
-        .nav-links a:hover { color: var(--white); }
+        .nav-links a:hover { color: var(--orange); }
 
-        .nav-cta {
-            font-size: 12px !important;
-            font-weight: 700 !important;
-            color: #000 !important;
+        .nav-links .nav-cta {
+            color: #000;
             background: var(--orange);
-            padding: 10px 22px;
-            border-radius: 6px;
-            letter-spacing: 0.8px !important;
-            transition: all 0.3s !important;
+            padding: 8px 18px;
+            border-radius: 4px;
+            font-weight: 700;
+            transition: all 0.3s;
         }
 
-        .nav-cta:hover {
-            background: var(--white) !important;
-            color: #000 !important;
+        .nav-links .nav-cta:hover {
+            background: transparent;
+            color: var(--orange);
+            box-shadow: 0 0 20px var(--orange-dim);
         }
 
-        /* ═══ SECTIONS ═══ */
-        .section {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 48px;
-        }
-
-        /* ═══ HERO ═══ */
+        /* ── HERO ── */
         .hero {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-top: 64px;
+            padding: 120px 0 80px;
+            position: relative;
         }
 
-        .hero-eyebrow {
-            font-size: 12px;
-            font-weight: 600;
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
             color: var(--orange);
-            text-transform: uppercase;
             letter-spacing: 3px;
-            margin-bottom: 32px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
             opacity: 0;
-            animation: blurIn 1s ease forwards 0.3s;
+            animation: fadeUp 0.8s ease forwards 0.2s;
         }
 
         .hero h1 {
-            font-size: clamp(44px, 7vw, 88px);
+            font-size: clamp(36px, 6vw, 72px);
             font-weight: 900;
             color: var(--white);
-            line-height: 1.0;
-            letter-spacing: -3px;
-            margin-bottom: 32px;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 28px;
             opacity: 0;
-            animation: blurIn 1s ease forwards 0.5s;
+            animation: fadeUp 0.8s ease forwards 0.4s;
         }
 
-        .hero h1 em {
-            font-style: normal;
-            background: linear-gradient(135deg, var(--orange), #ffb366);
+        .hero h1 .dissolve-word {
+            position: relative;
+            display: inline-block;
+            background: linear-gradient(135deg, var(--orange), #ff9a56);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
-        .hero-desc {
-            font-size: clamp(16px, 2vw, 20px);
+        .hero-sub {
+            font-size: 18px;
             line-height: 1.7;
-            color: var(--text);
-            max-width: 560px;
-            margin-bottom: 48px;
+            color: var(--text-dim);
+            max-width: 600px;
             opacity: 0;
-            animation: blurIn 1s ease forwards 0.7s;
+            animation: fadeUp 0.8s ease forwards 0.6s;
         }
 
-        .hero-desc strong { color: var(--white); }
+        .hero-sub strong {
+            color: var(--text);
+        }
 
-        .hero-actions {
+        .hero-cta-row {
             display: flex;
             gap: 16px;
-            align-items: center;
+            margin-top: 40px;
             opacity: 0;
-            animation: blurIn 1s ease forwards 0.9s;
+            animation: fadeUp 0.8s ease forwards 0.8s;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
+        .btn-primary {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
             font-weight: 700;
+            color: #000;
+            background: var(--orange);
+            padding: 14px 32px;
+            border-radius: 4px;
             text-decoration: none;
-            text-transform: uppercase;
             letter-spacing: 1px;
-            padding: 16px 36px;
-            border-radius: 6px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            border: 1px solid var(--orange);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--orange);
+            box-shadow: 0 0 30px var(--orange-dim);
+        }
+
+        .btn-ghost {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-dim);
+            padding: 14px 32px;
+            border-radius: 4px;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid var(--card-border);
             transition: all 0.3s;
         }
 
-        .btn-fill {
-            background: var(--orange);
-            color: #000;
-        }
-
-        .btn-fill:hover {
-            background: var(--white);
-            transform: translateY(-1px);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-
-        .btn-outline:hover {
+        .btn-ghost:hover {
             border-color: var(--text-dim);
             color: var(--white);
         }
 
-        .scroll-hint {
+        /* ── SCROLL INDICATOR ── */
+        .scroll-indicator {
             position: absolute;
-            bottom: 48px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             opacity: 0;
-            animation: blurIn 1s ease forwards 1.3s;
+            animation: fadeUp 0.8s ease forwards 1.2s;
         }
 
-        .scroll-hint span {
-            font-size: 10px;
+        .scroll-indicator span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
             color: var(--text-dim);
-            text-transform: uppercase;
             letter-spacing: 2px;
-        }
-
-        .scroll-hint-line {
-            width: 1px;
-            height: 48px;
-            background: linear-gradient(to bottom, var(--orange), transparent);
-            animation: pulse 2.5s ease infinite;
-        }
-
-        /* ═══ FULL-HEIGHT SECTIONS (gru.space style) ═══ */
-        .full-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 120px 0;
-        }
-
-        .section-eyebrow {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--orange);
             text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 24px;
         }
 
-        .section-heading {
-            font-size: clamp(28px, 4.5vw, 56px);
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--orange), transparent);
+            animation: scrollPulse 2s ease infinite;
+        }
+
+        /* ── SECTIONS ── */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            margin-bottom: 56px;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: clamp(24px, 3.5vw, 40px);
             font-weight: 800;
             color: var(--white);
-            line-height: 1.1;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            max-width: 700px;
+        }
+
+        /* ── DISSOLVE CARDS ── */
+        .dissolve-card {
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .dissolve-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, var(--orange-dim) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .dissolve-card:hover::before { opacity: 1; }
+
+        .dissolve-card:hover {
+            border-color: var(--orange-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Edge glow — dissolution boundary effect */
+        .dissolve-card::after {
+            content: '';
+            position: absolute;
+            top: -1px; right: -1px;
+            width: 60px; height: 60px;
+            background: radial-gradient(circle at top right, var(--orange-dim), transparent 70%);
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* ── THESIS SECTION ── */
+        .thesis-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .thesis-main {
+            grid-column: 1 / -1;
+        }
+
+        .thesis-main p {
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--text);
             max-width: 800px;
         }
 
-        .section-text {
-            font-size: clamp(15px, 1.5vw, 18px);
-            line-height: 1.8;
-            color: var(--text);
-            max-width: 640px;
+        .thesis-main p strong {
+            color: var(--white);
         }
 
-        .section-text strong { color: var(--white); }
-        .section-text .hl { color: var(--orange); font-weight: 600; }
+        .thesis-main p .accent {
+            color: var(--orange);
+            font-weight: 700;
+        }
 
-        /* ═══ STATS ROW ═══ */
-        .stats-row {
+        .hypothesis-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--orange);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .dissolve-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .dissolve-card p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-dim);
+        }
+
+        /* ── VERTICALS ── */
+        .verticals-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 64px;
+            gap: 16px;
         }
 
-        .stat {
-            background: var(--bg-elevated);
-            padding: 48px 32px;
+        .vertical-card {
             text-align: center;
+            padding: 40px 24px;
         }
 
-        .stat-num {
-            font-size: clamp(32px, 4vw, 52px);
-            font-weight: 800;
+        .vertical-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+            filter: grayscale(0.3);
+        }
+
+        .vertical-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 6px;
+        }
+
+        .vertical-detail {
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 40px 24px;
+            position: relative;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 42px;
+            font-weight: 700;
             color: var(--orange);
-            letter-spacing: -2px;
             line-height: 1;
             margin-bottom: 8px;
         }
@@ -306,409 +436,198 @@
             font-size: 12px;
             color: var(--text-dim);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
-        /* ═══ ROBOT CARDS ═══ */
-        .robots-grid {
+        /* ── APPROACH ── */
+        .approach-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 56px;
-        }
-
-        .robot-card {
-            background: var(--bg-elevated);
-            padding: 48px 32px;
-            position: relative;
-            transition: background 0.4s;
-        }
-
-        .robot-card:hover {
-            background: #0c0c14;
-        }
-
-        .robot-card-img {
-            width: 100%;
-            height: 160px;
-            background: linear-gradient(135deg, #0a0a12, #0e0e18);
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+            background: var(--card-border);
             border-radius: 8px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            border: 1px solid var(--border);
-        }
-
-        .robot-card-name {
-            font-size: 13px;
-            font-weight: 800;
-            color: var(--orange);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 4px;
-        }
-
-        .robot-card-full {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 12px;
-        }
-
-        .robot-card-desc {
-            font-size: 13px;
-            line-height: 1.7;
-            color: var(--text-dim);
-        }
-
-        /* ═══ PRODUCT GRID ═══ */
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 56px;
-        }
-
-        .product-card {
-            background: var(--bg-elevated);
-            padding: 48px 40px;
-            position: relative;
-            transition: background 0.4s;
-        }
-
-        .product-card:hover { background: #0c0c14; }
-
-        .product-num {
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--orange);
-            opacity: 0.3;
-            line-height: 1;
-            margin-bottom: 16px;
-        }
-
-        .product-card h3 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 12px;
-        }
-
-        .product-card p {
-            font-size: 14px;
-            line-height: 1.7;
-            color: var(--text-dim);
-        }
-
-        .product-card-img {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(135deg, #0a0a12, #0e0e18);
-            border-radius: 8px;
-            margin-top: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-
-        /* ═══ TIMELINE (gru.space roadmap style) ═══ */
-        .timeline {
-            margin-top: 56px;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .timeline-item {
-            display: grid;
-            grid-template-columns: 200px 1fr;
-            gap: 48px;
-            padding: 48px 0;
-            border-top: 1px solid var(--border);
-            position: relative;
-        }
-
-        .timeline-item:last-child {
-            border-bottom: 1px solid var(--border);
-        }
-
-        .timeline-left {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .timeline-status {
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            padding: 6px 14px;
-            border-radius: 100px;
-            display: inline-flex;
-            align-self: flex-start;
-        }
-
-        .status-done {
-            color: #34d399;
-            background: rgba(52, 211, 153, 0.1);
-            border: 1px solid rgba(52, 211, 153, 0.15);
-        }
-
-        .status-active {
-            color: var(--orange);
-            background: var(--orange-glow);
-            border: 1px solid rgba(249, 115, 22, 0.2);
-        }
-
-        .status-next {
-            color: var(--text-dim);
-            background: rgba(85, 85, 106, 0.1);
-            border: 1px solid rgba(85, 85, 106, 0.15);
-        }
-
-        .timeline-progress {
-            width: 100%;
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
             overflow: hidden;
         }
 
-        .timeline-progress-fill {
-            height: 100%;
-            border-radius: 2px;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-            width: 0;
-        }
-
-        .progress-done { background: #34d399; }
-        .progress-active { background: var(--orange); }
-
-        .timeline-right h3 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--white);
-            margin-bottom: 12px;
-        }
-
-        .timeline-right p {
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--text-dim);
-            max-width: 520px;
-        }
-
-        .timeline-img {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #0a0a12, #0e0e18);
-            border-radius: 8px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            color: var(--text-dim);
-            border: 1px solid var(--border);
-        }
-
-        .timeline-item.faded {
-            opacity: 0.35;
-        }
-
-        .timeline-item.faded .timeline-right h3,
-        .timeline-item.faded .timeline-right p {
-            color: var(--text-dim);
-        }
-
-        /* ═══ WAITLIST (prominent, gru.space CTA style) ═══ */
-        .waitlist-section {
-            min-height: 80vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .approach-step {
+            background: var(--card);
+            padding: 36px 24px;
             text-align: center;
-            padding: 120px 0;
+            position: relative;
         }
 
-        .waitlist-heading {
-            font-size: clamp(32px, 5vw, 64px);
-            font-weight: 900;
-            color: var(--white);
-            letter-spacing: -2px;
-            margin-bottom: 16px;
+        .approach-step:hover {
+            background: #0d0d14;
         }
 
-        .waitlist-sub {
-            font-size: 17px;
-            color: var(--text-dim);
-            margin-bottom: 48px;
-            max-width: 440px;
+        .step-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 12px;
         }
 
-        .waitlist-form {
-            display: flex;
-            max-width: 480px;
-            width: 100%;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            transition: all 0.4s;
-        }
-
-        .waitlist-form:focus-within {
-            border-color: var(--orange);
-            box-shadow: 0 0 60px var(--orange-glow);
-        }
-
-        .waitlist-input {
-            flex: 1;
-            background: var(--bg-elevated);
-            border: none;
-            padding: 18px 24px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            color: var(--white);
-            outline: none;
-        }
-
-        .waitlist-input::placeholder { color: var(--text-dim); }
-
-        .waitlist-btn {
-            background: var(--orange);
-            color: #000;
-            border: none;
-            padding: 18px 32px;
-            font-family: 'Inter', sans-serif;
+        .step-label {
             font-size: 13px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: background 0.3s;
-            white-space: nowrap;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 8px;
         }
 
-        .waitlist-btn:hover { background: var(--white); }
-
-        .waitlist-note {
-            font-size: 12px;
+        .step-detail {
+            font-size: 11px;
             color: var(--text-dim);
-            margin-top: 16px;
+            line-height: 1.5;
         }
 
-        .waitlist-note.success { color: #34d399; }
+        /* Arrow between steps */
+        .approach-step:not(:last-child)::after {
+            content: '\2192';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--orange);
+            z-index: 1;
+        }
 
-        /* ═══ TEAM ═══ */
+        /* ── TEAM ── */
         .team-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1px;
-            background: var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 56px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
         }
 
         .team-card {
-            background: var(--bg-elevated);
-            padding: 48px 40px;
-            transition: background 0.4s;
+            padding: 32px;
         }
 
-        .team-card:hover { background: #0c0c14; }
-
         .team-name {
-            font-size: 22px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--white);
             margin-bottom: 4px;
         }
 
         .team-role {
-            font-size: 12px;
-            font-weight: 700;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 500;
             color: var(--orange);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 16px;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
         }
 
         .team-bio {
-            font-size: 14px;
-            line-height: 1.7;
+            font-size: 13px;
+            line-height: 1.6;
             color: var(--text-dim);
         }
 
-        .team-bio strong { color: var(--text); }
+        .team-bio strong {
+            color: var(--text);
+        }
+
+        .team-card.pending {
+            opacity: 0.4;
+            border-style: dashed;
+        }
 
         .team-links {
-            margin-top: 20px;
+            margin-top: 16px;
             display: flex;
             gap: 16px;
         }
 
         .team-links a {
-            font-size: 12px;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
             color: var(--orange);
             text-decoration: none;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
             transition: opacity 0.3s;
         }
 
-        .team-links a:hover { opacity: 0.6; }
+        .team-links a:hover {
+            opacity: 0.7;
+        }
 
-        /* ═══ FOOTER ═══ */
-        .footer {
-            border-top: 1px solid var(--border);
+        /* ── CTA SECTION ── */
+        .cta-section {
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .cta-section h2 {
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .cta-section p {
+            font-size: 16px;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+        }
+
+        .cta-email {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--orange);
+            text-decoration: none;
+            border-bottom: 1px solid var(--orange-dim);
+            padding-bottom: 2px;
+            transition: all 0.3s;
+        }
+
+        .cta-email:hover {
+            border-color: var(--orange);
+            text-shadow: 0 0 20px var(--orange-dim);
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--card-border);
             padding: 32px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .footer span,
-        .footer a {
-            font-size: 12px;
+        .footer-left {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
             color: var(--text-dim);
         }
 
-        .footer a {
-            text-decoration: none;
-            color: var(--orange);
+        .footer-right {
+            font-size: 11px;
+            color: var(--text-dim);
         }
 
-        /* ═══ ANIMATIONS ═══ */
-        @keyframes blurIn {
-            from { opacity: 0; transform: translateY(24px); filter: blur(12px); }
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); filter: blur(10px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
 
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.8; }
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 1; transform: scaleY(1.2); }
         }
 
+        /* Scroll reveal — gru.space style blur-in */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
-            filter: blur(12px);
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(8px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.visible {
@@ -717,377 +636,719 @@
             filter: blur(0);
         }
 
-        /* ═══ DIVIDER ═══ */
-        .divider {
-            width: 100%;
-            height: 1px;
-            background: var(--border);
-            margin: 0;
+        /* ── DISSOLUTION FRAGMENTS ── */
+        .fragment-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
         }
 
-        /* ═══ RESPONSIVE ═══ */
-        @media (max-width: 900px) {
-            .nav { padding: 0 24px; }
+        .fragment {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--orange);
+            opacity: 0;
+            border-radius: 1px;
+        }
+
+        /* ── PRODUCT GRID ── */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .product-card {
+            padding: 32px;
+        }
+
+        .product-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange);
+            margin-bottom: 12px;
+        }
+
+        .product-card h3 {
+            font-size: 18px;
+        }
+
+        /* ── EXPANDED VERTICAL CARDS ── */
+        .vertical-card-expanded {
+            text-align: left;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .vertical-card-expanded .vertical-name {
+            padding: 24px 28px 0;
+        }
+
+        .vertical-full-name {
+            font-size: 12px;
+            color: var(--text-dim);
+            padding: 2px 28px 0;
+        }
+
+        .vertical-desc {
+            font-size: 13px;
+            line-height: 1.65;
+            color: var(--text-dim);
+            padding: 12px 28px 28px;
+        }
+
+        .vertical-img-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #0d0d14 0%, #111118 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .vertical-img-placeholder span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-dim);
+            opacity: 0.5;
+        }
+
+        /* ── TIMELINE / WHAT WE'RE BUILDING ── */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .timeline-card {
+            padding: 36px;
+        }
+
+        .timeline-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .timeline-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            max-width: 700px;
+        }
+
+        .timeline-status {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 3px;
+        }
+
+        .status-done {
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        .status-active {
+            color: var(--orange);
+            background: var(--orange-dim);
+            border: 1px solid var(--orange-dim);
+        }
+
+        .status-next {
+            color: var(--text-dim);
+            background: rgba(102, 102, 128, 0.1);
+            border: 1px solid rgba(102, 102, 128, 0.2);
+        }
+
+        .timeline-img-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #0d0d14 0%, #111118 100%);
+            border-radius: 6px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .timeline-img-placeholder span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-dim);
+            opacity: 0.5;
+        }
+
+        /* ── WAITLIST SECTION ── */
+        .waitlist-section {
+            text-align: center;
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .waitlist-title {
+            font-size: clamp(28px, 4vw, 48px);
+            font-weight: 900;
+            color: var(--white);
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .waitlist-sub {
+            font-size: 16px;
+            color: var(--text-dim);
+            margin-bottom: 36px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .waitlist-form {
+            display: flex;
+            gap: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            transition: border-color 0.3s;
+        }
+
+        .waitlist-form:focus-within {
+            border-color: var(--orange);
+            box-shadow: 0 0 40px var(--orange-dim);
+        }
+
+        .waitlist-input {
+            flex: 1;
+            background: var(--card);
+            border: none;
+            padding: 16px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--white);
+            outline: none;
+        }
+
+        .waitlist-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .waitlist-btn {
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+            white-space: nowrap;
+            padding: 16px 28px;
+        }
+
+        .waitlist-note {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 14px;
+            transition: all 0.3s;
+        }
+
+        .waitlist-note.success {
+            color: #22c55e;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 768px) {
+            .content { padding: 0 20px; }
+            nav { padding: 20px 0; }
             .nav-links { display: none; }
-            .section { padding: 0 24px; }
 
+            .hero { min-height: auto; padding: 80px 0 60px; }
             .hero h1 { letter-spacing: -1px; }
-            .hero-actions { flex-direction: column; align-items: flex-start; }
+            .hero-cta-row { flex-direction: column; }
 
-            .stats-row,
-            .robots-grid { grid-template-columns: 1fr; }
+            section { padding: 60px 0; }
 
+            .thesis-content,
+            .verticals-grid,
+            .stats-bar,
             .product-grid,
             .team-grid { grid-template-columns: 1fr; }
 
-            .timeline-item {
-                grid-template-columns: 1fr;
-                gap: 20px;
+            .waitlist-form { flex-direction: column; }
+            .waitlist-btn { border-radius: 0; }
+
+            .approach-grid {
+                grid-template-columns: 1fr 1fr;
             }
 
-            .waitlist-form { flex-direction: column; }
-            .waitlist-btn { padding: 16px; }
+            .approach-step:not(:last-child)::after { display: none; }
 
-            .full-section { min-height: auto; padding: 80px 0; }
+            .stat-number { font-size: 32px; }
+        }
+
+        @media (max-width: 480px) {
+            .approach-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-<canvas id="bg-canvas"></canvas>
+<!-- Particle starfield -->
+<canvas id="particles-canvas"></canvas>
 
-<!-- NAV -->
-<nav class="nav">
-    <div class="nav-inner">
-        <a href="/" class="nav-logo">Chargebotic</a>
+<!-- Grid overlay that dissolves at edges -->
+<div class="grid-overlay"></div>
+
+<!-- Floating dissolution fragments -->
+<div class="fragment-container" id="fragments"></div>
+
+<div class="content">
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-logo">Chargebotic<span>.</span></div>
         <ul class="nav-links">
             <li><a href="#problem">Problem</a></li>
             <li><a href="#robots">Robots</a></li>
-            <li><a href="#product">Product</a></li>
+            <li><a href="#building">Building</a></li>
             <li><a href="#team">Team</a></li>
-            <li><a href="#waitlist" class="nav-cta">Join Waitlist</a></li>
+            <li><a href="#waitlist" class="nav-cta">Join waitlist</a></li>
         </ul>
-    </div>
-</nav>
+    </nav>
 
-<!-- HERO -->
-<div class="section hero">
-    <div class="hero-eyebrow">Autonomous Charging for Autonomous Fleets</div>
-    <h1>
-        To settle the Moon,<br>
-        we need robots.<br>
-        Robots need <em>energy.</em>
-    </h1>
-    <p class="hero-desc">
-        Every robot on the Moon, on a sidewalk, or in a warehouse eventually stops.
-        <strong>Battery dies. Mission over.</strong>
-        We build autonomous charging systems that keep fleets running, anywhere.
-    </p>
-    <div class="hero-actions">
-        <a href="#waitlist" class="btn btn-fill">Join the Waitlist</a>
-        <a href="#problem" class="btn btn-outline">Learn More</a>
-    </div>
-    <div class="scroll-hint">
-        <span>Scroll</span>
-        <div class="scroll-hint-line"></div>
-    </div>
-</div>
-
-<!-- PROBLEM -->
-<div class="section full-section" id="problem">
-    <div class="reveal">
-        <div class="section-eyebrow">The Problem</div>
-        <h2 class="section-heading">Every autonomous fleet shares the same bottleneck.</h2>
-        <p class="section-text">
-            Millions of robots already operate around the world. They move packages, deliver food,
-            inspect infrastructure, survey farmland, and explore the Moon.
-            But <span class="hl">every single one</span> eventually stops.
-            <strong>They run out of battery, sit idle for hours, or need a human to plug them in.</strong>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-label">Autonomous charging for autonomous fleets</div>
+        <h1>
+            To settle the Moon,<br>
+            we need robots.<br>
+            Robots need <span class="dissolve-word">energy.</span>
+        </h1>
+        <p class="hero-sub">
+            Every robot on the Moon, on a sidewalk, or in a warehouse eventually stops.
+            <strong>Battery dies. Mission over.</strong>
+            We build autonomous charging systems that keep fleets running, anywhere.
         </p>
-    </div>
-
-    <div class="stats-row reveal">
-        <div class="stat">
-            <div class="stat-num">30%</div>
-            <div class="stat-label">Fleet time lost to charging</div>
+        <div class="hero-cta-row">
+            <a href="#waitlist" class="btn-primary">Join the waitlist</a>
+            <a href="#problem" class="btn-ghost">Learn more</a>
         </div>
-        <div class="stat">
-            <div class="stat-num">3M+</div>
-            <div class="stat-label">Autonomous robots by 2028</div>
-        </div>
-        <div class="stat">
-            <div class="stat-num">$38B</div>
-            <div class="stat-label">Charging infra market by 2033</div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
         </div>
     </div>
-</div>
 
-<!-- ROBOTS -->
-<div class="section full-section" id="robots">
-    <div class="reveal">
-        <div class="section-eyebrow">Robots are already here</div>
-        <h2 class="section-heading">They're in warehouses, on sidewalks, in the sky, and on the Moon.</h2>
-    </div>
+    <!-- THE PROBLEM -->
+    <section id="problem">
+        <div class="section-header reveal">
+            <div class="section-label">The problem</div>
+            <h2 class="section-title">Every autonomous fleet shares the same bottleneck: energy.</h2>
+        </div>
 
-    <div class="robots-grid">
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#127761;</div>
-            <div class="robot-card-name">Space</div>
-            <div class="robot-card-full">Lunar & Planetary Rovers</div>
-            <p class="robot-card-desc">On the Moon, energy is life or death. Rovers face extreme cold, two-week nights without sunlight, and no way to recharge. Multiple missions ended because the rover simply ran out of power.</p>
+        <div class="thesis-main reveal">
+            <p>
+                Millions of robots already operate around the world. They move packages, deliver food,
+                inspect infrastructure, survey farmland, and explore the Moon.
+                But <span class="accent">every single one</span> eventually stops.
+                <strong>They run out of battery, sit idle for hours, or need a human to plug them in.</strong>
+                Energy is the invisible ceiling holding autonomous fleets back.
+            </p>
         </div>
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#128230;</div>
-            <div class="robot-card-name">Last Mile</div>
-            <div class="robot-card-full">Delivery Robots</div>
-            <p class="robot-card-desc">Small sidewalk robots delivering food, groceries, and packages. Starship and Serve Robotics already run fleets across U.S. and European cities. They recharge constantly between runs.</p>
-        </div>
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#129302;</div>
-            <div class="robot-card-name">Humanoid</div>
-            <div class="robot-card-full">Humanoid Robots</div>
-            <p class="robot-card-desc">Tesla Optimus, Figure, Apptronik. Human-shaped robots built for factories, hospitals, and homes. They'll need constant power to match a human work shift.</p>
-        </div>
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#9881;</div>
-            <div class="robot-card-name">AMR</div>
-            <div class="robot-card-full">Autonomous Mobile Robots</div>
-            <p class="robot-card-desc">The backbone of modern logistics. Amazon, DHL, and Walmart deploy thousands of AMRs to move inventory 24/7. They never take breaks. Except to charge.</p>
-        </div>
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#9992;</div>
-            <div class="robot-card-name">UAV</div>
-            <div class="robot-card-full">Unmanned Aerial Vehicles</div>
-            <p class="robot-card-desc">From crop monitoring to medical deliveries. Zipline flies blood supplies across Africa by drone. But flight time is 20 to 40 minutes per charge. Every landing is lost time.</p>
-        </div>
-        <div class="robot-card reveal">
-            <div class="robot-card-img">&#127981;</div>
-            <div class="robot-card-name">Industrial</div>
-            <div class="robot-card-full">Heavy Duty & Outdoor</div>
-            <p class="robot-card-desc">Mining bots, farm robots, construction machines. They work in harsh, remote places far from any outlet. Heavy loads, nonstop schedules, zero infrastructure.</p>
-        </div>
-    </div>
-</div>
 
-<!-- PRODUCT -->
-<div class="section full-section" id="product">
-    <div class="reveal">
-        <div class="section-eyebrow">What we're building</div>
-        <h2 class="section-heading">The full charging infrastructure for autonomous fleets.</h2>
-    </div>
-
-    <div class="product-grid">
-        <div class="product-card reveal">
-            <div class="product-num">01</div>
-            <h3>The Charger</h3>
-            <p>A wireless charging station designed for autonomous docking. The robot drives up, aligns, and charges. No plugs, no cables, no human.</p>
-            <div class="product-card-img">[ Photo: charger station ]</div>
-        </div>
-        <div class="product-card reveal">
-            <div class="product-num">02</div>
-            <h3>The Retrofit Kit</h3>
-            <p>A receiver and adapter kit that fits onto existing robots. No need to redesign the robot. We retrofit any fleet with wireless charging.</p>
-            <div class="product-card-img">[ Photo: retrofit kit ]</div>
-        </div>
-        <div class="product-card reveal">
-            <div class="product-num">03</div>
-            <h3>Navigation Software</h3>
-            <p>The robot needs to find the charger and dock precisely. Our navigation layer guides robots autonomously with centimeter-level alignment.</p>
-        </div>
-        <div class="product-card reveal">
-            <div class="product-num">04</div>
-            <h3>Orchestration Software</h3>
-            <p>Fleet-level intelligence. Which robot charges when, where, and for how long. Optimizes uptime so no robot is ever idle waiting to charge.</p>
-        </div>
-    </div>
-</div>
-
-<!-- TIMELINE -->
-<div class="section full-section" id="roadmap">
-    <div class="reveal">
-        <div class="section-eyebrow">Where we are</div>
-        <h2 class="section-heading">Chargers that go to the robot. Not the other way around.</h2>
-    </div>
-
-    <div class="timeline">
-        <div class="timeline-item reveal">
-            <div class="timeline-left">
-                <div class="timeline-status status-done">Completed</div>
-                <div class="timeline-progress"><div class="timeline-progress-fill progress-done" data-width="100"></div></div>
+        <div class="stats-bar" style="margin-top: 40px;">
+            <div class="dissolve-card stat-card reveal">
+                <div class="stat-number">30%</div>
+                <div class="stat-label">Fleet time lost to charging</div>
             </div>
-            <div class="timeline-right">
+            <div class="dissolve-card stat-card reveal">
+                <div class="stat-number">3M+</div>
+                <div class="stat-label">Autonomous robots by 2028</div>
+            </div>
+            <div class="dissolve-card stat-card reveal">
+                <div class="stat-number">$38B</div>
+                <div class="stat-label">Charging infra market by 2033</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROBOTS AROUND US -->
+    <section id="robots">
+        <div class="section-header reveal">
+            <div class="section-label">Robots are already here</div>
+            <h2 class="section-title">They're in warehouses, on sidewalks, in the sky, and on the Moon.</h2>
+        </div>
+
+        <div class="verticals-grid">
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: lunar rover ]</span>
+                </div>
+                <div class="vertical-name">Space</div>
+                <div class="vertical-full-name">Lunar & Planetary Rovers</div>
+                <p class="vertical-desc">On the Moon, energy is life or death. Rovers face extreme cold, two-week nights without sunlight, and no way to recharge. Multiple missions ended because the rover simply ran out of power.</p>
+            </div>
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: sidewalk delivery robot ]</span>
+                </div>
+                <div class="vertical-name">Last Mile</div>
+                <div class="vertical-full-name">Delivery Robots</div>
+                <p class="vertical-desc">Small sidewalk robots delivering food, groceries, and packages. Starship and Serve Robotics already run fleets across U.S. and European cities. They recharge constantly between runs.</p>
+            </div>
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: humanoid robot ]</span>
+                </div>
+                <div class="vertical-name">Humanoid</div>
+                <div class="vertical-full-name">Humanoid Robots</div>
+                <p class="vertical-desc">Tesla Optimus, Figure, Apptronik. Human-shaped robots built for factories, hospitals, and homes. They'll need constant power to match a human work shift.</p>
+            </div>
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: warehouse robots ]</span>
+                </div>
+                <div class="vertical-name">AMR</div>
+                <div class="vertical-full-name">Autonomous Mobile Robots</div>
+                <p class="vertical-desc">The backbone of modern logistics. Amazon, DHL, and Walmart deploy thousands of AMRs to move inventory 24/7. They navigate on their own, coordinate in fleets, and never take breaks. Except to charge.</p>
+            </div>
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: delivery drone ]</span>
+                </div>
+                <div class="vertical-name">UAV</div>
+                <div class="vertical-full-name">Unmanned Aerial Vehicles</div>
+                <p class="vertical-desc">From crop monitoring to medical deliveries. Zipline flies blood supplies across Africa and the U.S. by drone. But flight time is 20 to 40 minutes per charge. Every landing is lost time.</p>
+            </div>
+            <div class="dissolve-card vertical-card-expanded reveal">
+                <div class="vertical-img-placeholder">
+                    <span>[ Photo: industrial robot outdoors ]</span>
+                </div>
+                <div class="vertical-name">Industrial</div>
+                <div class="vertical-full-name">Heavy Duty & Outdoor</div>
+                <p class="vertical-desc">Mining bots, farm robots, construction machines. They work in harsh, remote places far from any outlet. Heavy loads, nonstop schedules, zero infrastructure.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT WE'RE BUILDING -->
+    <section id="building">
+        <div class="section-header reveal">
+            <div class="section-label">What we're building</div>
+            <h2 class="section-title">The full charging infrastructure for autonomous fleets.</h2>
+        </div>
+
+        <div class="product-grid">
+            <div class="dissolve-card product-card reveal">
+                <div class="product-number">01</div>
+                <h3>The Charger</h3>
+                <p>A wireless charging station designed for autonomous docking. The robot drives up, aligns, and charges. No plugs, no cables, no human. Deployable indoors and outdoors.</p>
+                <div class="timeline-img-placeholder">
+                    <span>[ Photo: charger station ]</span>
+                </div>
+            </div>
+            <div class="dissolve-card product-card reveal">
+                <div class="product-number">02</div>
+                <h3>The Retrofit Kit</h3>
+                <p>A receiver and adapter kit that fits onto existing robots. No need to redesign the robot. We retrofit any fleet with wireless charging capability.</p>
+                <div class="timeline-img-placeholder">
+                    <span>[ Photo: retrofit kit, receiver + adapter ]</span>
+                </div>
+            </div>
+            <div class="dissolve-card product-card reveal">
+                <div class="product-number">03</div>
+                <h3>Navigation Software</h3>
+                <p>The robot needs to find the charger and dock precisely. Our navigation layer guides robots to the charging station autonomously, with centimeter-level alignment.</p>
+            </div>
+            <div class="dissolve-card product-card reveal">
+                <div class="product-number">04</div>
+                <h3>Orchestration Software</h3>
+                <p>Fleet-level intelligence. Which robot charges when, where, and for how long. Optimizes uptime across the entire fleet so no robot is ever idle waiting to charge.</p>
+            </div>
+        </div>
+
+        <!-- WHERE WE ARE -->
+        <div class="section-header reveal" style="margin-top: 80px;">
+            <div class="section-label">Where we are</div>
+        </div>
+
+        <div class="timeline">
+            <div class="dissolve-card timeline-card reveal">
+                <div class="timeline-status status-done">Completed</div>
                 <h3>Lunar Rover Charger</h3>
                 <p>We started with the hardest problem: keeping rovers alive on the Moon. We designed an autonomous wireless charging system built to survive extreme cold, dust, and zero infrastructure. This is where Chargebotic was born.</p>
-                <div class="timeline-img">[ Photo: lunar charger prototype ]</div>
+                <div class="timeline-img-placeholder">
+                    <span>[ Photo: lunar charger prototype ]</span>
+                </div>
             </div>
-        </div>
-        <div class="timeline-item reveal">
-            <div class="timeline-left">
+            <div class="dissolve-card timeline-card reveal">
                 <div class="timeline-status status-active">In progress</div>
-                <div class="timeline-progress"><div class="timeline-progress-fill progress-active" data-width="45"></div></div>
-            </div>
-            <div class="timeline-right">
                 <h3>Last Mile Delivery Robots</h3>
                 <p>Now we're bringing it to Earth. Working with Last Mile Solutions to deploy our charging infrastructure on delivery routes. Robots dock, charge in minutes, and get back to work. No human needed.</p>
-                <div class="timeline-img">[ Photo: delivery robot charging station ]</div>
+                <div class="timeline-img-placeholder">
+                    <span>[ Photo: delivery robot charging station ]</span>
+                </div>
             </div>
-        </div>
-        <div class="timeline-item faded reveal">
-            <div class="timeline-left">
+            <div class="dissolve-card timeline-card reveal" style="opacity: 0.5; border-style: dashed;">
                 <div class="timeline-status status-next">Up next</div>
-                <div class="timeline-progress"><div class="timeline-progress-fill" data-width="0"></div></div>
-            </div>
-            <div class="timeline-right">
                 <h3>Warehouse AMR Fleets</h3>
                 <p>The biggest near-term market. Warehouse operators lose millions to charging downtime. Fleet-wide energy orchestration that eliminates idle time entirely.</p>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- WAITLIST -->
-<div class="section waitlist-section" id="waitlist">
-    <div class="reveal">
-        <div class="section-eyebrow">Stay in the loop</div>
-        <h2 class="waitlist-heading">We're just getting started.</h2>
-        <p class="waitlist-sub">Get early updates, partnership opportunities, and first access to our technology.</p>
-        <form class="waitlist-form" onsubmit="handleWaitlist(event)">
-            <input type="email" placeholder="your@email.com" required class="waitlist-input" id="waitlist-email">
-            <button type="submit" class="waitlist-btn">Join Waitlist</button>
-        </form>
-        <p class="waitlist-note" id="waitlist-note">No spam. Just milestones.</p>
-    </div>
-</div>
+    <!-- WAITLIST -->
+    <section class="waitlist-section" id="waitlist">
+        <div class="reveal">
+            <div class="section-label">Stay in the loop</div>
+            <h2 class="waitlist-title">We're just getting started.</h2>
+            <p class="waitlist-sub">Get early updates, partnership opportunities, and first access to our technology.</p>
+            <form class="waitlist-form" onsubmit="handleWaitlist(event)">
+                <input type="email" placeholder="your@email.com" required class="waitlist-input" id="waitlist-email">
+                <button type="submit" class="btn-primary waitlist-btn">Join waitlist</button>
+            </form>
+            <p class="waitlist-note" id="waitlist-note">No spam. Just milestones.</p>
+        </div>
+    </section>
 
-<!-- TEAM -->
-<div class="section full-section" id="team">
-    <div class="reveal">
-        <div class="section-eyebrow">Founders</div>
-        <h2 class="section-heading">The team behind Chargebotic.</h2>
-    </div>
+    <!-- TEAM -->
+    <section id="team">
+        <div class="section-header reveal">
+            <div class="section-label">Founders</div>
+            <h2 class="section-title">The team behind Chargebotic.</h2>
+        </div>
 
-    <div class="team-grid">
-        <div class="team-card reveal">
-            <div class="team-name">Anis Cheriet</div>
-            <div class="team-role">Co-founder & CEO</div>
-            <p class="team-bio"><strong>Ex-EV charging infrastructure.</strong> Led Europe's largest charging deployments twice. Deep expertise in energy systems at scale.</p>
-            <div class="team-links">
-                <a href="https://www.linkedin.com/in/anischeriet/" target="_blank">LinkedIn</a>
-                <a href="https://anischeriet.com" target="_blank">Website</a>
+        <div class="team-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="dissolve-card team-card reveal">
+                <div class="team-name">Anis Cheriet</div>
+                <div class="team-role">Co-founder & CEO</div>
+                <p class="team-bio"><strong>Ex-EV charging infrastructure.</strong> Led Europe's largest charging deployments twice. Deep expertise in energy systems at scale.</p>
+                <div class="team-links">
+                    <a href="https://www.linkedin.com/in/anischeriet/" target="_blank">LinkedIn</a>
+                    <a href="https://anischeriet.com" target="_blank">Website</a>
+                </div>
+            </div>
+            <div class="dissolve-card team-card reveal">
+                <div class="team-name">Christopher Redfearn</div>
+                <div class="team-role">Co-founder & Hardware</div>
+                <p class="team-bio"><strong>Ex-Apple & Meta.</strong> Hardware lead, MS in CS. Builds space-grade reliable systems from scratch.</p>
+                <div class="team-links">
+                    <a href="https://www.linkedin.com/in/christopherredfearn/" target="_blank">LinkedIn</a>
+                </div>
             </div>
         </div>
-        <div class="team-card reveal">
-            <div class="team-name">Christopher Redfearn</div>
-            <div class="team-role">Co-founder & Hardware</div>
-            <p class="team-bio"><strong>Ex-Apple & Meta.</strong> Hardware lead, MS in CS. Builds space-grade reliable systems from scratch.</p>
-            <div class="team-links">
-                <a href="https://www.linkedin.com/in/christopherredfearn/" target="_blank">LinkedIn</a>
-            </div>
-        </div>
-    </div>
-</div>
+    </section>
 
-<!-- FOOTER -->
-<div class="section">
-    <div class="footer">
-        <span>Chargebotic &copy; 2025 &middot; San Francisco</span>
-        <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
-    </div>
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-left">Chargebotic &copy; 2025 &middot; San Francisco</div>
+        <div class="footer-right"><a href="mailto:anis@chargebotic.com" style="color: var(--orange); text-decoration: none;">anis@chargebotic.com</a></div>
+    </footer>
+
 </div>
 
 <script>
-// ═══ PARTICLES ═══
+// ═══════════════════════════════════════════════
+// PARTICLE STARFIELD — Canvas-based background
+// ═══════════════════════════════════════════════
 (function() {
-    const c = document.getElementById('bg-canvas');
-    const ctx = c.getContext('2d');
-    let pts = [], w, h;
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: -1000, y: -1000 };
+    let w, h;
 
-    function resize() { w = c.width = innerWidth; h = c.height = innerHeight; }
+    function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+    }
 
-    function init() {
-        pts = [];
-        const n = Math.min(Math.floor(w * h / 5000), 300);
-        for (let i = 0; i < n; i++) pts.push({
-            x: Math.random() * w, y: Math.random() * h,
-            s: Math.random() * 1.2 + 0.3,
-            vx: (Math.random() - 0.5) * 0.1, vy: (Math.random() - 0.5) * 0.1,
-            o: Math.random() * 0.4 + 0.05,
-            orange: Math.random() < 0.06
-        });
+    function createParticles() {
+        particles = [];
+        const count = Math.min(Math.floor((w * h) / 4000), 400);
+        for (let i = 0; i < count; i++) {
+            particles.push({
+                x: Math.random() * w,
+                y: Math.random() * h,
+                size: Math.random() * 1.5 + 0.5,
+                speedX: (Math.random() - 0.5) * 0.15,
+                speedY: (Math.random() - 0.5) * 0.15,
+                opacity: Math.random() * 0.5 + 0.1,
+                isOrange: Math.random() < 0.08
+            });
+        }
     }
 
     function draw() {
         ctx.clearRect(0, 0, w, h);
-        const sy = scrollY * 0.03;
-        pts.forEach(p => {
-            const dy = ((p.y - sy) % h + h) % h;
+
+        const scrollY = window.scrollY;
+
+        particles.forEach(p => {
+            // Parallax with scroll
+            const drawY = ((p.y - scrollY * 0.05) % h + h) % h;
+
+            // Mouse repulsion
+            const dx = p.x - mouse.x;
+            const dy = drawY - mouse.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            let offsetX = 0, offsetY = 0;
+            if (dist < 120) {
+                const force = (120 - dist) / 120;
+                offsetX = (dx / dist) * force * 15;
+                offsetY = (dy / dist) * force * 15;
+            }
+
             ctx.beginPath();
-            ctx.arc(p.x, dy, p.s, 0, 6.28);
-            ctx.fillStyle = p.orange
-                ? `rgba(249,115,22,${p.o * 1.5})`
-                : `rgba(180,180,200,${p.o})`;
+            ctx.arc(p.x + offsetX, drawY + offsetY, p.size, 0, Math.PI * 2);
+            ctx.fillStyle = p.isOrange
+                ? `rgba(249, 115, 22, ${p.opacity * 1.5})`
+                : `rgba(200, 200, 220, ${p.opacity})`;
             ctx.fill();
-            p.x += p.vx; p.y += p.vy;
-            if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
-            if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+
+            // Move
+            p.x += p.speedX;
+            p.y += p.speedY;
+            if (p.x < 0) p.x = w;
+            if (p.x > w) p.x = 0;
+            if (p.y < 0) p.y = h;
+            if (p.y > h) p.y = 0;
         });
+
+        // Draw connections near mouse
+        particles.forEach((a, i) => {
+            const ay = ((a.y - scrollY * 0.05) % h + h) % h;
+            const dxa = a.x - mouse.x;
+            const dya = ay - mouse.y;
+            const distA = Math.sqrt(dxa * dxa + dya * dya);
+            if (distA > 200) return;
+
+            particles.slice(i + 1).forEach(b => {
+                const by = ((b.y - scrollY * 0.05) % h + h) % h;
+                const dx = a.x - b.x;
+                const dy = ay - by;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 80) {
+                    ctx.beginPath();
+                    ctx.moveTo(a.x, ay);
+                    ctx.lineTo(b.x, by);
+                    ctx.strokeStyle = `rgba(249, 115, 22, ${0.08 * (1 - dist / 80)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            });
+        });
+
         requestAnimationFrame(draw);
     }
 
-    addEventListener('resize', () => { resize(); init(); });
-    resize(); init(); draw();
+    window.addEventListener('resize', () => { resize(); createParticles(); });
+    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+    resize();
+    createParticles();
+    draw();
 })();
 
-// ═══ SCROLL REVEAL (gru.space-style staggered blur) ═══
+// ═══════════════════════════════════════════════
+// DISSOLUTION FRAGMENTS — Floating grid pieces
+// ═══════════════════════════════════════════════
 (function() {
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (!e.isIntersecting) return;
-            const siblings = [...e.target.parentElement.children].filter(c => c.classList.contains('reveal'));
-            const i = siblings.indexOf(e.target);
-            e.target.style.transitionDelay = (i * 120) + 'ms';
-            requestAnimationFrame(() => e.target.classList.add('visible'));
-            obs.unobserve(e.target);
+    const container = document.getElementById('fragments');
+    const count = 30;
+
+    for (let i = 0; i < count; i++) {
+        const frag = document.createElement('div');
+        frag.className = 'fragment';
+        const size = Math.random() * 4 + 2;
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        const duration = Math.random() * 8 + 6;
+        const delay = Math.random() * 5;
+
+        frag.style.cssText = `
+            left: ${x}%;
+            top: ${y}%;
+            width: ${size}px;
+            height: ${size}px;
+            opacity: ${Math.random() * 0.15 + 0.05};
+            animation: fragmentFloat ${duration}s ease-in-out ${delay}s infinite alternate;
+        `;
+        container.appendChild(frag);
+    }
+
+    // Inject keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fragmentFloat {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(${Math.random() > 0.5 ? '' : '-'}${Math.random() * 40 + 10}px, ${Math.random() > 0.5 ? '' : '-'}${Math.random() * 40 + 10}px) rotate(${Math.random() * 90}deg); }
+        }
+    `;
+    document.head.appendChild(style);
+})();
+
+// ═══════════════════════════════════════════════
+// SCROLL REVEAL — Intersection Observer (gru.space style stagger)
+// ═══════════════════════════════════════════════
+(function() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                const siblings = Array.from(entry.target.parentElement.children)
+                    .filter(c => c.classList.contains('reveal'));
+                const index = siblings.indexOf(entry.target);
+                const delay = index * 150;
+                entry.target.style.transitionDelay = delay + 'ms';
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, 50);
+                observer.unobserve(entry.target);
+            }
         });
-    }, { threshold: 0.06, rootMargin: '0px 0px -80px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 
-// ═══ PROGRESS BARS (animate on scroll) ═══
-(function() {
-    const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-            if (!e.isIntersecting) return;
-            const w = e.target.dataset.width;
-            if (w) e.target.style.width = w + '%';
-            obs.unobserve(e.target);
-        });
-    }, { threshold: 0.3 });
-
-    document.querySelectorAll('.timeline-progress-fill').forEach(el => obs.observe(el));
-})();
-
-// ═══ SCROLL HINT HIDE ═══
-(function() {
-    const el = document.querySelector('.scroll-hint');
-    if (!el) return;
-    let done = false;
-    addEventListener('scroll', () => {
-        if (!done && scrollY > 80) { el.style.opacity = '0'; el.style.transition = 'opacity 0.6s'; done = true; }
-    });
-})();
-
-// ═══ WAITLIST ═══
+// ═══════════════════════════════════════════════
+// WAITLIST FORM HANDLER
+// ═══════════════════════════════════════════════
 function handleWaitlist(e) {
     e.preventDefault();
     const email = document.getElementById('waitlist-email').value;
     const note = document.getElementById('waitlist-note');
-    note.textContent = "Thanks! We'll keep you posted at " + email;
+    // For now, mailto fallback — replace with real API later
+    note.textContent = 'Thanks! We\'ll keep you posted at ' + email;
     note.classList.add('success');
     document.getElementById('waitlist-email').value = '';
-    location.href = 'mailto:anis@chargebotic.com?subject=Waitlist&body=Add me: ' + encodeURIComponent(email);
+    // Also open mailto as backup
+    window.location.href = 'mailto:anis@chargebotic.com?subject=Waitlist signup&body=Add me to the waitlist: ' + encodeURIComponent(email);
 }
+
+// ═══════════════════════════════════════════════
+// HIDE SCROLL INDICATOR on scroll
+// ═══════════════════════════════════════════════
+(function() {
+    const indicator = document.querySelector('.scroll-indicator');
+    if (!indicator) return;
+    let hidden = false;
+    window.addEventListener('scroll', () => {
+        if (!hidden && window.scrollY > 100) {
+            indicator.style.opacity = '0';
+            indicator.style.transition = 'opacity 0.5s';
+            hidden = true;
+        }
+    });
+})();
 </script>
 
 </body>
