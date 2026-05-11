@@ -29,7 +29,7 @@ async def main():
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": A4_WIDTH, "height": A4_HEIGHT})
-        await page.goto(f"{SITE_URL}/index.html", wait_until="networkidle")
+        await page.goto(f"{SITE_URL}/deck/index.html", wait_until="networkidle")
 
         # Inject CSS to tighten spacing - targets the exact classes from the site
         await page.evaluate("""() => {

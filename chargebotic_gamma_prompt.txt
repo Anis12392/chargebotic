@@ -1,0 +1,90 @@
+Create a 10-slide investor pitch deck for a startup called Chargebotic. Apply these rules on EVERY slide: less text more diagrams, no slide should have more than 40 words, every page must have the company logo, contact info (anis@chargebotic.com), and page number so any screengrabbed page stands alone. Use a dark theme with orange (#f97316) accents. 16:9 landscape format.
+
+SLIDE 1 — TITLE PAGE
+Company name: Chargebotic
+Tagline: "The Universal Energy Layer for Robots"
+This tagline must be simple, sticky, and repeatable — it's what a VC would say to their partners when mentioning us. It captures our big vision with a hook.
+Visual: Bold product image or clean render of an autonomous charging rover docking to a robot
+Bottom: anis@chargebotic.com · chargebotic.com · San Francisco, CA
+
+SLIDE 2 — THE PROBLEM
+Headline: "Energy Kills Robot Fleets"
+This slide must hit hard — if investors don't feel this is a massive problem, the rest of the deck is irrelevant.
+Visual diagram showing the pain:
+- Warehouse AMRs spend 30% of their time charging instead of working
+- Delivery robots have a 4-hour window before they're useless
+- Rovers on the Moon die because energy isn't there
+Use icons or a visual showing robots stranded/idle. One big stat: "30% of fleet time lost to charging"
+
+SLIDE 3 — MARKET SIZE
+Headline: "A $38B Infrastructure Problem"
+Show the SIZE of the problem with big visual numbers:
+- $38B robot charging infrastructure market by 2033
+- 3M+ autonomous robots deployed by 2028
+- Every robotics vertical hits the same wall
+Visual: Market size graphic with the verticals — Warehouses, Drones, Delivery, Humanoid, Industrial, Space
+Diagram, not text.
+
+SLIDE 4 — THE SOLUTION / VALUE PROPOSITION
+Headline: "Chargebotic: Autonomous Charging Infrastructure"
+What we build: A universal energy layer for robots. An autonomous rover with induction pad that docks to any robot and charges it without human intervention.
+Visual: Simple diagram showing how it works — rover navigates → aligns → charges via induction
+One sentence max explaining the concept. Let the diagram carry it.
+
+SLIDE 5 — SECRET SAUCE / MOAT
+Headline: "Why We Win"
+What's unique — our technology moat:
+- Universal: Works across robot brands (the "Android moment" for robot energy)
+- Software intelligence: Routing, scheduling, fleet-wide energy optimization (45% of value is in the software layer)
+- Hardware + Software: Not just a charger — an intelligent energy orchestration platform
+Visual: Icon-based layout or diagram showing the moat. No paragraphs.
+
+SLIDE 6 — BUSINESS MODEL
+Headline: "How We Make Money"
+Revenue model — keep it visual:
+- Hardware: Per-unit charging rover sales
+- Software SaaS: Fleet energy management platform (recurring)
+- Repeatable across all 6 verticals
+Visual: Simple revenue diagram or pricing breakdown
+Also show: Who we sell to (robot fleet operators, warehouse companies, robot OEMs)
+
+SLIDE 7 — GO-TO-MARKET
+Headline: "How We Reach Customers"
+Go-to-market strategy:
+- Direct sales to fleet operators (warehouses first — highest pain, fastest deploy)
+- Partnerships with robot OEMs
+- Research-first approach: Talk to operators → Map the pain → Find the wedge → Ship & iterate
+Visual: Funnel or channel diagram. Keep under 30 words.
+
+SLIDE 8 — COMPETITIVE LANDSCAPE
+Headline: "Where We Stand"
+This is critical — show we know the market.
+Visual: 2-axis chart. Pick two axes (e.g., "Universal vs. Proprietary" on X, "Hardware Only vs. Hardware + Software Intelligence" on Y).
+Chargebotic in the upper-right corner (best position).
+Competitors plotted below/left: proprietary robot brand chargers, manual charging solutions, single-vertical charging companies.
+No paragraphs — the chart IS the slide.
+
+SLIDE 9 — TEAM
+Headline: "Why Us"
+Why is our team the one to bet on?
+
+Anis Cheriet — Co-founder & CEO
+Ex-EV charging infrastructure. Led Europe's largest charging deployments twice. Deep expertise in energy systems at scale.
+LinkedIn link.
+
+Christopher Redfearn — Co-founder & Hardware Lead
+Ex-Apple & Meta. Hardware lead, MS in CS. Builds space-grade reliable systems from scratch.
+LinkedIn link.
+
+Visual: Headshots + 1-line highlights. Keep it short — details come in follow-up meetings.
+
+SLIDE 10 — THE ASK + TRACTION
+Headline: "Join Us"
+Use of capital — what are we raising, how will we use it, what's the output:
+- Raising: [pre-seed amount]
+- Use: R&D, first pilot deployments, hiring
+- Timeline: 18 months
+- Milestone: Production-ready system, first paying customers, worth at least 2x at end of runway
+Traction so far: Working prototype, autonomous docking demo, Nav2/ROS2 integration, induction charging system operational
+Visual: Clean milestone timeline + traction proof points
+End with: Calendar link to book a meeting + "anis@chargebotic.com"

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Powerbird — Pipeline</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+  header { padding: 32px 40px 24px; border-bottom: 1px solid #1e1e1e; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  header span { font-size: 13px; color: #555; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; margin-right: 6px; }
+
+  .stats { display: flex; gap: 16px; padding: 32px 40px; flex-wrap: wrap; }
+  .stat { background: #111; border: 1px solid #1e1e1e; border-radius: 12px; padding: 20px 28px; min-width: 160px; flex: 1; }
+  .stat .num { font-size: 36px; font-weight: 700; letter-spacing: -1px; }
+  .stat .label { font-size: 12px; color: #555; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat.investor .num { color: #a78bfa; }
+  .stat.interest .num { color: #38bdf8; }
+  .stat.partner .num { color: #34d399; }
+  .stat.media .num { color: #fb923c; }
+
+  .filters { padding: 0 40px 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .filter { padding: 6px 14px; border-radius: 20px; border: 1px solid #2a2a2a; background: transparent; color: #888; font-size: 13px; cursor: pointer; transition: all 0.15s; }
+  .filter:hover, .filter.active { background: #fff; color: #000; border-color: #fff; }
+
+  .table-wrap { padding: 0 40px 60px; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { border-bottom: 1px solid #1e1e1e; }
+  th { text-align: left; padding: 10px 16px; font-size: 11px; color: #444; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+  td { padding: 14px 16px; border-bottom: 1px solid #111; vertical-align: middle; }
+  tr:hover td { background: #111; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+  .badge.Investor       { background: #2e1e6e; color: #a78bfa; }
+  .badge.Product        { background: #0c2a3e; color: #38bdf8; }
+  .badge.Partner        { background: #0a2e22; color: #34d399; }
+  .badge.Media          { background: #2e1a0a; color: #fb923c; }
+  .badge.Discovery      { background: #1e1e1e; color: #888; }
+
+  .status { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .status.New       { background: #22c55e; }
+  .status.Contacted { background: #f59e0b; }
+  .status.Closed    { background: #ef4444; }
+
+  .name { font-weight: 500; }
+  .email { color: #555; font-size: 12px; }
+  .company { color: #aaa; }
+  .date { color: #555; font-size: 12px; white-space: nowrap; }
+  .subject { color: #555; font-size: 12px; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .empty { text-align: center; padding: 60px; color: #333; }
+
+  @media (max-width: 768px) {
+    header, .stats, .filters, .table-wrap { padding-left: 20px; padding-right: 20px; }
+    .stat { min-width: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>⚡ Powerbird Pipeline</h1>
+  </div>
+  <span style="margin-left:auto"><span class="dot"></span>Live</span>
+</header>
+
+<div class="stats" id="stats"></div>
+
+<div class="filters" id="filters">
+  <button class="filter active" onclick="filterBy('all', this)">All</button>
+  <button class="filter" onclick="filterBy('Investor', this)">Investors</button>
+  <button class="filter" onclick="filterBy('Product Interest', this)">Product Interest</button>
+  <button class="filter" onclick="filterBy('Partner/Supplier', this)">Partners</button>
+  <button class="filter" onclick="filterBy('Media', this)">Media</button>
+  <button class="filter" onclick="filterBy('Discovery Call', this)">Discovery Calls</button>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Company</th>
+        <th>Category</th>
+        <th>Last Contact</th>
+        <th>Last Subject</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<script>
+var contacts = [
+  { name: "Antoine Moyroud",    email: "antoine@lsvp.com",                  company: "Lightspeed Venture Partners", category: "Investor",          lastContact: "2026-05-06", lastSubject: "Zoom | Anis & Bo (Chargebotic) <> Antoine (LSVP)",              status: "Contacted" },
+  { name: "Christian Keil",     email: "ck@a16z.com",                       company: "a16z (American Dynamism)",    category: "Investor",          lastContact: "2026-05-11", lastSubject: "Wirebird persistent drones powered by power line",               status: "Contacted" },
+  { name: "Avery Schmitz",      email: "avery.schmitz@cnn.com",             company: "CNN",                         category: "Media",             lastContact: "2026-05-07", lastSubject: "Power line charging for investigative reporting (CNN)",           status: "New" },
+  { name: "Ed",                 email: "ed@virtussolis.space",              company: "Virtus Solis",                category: "Product Interest",  lastContact: "2026-05-07", lastSubject: "Powerbird - Persistent drone - Anis / Bo",                       status: "Contacted" },
+  { name: "Royee Li-Ran",       email: "royeel@gmail.com",                  company: "—",                           category: "Product Interest",  lastContact: "2026-05-07", lastSubject: "Representation in Israel",                                       status: "New" },
+  { name: "A.D. Besemer",       email: "a.d.besemer@icloud.com",            company: "—",                           category: "Product Interest",  lastContact: "2026-05-04", lastSubject: "Drones",                                                         status: "New" },
+  { name: "Luke Liu",           email: "luke.liu@longsingtechnology.com",   company: "Longsing Technology",         category: "Partner/Supplier",  lastContact: "2026-05-04", lastSubject: "4 technical proposals for preview (2 NCM and 2 LFP)",            status: "Contacted" },
+  { name: "Daniele",            email: "db@cognivix.com",                   company: "Cognivix",                    category: "Product Interest",  lastContact: "2026-05-01", lastSubject: "Daniele from Cognivix <> Bo & Anis from Chargebotic",            status: "Contacted" },
+  { name: "Alex Burkardt",      email: "alex@lowercaseb.com",               company: "Lowercase Capital",           category: "Product Interest",  lastContact: "2026-05-01", lastSubject: "Bo<>Alex meet at Alex's Garage Lab",                             status: "Contacted" },
+  { name: "Axel",               email: "axel@innate.bot",                   company: "Innate Robotics",             category: "Partner/Supplier",  lastContact: "2026-05-05", lastSubject: "Autonomous fast-charging module for Mars",                        status: "Contacted" },
+  { name: "Steve Macenski",     email: "steve@opennav.org",                 company: "OpenNav",                     category: "Partner/Supplier",  lastContact: "2026-04-30", lastSubject: "Follow up Coffee - Steve <> Anis & Bo",                          status: "Contacted" },
+  { name: "Patrick Consorti",   email: "patrick.consorti@gmail.com",        company: "—",                           category: "Partner/Supplier",  lastContact: "2026-04-14", lastSubject: "Board Directors: Anis - Hadi - Patrick",                         status: "Contacted" },
+  { name: "Clovis Vinant-Tang", email: "clovisvt@gmail.com",                company: "—",                           category: "Discovery Call",    lastContact: "2026-04-15", lastSubject: "Discovery Call - 15 Minutes",                                    status: "Contacted" },
+  { name: "Sandeep",            email: "sandeepkumar172967@gmail.com",       company: "—",                           category: "Discovery Call",    lastContact: "2026-03-16", lastSubject: "Discovery Call - 15 Minutes",                                    status: "New" },
+];
+
+var current = 'all';
+
+function badgeClass(cat) {
+  if (cat === 'Investor') return 'Investor';
+  if (cat === 'Product Interest') return 'Product';
+  if (cat.startsWith('Partner')) return 'Partner';
+  if (cat === 'Media') return 'Media';
+  return 'Discovery';
+}
+
+function render(data) {
+  var tbody = document.getElementById('tbody');
+  if (!data.length) { tbody.innerHTML = '<tr><td colspan="6" class="empty">No contacts</td></tr>'; return; }
+  tbody.innerHTML = data.map(function(c) {
+    return '<tr>' +
+      '<td><div class="name">'+c.name+'</div><div class="email">'+c.email+'</div></td>' +
+      '<td class="company">'+c.company+'</td>' +
+      '<td><span class="badge '+badgeClass(c.category)+'">'+c.category+'</span></td>' +
+      '<td class="date">'+c.lastContact+'</td>' +
+      '<td class="subject" title="'+c.lastSubject+'">'+c.lastSubject+'</td>' +
+      '<td><span class="status '+c.status+'"></span>'+c.status+'</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function filterBy(cat, btn) {
+  current = cat;
+  document.querySelectorAll('.filter').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var filtered = cat === 'all' ? contacts : contacts.filter(function(c){return c.category===cat;});
+  render(filtered);
+}
+
+function buildStats() {
+  var cats = { Investor: 0, 'Product Interest': 0, 'Partner/Supplier': 0, Media: 0 };
+  contacts.forEach(function(c) { if (cats[c.category] !== undefined) cats[c.category]++; });
+  var el = document.getElementById('stats');
+  el.innerHTML =
+    '<div class="stat"><div class="num">'+contacts.length+'</div><div class="label">Total</div></div>' +
+    '<div class="stat investor"><div class="num">'+cats['Investor']+'</div><div class="label">Investors</div></div>' +
+    '<div class="stat interest"><div class="num">'+cats['Product Interest']+'</div><div class="label">Product Interest</div></div>' +
+    '<div class="stat partner"><div class="num">'+cats['Partner/Supplier']+'</div><div class="label">Partners</div></div>' +
+    '<div class="stat media"><div class="num">'+cats['Media']+'</div><div class="label">Media</div></div>';
+}
+
+buildStats();
+render(contacts);
+</script>
+</body>
+</html>

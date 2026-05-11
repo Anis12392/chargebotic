@@ -3,313 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chargebotic | Universal Energy for Autonomous Robots</title>
-    <meta name="description" content="Chargebotic is building the universal energy layer for autonomous robotics. Charging infrastructure, orchestration software, and fleet optimization.">
+    <title>Powerbird | Persistent Drone. Powered by the Line.</title>
+    <meta name="description" content="Powerbird is a self-charging autonomous drone that harvests energy directly from power lines — enabling unlimited flight time for inspection, monitoring, and more.">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="powerbird.css">
 </head>
 <body>
 
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-inner">
-            <a href="/" class="nav-logo">Chargebotic</a>
+            <a href="/" class="nav-logo">
+                <span class="logo-bolt">⚡</span>
+                <span class="logo-text">POWERBIRD</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="#problem">Problem</a></li>
-                <li><a href="#industries">Industries</a></li>
-                <li><a href="#solution">Solution</a></li>
-                <li><a href="#story">Our Story</a></li>
-                <li><a href="chargebotic-built.html">What We Built</a></li>
-                <li><a href="chargebotic-advisors.html">Advisors</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
                 <li><a href="#team">Team</a></li>
-                <li><a href="mailto:anis@chargebotic.com" class="nav-cta">Talk to Us <span class="btn-arrow">&rarr;</span></a></li>
+                <li><button class="nav-cta nav-reserve" onclick="openReserve()">Waitlist <span class="btn-arrow">→</span></button></li>
             </ul>
             <button class="nav-hamburger" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </button>
         </div>
     </nav>
 
-    <!-- Hero — Video Background -->
-    <section class="hero">
-        <div class="hero-video-wrapper">
-            <video class="hero-video" autoplay muted loop playsinline>
-                <source src="hero-video.mp4" type="video/mp4">
-            </video>
-            <div class="hero-video-overlay"></div>
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-grid"></div>
+            <div class="hero-glow"></div>
+            <div class="powerline-svg">
+                <svg viewBox="0 0 1400 300" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Tower left -->
+                    <line x1="100" y1="280" x2="100" y2="80" stroke="#f5c518" stroke-width="3" opacity="0.4"/>
+                    <line x1="60" y1="130" x2="140" y2="130" stroke="#f5c518" stroke-width="3" opacity="0.4"/>
+                    <line x1="70" y1="100" x2="130" y2="100" stroke="#f5c518" stroke-width="2" opacity="0.4"/>
+                    <!-- Tower right -->
+                    <line x1="1300" y1="280" x2="1300" y2="80" stroke="#f5c518" stroke-width="3" opacity="0.4"/>
+                    <line x1="1260" y1="130" x2="1340" y2="130" stroke="#f5c518" stroke-width="3" opacity="0.4"/>
+                    <line x1="1270" y1="100" x2="1330" y2="100" stroke="#f5c518" stroke-width="2" opacity="0.4"/>
+                    <!-- Power lines -->
+                    <path d="M60,100 Q700,160 1340,100" stroke="#f5c518" stroke-width="2" fill="none" opacity="0.6"/>
+                    <path d="M60,130 Q700,190 1340,130" stroke="#f5c518" stroke-width="2" fill="none" opacity="0.6"/>
+                    <path d="M70,100 Q700,170 1330,100" stroke="#f5c518" stroke-width="1.5" fill="none" opacity="0.3"/>
+                    <!-- Energy pulse on line -->
+                    <circle r="6" fill="#f5c518" opacity="0.9">
+                        <animateMotion dur="4s" repeatCount="indefinite">
+                            <mpath href="#line1"/>
+                        </animateMotion>
+                    </circle>
+                    <path id="line1" d="M60,100 Q700,160 1340,100" fill="none"/>
+                    <!-- Drone body sketch -->
+                    <g transform="translate(650,120)" opacity="0.15">
+                        <line x1="-40" y1="0" x2="40" y2="0" stroke="#f5c518" stroke-width="2"/>
+                        <line x1="0" y1="-25" x2="0" y2="25" stroke="#f5c518" stroke-width="2"/>
+                        <circle cx="-40" cy="0" r="12" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                        <circle cx="40" cy="0" r="12" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                        <circle cx="0" cy="-25" r="12" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                        <circle cx="0" cy="25" r="12" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                        <rect x="-12" y="-12" width="24" height="24" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                    </g>
+                </svg>
+            </div>
         </div>
         <div class="hero-content">
+            <div class="hero-badge">EARLY STAGE · SEEKING PARTNERS</div>
             <h1 class="hero-title">
-                Powering the world's<br><span class="accent">autonomous fleets.</span>
+                Persistent drone.<br>
+                <span class="accent">Powered by the line.</span>
             </h1>
             <p class="hero-subtitle">
-                Universal charging infrastructure and intelligent energy orchestration for every robot, every vertical, every scale.
+                Powerbird autonomously latches onto power lines, harvests energy via magnetic induction, and recharges mid-mission — enabling truly unlimited flight time.
             </p>
             <div class="hero-ctas">
-                <a href="mailto:anis@chargebotic.com" class="btn-primary">
-                    Talk to Us <span class="btn-arrow">&rarr;</span>
-                </a>
-                <a href="#problem" class="btn-secondary">
-                    Learn More <span class="btn-arrow">&darr;</span>
-                </a>
+                <button class="btn btn-primary" onclick="openReserve()">Join the Waitlist →</button>
+                <a href="#how-it-works" class="btn btn-ghost">See How It Works</a>
             </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value">∞</div>
+                    <div class="stat-label">Flight Endurance</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <div class="stat-value">0</div>
+                    <div class="stat-label">Ground Recharges</div>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <div class="stat-value">Autonomous</div>
+                    <div class="stat-label">Perch & Charge</div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-line"></div>
         </div>
     </section>
 
-    <!-- The Problem -->
-    <section id="problem" class="section">
+    <!-- Problem -->
+    <section class="problem" id="problem">
         <div class="container">
-            <div class="section-header fade-in" style="max-width: 800px;">
-                <div class="section-label">The Problem</div>
-                <h2 class="section-title">Robots are ready. Energy isn't.</h2>
-                <p class="section-subtitle" style="max-width: 800px;">
-                    Autonomous robots are transforming every industry. But they all hit the same wall: <strong style="color: var(--color-white);">energy.</strong> Fleets lose 30% of productive time to charging. Infrastructure costs more than the robots themselves. And every brand has its own siloed solution.
-                </p>
+            <div class="section-label">THE PROBLEM</div>
+            <h2 class="section-title">Drones die. Missions don't wait.</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">🔋</div>
+                    <h3>20–40 min</h3>
+                    <p>Average flight time before a drone must land and recharge — breaking operations, losing coverage.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🚁</div>
+                    <h3>Fleet overhead</h3>
+                    <p>Continuous missions require multiple drones rotating on the ground — multiplying cost and logistics.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📡</div>
+                    <h3>Remote = impossible</h3>
+                    <p>In the field — wildfires, pipelines, borders — there's no charging station. The mission simply ends.</p>
+                </div>
             </div>
-
-            <div class="grid-3 fade-in" style="margin-top: 64px;">
-                <div class="card" style="text-align: center; padding: 48px 32px;">
-                    <div class="stat-number">30%</div>
-                    <p class="card-text" style="margin-top: 12px;">of fleet operating time lost to charging and battery management</p>
-                </div>
-                <div class="card" style="text-align: center; padding: 48px 32px;">
-                    <div class="stat-number">0</div>
-                    <p class="card-text" style="margin-top: 12px;">universal charging solutions exist today. Every fleet is locked into one vendor.</p>
-                </div>
-                <div class="card" style="text-align: center; padding: 48px 32px;">
-                    <div class="stat-number">#1</div>
-                    <p class="card-text" style="margin-top: 12px;">cost driver at scale isn't the robots — it's the energy infrastructure around them.</p>
-                </div>
+            <div class="problem-insight">
+                <div class="insight-bar"></div>
+                <p>Power lines cross <strong>7.3 million km</strong> of terrain globally — yet no drone harvests that energy. We built one that does.</p>
             </div>
         </div>
     </section>
 
-    <!-- Industries -->
-    <section id="industries" class="section">
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
         <div class="container">
-            <div class="section-header centered fade-in">
-                <div class="section-label">Industries We Serve</div>
-                <h2 class="section-title">One energy platform.<br>Every autonomous vertical.</h2>
-                <p class="section-subtitle">Wherever robots work, they need energy. We're building the layer that makes it seamless — from warehouses to the lunar surface.</p>
+            <div class="section-label">HOW IT WORKS</div>
+            <h2 class="section-title">The autonomous cycle</h2>
+            <p class="section-subtitle">Powerbird detects a power line, perches, recharges, and resumes — all without human intervention.</p>
+
+            <div class="cycle-steps">
+                <div class="cycle-step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="28" stroke="#f5c518" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            <path d="M20,42 L30,18 L40,42" stroke="#f5c518" stroke-width="2" fill="none"/>
+                            <line x1="22" y1="35" x2="38" y2="35" stroke="#f5c518" stroke-width="2"/>
+                            <line x1="10" y1="42" x2="50" y2="42" stroke="#f5c518" stroke-width="1.5"/>
+                            <circle cx="15" cy="24" r="3" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                            <circle cx="45" cy="20" r="3" stroke="#f5c518" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3>Find Line</h3>
+                    <p>Computer vision and magnetic field sensing detect the nearest high-voltage transmission line within range.</p>
+                </div>
+                <div class="cycle-arrow">→</div>
+                <div class="cycle-step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="28" stroke="#f5c518" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            <line x1="10" y1="22" x2="50" y2="22" stroke="#f5c518" stroke-width="2.5"/>
+                            <rect x="22" y="22" width="16" height="10" stroke="#f5c518" stroke-width="1.5" fill="none" rx="1"/>
+                            <line x1="30" y1="32" x2="30" y2="40" stroke="#f5c518" stroke-width="1.5" stroke-dasharray="3,3"/>
+                        </svg>
+                    </div>
+                    <h3>Land &amp; Connect</h3>
+                    <p>The hook system clamps precisely onto the wire. Induction coils align automatically for maximum energy transfer.</p>
+                </div>
+                <div class="cycle-arrow">→</div>
+                <div class="cycle-step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="28" stroke="#f5c518" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            <path d="M22,20 L18,32 L28,30 L24,44 L42,26 L32,28 L36,14 Z" stroke="#f5c518" stroke-width="1.5" fill="rgba(245,197,24,0.15)"/>
+                        </svg>
+                    </div>
+                    <h3>Harvest Energy</h3>
+                    <p>The alternating magnetic field of the line drives our induction coil, converting it to clean DC power to top up the battery.</p>
+                </div>
+                <div class="cycle-arrow">→</div>
+                <div class="cycle-step">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">
+                        <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="30" cy="30" r="28" stroke="#f5c518" stroke-width="1.5" fill="none" opacity="0.3"/>
+                            <line x1="10" y1="22" x2="50" y2="22" stroke="#f5c518" stroke-width="2.5"/>
+                            <path d="M30,38 L30,28" stroke="#f5c518" stroke-width="2" marker-end="url(#arrow)"/>
+                            <polygon points="24,30 30,18 36,30" stroke="#f5c518" stroke-width="1.5" fill="rgba(245,197,24,0.15)"/>
+                            <line x1="18" y1="48" x2="42" y2="48" stroke="#f5c518" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        </svg>
+                    </div>
+                    <h3>Take Off</h3>
+                    <p>Battery recharged. Powerbird releases from the line and resumes its mission — no operator needed, no base to return to.</p>
+                </div>
             </div>
 
-            <div class="grid-3 fade-in" style="margin-top: 48px;">
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">⚙️</div>
-                    <div class="card-title">Warehouse &amp; Factory AMRs</div>
-                    <p class="card-text">Your AMRs spend hours docked at chargers instead of moving pallets. We eliminate charging downtime with wireless, autonomous energy delivery.</p>
+            <!-- Hook System Detail -->
+            <div class="tech-detail">
+                <div class="tech-text">
+                    <div class="section-label">HARDWARE</div>
+                    <h3>The Hook System</h3>
+                    <p>The core innovation is the clamping mechanism: a spring-loaded hook with integrated induction coils that grips any standard transmission wire. No contact required — energy harvesting is purely inductive.</p>
+                    <ul class="tech-list">
+                        <li><span class="check">✓</span> Non-contact inductive coupling — no electrical tap</li>
+                        <li><span class="check">✓</span> Works on any AC power line (50/60 Hz)</li>
+                        <li><span class="check">✓</span> Secure mechanical grip withstands wind and vibration</li>
+                        <li><span class="check">✓</span> On-board power converter outputs clean DC</li>
+                    </ul>
                 </div>
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">✈️</div>
-                    <div class="card-title">Drones &amp; UAVs</div>
-                    <p class="card-text">Flight time is everything. Autonomous landing pads with rapid wireless charging keep your fleet in the air, not on the ground.</p>
-                </div>
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">📦</div>
-                    <div class="card-title">Last-Mile Delivery</div>
-                    <p class="card-text">Delivery robots have a 4-hour window before they're useless. Distributed charging nodes across the city extend range without returning to base.</p>
-                </div>
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">🤖</div>
-                    <div class="card-title">Humanoid Robots</div>
-                    <p class="card-text">The next-gen workforce needs energy like humans need rest. Seamless charging stations that humanoids can navigate to autonomously.</p>
-                </div>
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">🏭</div>
-                    <div class="card-title">Industrial &amp; Outdoor</div>
-                    <p class="card-text">Heavy-duty robots in construction, agriculture, and mining work in harsh conditions. Ruggedized charging infrastructure built to survive.</p>
-                </div>
-                <div class="card">
-                    <div style="font-size: 32px; margin-bottom: 16px;">🌑</div>
-                    <div class="card-title">Space &amp; Lunar</div>
-                    <p class="card-text">A $100M rover dies in 14 days because energy isn't there. Deployable energy nodes that survive extreme environments — where it all started for us.</p>
+                <div class="tech-visual">
+                    <div class="hook-diagram">
+                        <div class="wire-line"></div>
+                        <div class="hook-body">
+                            <div class="hook-clamp">CLAMP</div>
+                            <div class="hook-coil">⚡ INDUCTION COIL</div>
+                            <div class="hook-converter">POWER CONVERTER</div>
+                            <div class="hook-output">→ DC POWER</div>
+                        </div>
+                        <div class="field-rings">
+                            <div class="ring r1"></div>
+                            <div class="ring r2"></div>
+                            <div class="ring r3"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- What We're Building -->
-    <section id="solution" class="section">
+    <!-- Use Cases -->
+    <section class="use-cases" id="use-cases">
         <div class="container">
-            <div class="section-header centered fade-in">
-                <div class="section-label">What We're Building</div>
-                <h2 class="section-title">Full-stack autonomous charging.</h2>
-                <p class="section-subtitle">Hardware, software, and intelligence — everything a fleet needs to never think about energy again.</p>
-            </div>
-
-            <div class="grid-2 fade-in" style="margin-top: 48px;">
-                <div class="card" style="padding: 48px 36px;">
-                    <div style="font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--color-accent); margin-bottom: 20px;">Hardware</div>
-                    <div class="card-title" style="font-size: 24px; margin-bottom: 16px;">Universal Wireless Charging</div>
-                    <p class="card-text">Induction-based charging pads that work with any robot. No connectors, no dust issues, no manual intervention. From 5W to 100W — and scaling.</p>
+            <div class="section-label">USE CASES</div>
+            <h2 class="section-title">Missions that never end</h2>
+            <p class="section-subtitle">Any mission that follows infrastructure — or operates near it — becomes viable with unlimited endurance.</p>
+            <div class="use-cases-grid">
+                <div class="use-case-card featured">
+                    <div class="uc-icon">🔌</div>
+                    <h3>Line Inspection</h3>
+                    <p>Continuously patrol hundreds of kilometers of transmission infrastructure. Powerbird literally fuels itself from the lines it's inspecting.</p>
+                    <div class="uc-tag">PRIMARY MARKET</div>
                 </div>
-                <div class="card" style="padding: 48px 36px;">
-                    <div style="font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--color-accent); margin-bottom: 20px;">Software</div>
-                    <div class="card-title" style="font-size: 24px; margin-bottom: 16px;">Energy Orchestration</div>
-                    <p class="card-text">Intelligent routing, scheduling, and fleet-wide optimization. Your robots detect low battery, navigate to the nearest charger, dock, charge, and resume — fully autonomously.</p>
+                <div class="use-case-card">
+                    <div class="uc-icon">🔥</div>
+                    <h3>Wildfire Monitoring</h3>
+                    <p>Deploy near transmission corridors and maintain persistent aerial watch over fire-prone areas — no retrieval needed.</p>
                 </div>
-            </div>
-
-            <div class="fade-in" style="margin-top: 24px; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 12px; padding: 48px; text-align: center;">
-                <p style="font-size: 20px; font-weight: 600; color: var(--color-white); margin-bottom: 8px;">We built a full autonomous charging stack in 3 months.</p>
-                <p style="font-size: 15px; color: var(--color-text-secondary);">Robot + wireless charger + autonomous navigation + charging orchestration. End-to-end, working today.</p>
+                <div class="use-case-card">
+                    <div class="uc-icon">📡</div>
+                    <h3>Communications Relay</h3>
+                    <p>Perch on a line and extend radio/LTE coverage to remote areas where ground infrastructure doesn't reach.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="uc-icon">🛡️</div>
+                    <h3>Border &amp; Area Surveillance</h3>
+                    <p>Long-duration patrol along fenced perimeters or border corridors using the adjacent power infrastructure as fuel.</p>
+                </div>
+                <div class="use-case-card">
+                    <div class="uc-icon">🌬️</div>
+                    <h3>Renewables Monitoring</h3>
+                    <p>Inspect wind farms and solar fields, harvesting energy from the very grid they power. Fully circular operation.</p>
+                </div>
+                <div class="use-case-card more">
+                    <div class="uc-icon">+</div>
+                    <h3>And More</h3>
+                    <p>Any vertical where endurance is the bottleneck. We're building for the applications that matter most first.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Our Story -->
-    <section id="story" class="section">
-        <div class="container" style="max-width: 800px;">
-            <div class="section-header centered fade-in">
-                <div class="section-label">Our Story</div>
-                <h2 class="section-title">From lunar hypothesis to full autonomous stack in 3 months.</h2>
-                <p class="section-subtitle">How we went from asking "what if we could deploy energy nodes on the Moon?" to a working end-to-end charging stack here on Earth.</p>
-            </div>
-
-            <div class="timeline" style="margin-top: 64px;">
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Dec 6, 2025</div>
-                    <div class="timeline-title">Rovers Die on the Moon</div>
-                    <p class="timeline-text">A $100M rover dies in 14 days because <strong style="color: var(--color-white);">energy isn't there</strong>. Solar panels only work in sunlight, batteries drain in the lunar night (-173&deg;C). We asked: what if we could deploy energy nodes for opportunity charging?</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-01.jpeg" alt="Rovers Die on the Moon" loading="lazy" />
+    <!-- Roadmap -->
+    <section class="roadmap" id="roadmap">
+        <div class="container">
+            <div class="section-label">ROADMAP</div>
+            <h2 class="section-title">Three steps to persistent flight</h2>
+            <div class="roadmap-steps">
+                <div class="rm-step active">
+                    <div class="rm-dot active"></div>
+                    <div class="rm-content">
+                        <div class="rm-phase">PHASE 1 — NOW</div>
+                        <h3>Build the Drone</h3>
+                        <p>High-efficiency quadrotor platform with lightweight composite frame, optimized for prolonged hover and precision landing on cables.</p>
+                        <ul>
+                            <li>4-prop high-efficiency design</li>
+                            <li>Lightweight structure</li>
+                            <li>Modular payload bay</li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Dec 2025</div>
-                    <div class="timeline-title">Induction Is The Way</div>
-                    <p class="timeline-text">Researched how to charge on the Moon. Found that <strong style="color: var(--color-white);">induction is the best method</strong>: no connectors to jam with regolith dust, no moving parts. Discovered Astrobotic's wireless charging research in thermal vacuum testing, confirming the approach.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-02.jpeg" alt="Induction Is The Way" loading="lazy" />
+                <div class="rm-connector"></div>
+                <div class="rm-step">
+                    <div class="rm-dot"></div>
+                    <div class="rm-content">
+                        <div class="rm-phase">PHASE 2 — NEXT</div>
+                        <h3>Design the Hook</h3>
+                        <p>Mechanical clamping system with integrated induction coils. Safe, secure, repeatable attachment across standard wire gauges.</p>
+                        <ul>
+                            <li>Spring-loaded clamp mechanism</li>
+                            <li>Magnetic induction coil integration</li>
+                            <li>Power converter to clean DC</li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Dec 2025</div>
-                    <div class="timeline-title">LEN: Lunar Energy Node Network</div>
-                    <p class="timeline-text">Designed the <strong style="color: var(--color-white);">Lunar Energy Node</strong> concept: small, deployable charging modules buried in regolith for thermal protection. Nodes form a mesh network with AI-assisted routing, creating the first multi-node lunar energy grid.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-03.jpeg" alt="LEN: Lunar Energy Node Network" loading="lazy" />
+                <div class="rm-connector"></div>
+                <div class="rm-step">
+                    <div class="rm-dot"></div>
+                    <div class="rm-content">
+                        <div class="rm-phase">PHASE 3 — AHEAD</div>
+                        <h3>Autonomous Ops</h3>
+                        <p>Full closed-loop autonomy: detect line, approach, land, harvest, take off — with no operator in the loop.</p>
+                        <ul>
+                            <li>Computer vision line detection</li>
+                            <li>Precision autonomous landing</li>
+                            <li>Full mission autonomy</li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Jan 2026</div>
-                    <div class="timeline-title">LEN-P: The Projectile Battery</div>
-                    <p class="timeline-text">Designed the LEN-P: a rugged cylindrical battery with wireless charging dock, 1-2 kWh storage, shock absorbers, thermal management, and ground-penetration anchoring. Engineered to survive impact.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-04.jpeg" alt="LEN-P: The Projectile Battery" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Jan 2026</div>
-                    <div class="timeline-title">LEN-P Prototype Roadmap</div>
-                    <p class="timeline-text">Mapped out the <strong style="color: var(--color-white);">prototype development phases</strong>: from core electronics (Phase 1) to V0 cylinder, shock buffer, embed/penetrator, charging box, and finally the full-scale 1 kWh form factor. Physical prototypes at each stage.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-05.jpeg" alt="LEN-P Prototype Roadmap" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Jan 5, 2026</div>
-                    <div class="timeline-title">Energy Delivery: Projectile Prototype</div>
-                    <p class="timeline-text">3D-printed the LEN-P projectile at 1/3 scale (155mm form factor reference). Researched artillery shell aerodynamics and impact resistance. The idea: catapult energy to the Moon. Drop it from orbit, it lands and becomes a charging node.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-06.jpeg" alt="Energy Delivery: Projectile Prototype" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Jan 6, 2026</div>
-                    <div class="timeline-title">Building the V0: Robot + Conductive Charger</div>
-                    <p class="timeline-text"><strong style="color: var(--color-white);">Pivoted from Moon to Earth</strong> to validate the core technology. Built Spark-E from scratch and our first conductive charging station. The team at the Artifact lab in SF, hands-on hardware.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-07-1.jpeg" alt="Building the V0: Robot + Conductive Charger" loading="lazy" />
-                        <img src="story-images/story-07-2.jpeg" alt="Building the V0: Robot + Conductive Charger" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Jan 2026</div>
-                    <div class="timeline-title">Spark-E + Autonomous Conductive Charging</div>
-                    <p class="timeline-text">First autonomous charging demo. Spark-E with NVIDIA Jetson, LiDAR, depth camera detects the ArUco marker, navigates to the conductive pad, and charges itself. Zero human intervention.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-08.jpeg" alt="Spark-E + Autonomous Conductive Charging" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Feb 2026</div>
-                    <div class="timeline-title">Navigation Becomes Orchestrator</div>
-                    <p class="timeline-text">Evolved the navigation system into a <strong style="color: var(--color-white);">charging orchestration layer</strong>. The robot detects low battery, plans route to nearest charger, docks with precision, charges, and resumes its mission. Full autonomous loop.</p>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Feb 2026</div>
-                    <div class="timeline-title">Induction Charger: 5W to 100W</div>
-                    <p class="timeline-text">Built our own <strong style="color: var(--color-white);">induction charging pads</strong>. Started at 5W, scaled to <strong style="color: var(--color-white);">100W</strong>. Custom 3D-printed enclosures with copper coils. Wireless, no connectors, no dust issues. The same technology for the Moon works on Earth.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-10-1.jpeg" alt="Induction Charger: 5W to 100W" loading="lazy" />
-                        <img src="story-images/story-10-2.jpeg" alt="Induction Charger: 5W to 100W" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Feb 2026</div>
-                    <div class="timeline-title">Chargebotic V1: Full Stack</div>
-                    <p class="timeline-text"><strong style="color: var(--color-white);">Chargebotic V1 complete.</strong> Mecanum-wheel robot + LiDAR + depth camera + induction charging station + autonomous navigation + charging orchestration. End-to-end autonomous charging loop, fully operational.</p>
-                    <div class="timeline-images">
-                        <img src="story-images/story-11.jpeg" alt="Chargebotic V1: Full Stack" loading="lazy" />
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in">
-                    <div class="timeline-date">Now</div>
-                    <div class="timeline-title">Full Stack Complete. Finding PMF.</div>
-                    <p class="timeline-text">Robotics platform + battery + charging infrastructure + orchestration software. Now talking to fleet operators across all verticals to find where to deploy first. Stay tuned.</p>
-                </div>
-
             </div>
         </div>
     </section>
 
     <!-- Team -->
-    <section id="team" class="section">
+    <section class="team" id="team">
         <div class="container">
-            <div class="section-header centered fade-in">
-                <div class="section-label">Team</div>
-                <h2 class="section-title">Ex-Apple. Ex-Meta.<br>Built for this.</h2>
-            </div>
-            <div class="grid-3 fade-in">
+            <div class="section-label">TEAM</div>
+            <h2 class="section-title">Built by builders</h2>
+            <div class="team-grid">
                 <div class="team-card">
-                    <div class="team-name">Anis Cheriet</div>
+                    <div class="team-avatar">AC</div>
+                    <h3>Anis Cheriet</h3>
                     <div class="team-role">Co-founder &amp; CEO</div>
-                    <p class="team-bio"><strong>Ex-EV charging infrastructure.</strong> Led Europe's largest charging deployments twice. Deep expertise in energy systems at scale.</p>
+                    <p>Operations, strategy, and go-to-market. Pushing the frontier from concept to field deployment.</p>
                 </div>
                 <div class="team-card">
-                    <div class="team-name">Christopher Redfearn</div>
+                    <div class="team-avatar">CR</div>
+                    <h3>Christopher Redfearn</h3>
                     <div class="team-role">Co-founder &amp; Hardware Lead</div>
-                    <p class="team-bio"><strong>Ex-Apple &amp; Meta.</strong> Hardware lead, MS in CS. Builds space-grade reliable systems from scratch.</p>
+                    <p>Deep hardware expertise. Designing the drone, hook system, and power electronics from the ground up.</p>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="section">
+    <!-- CTA / Contact -->
+    <section class="cta-section" id="contact">
         <div class="container">
-            <div style="text-align: center; padding: 80px 32px; background: var(--color-bg-card); border: 1px solid var(--color-border); border-radius: 16px;" class="fade-in">
-                <h3 style="font-size: clamp(24px, 3vw, 36px); font-weight: 800; color: var(--color-white); margin-bottom: 16px; letter-spacing: -0.5px;">Let's talk about your fleet's energy problem.</h3>
-                <p style="font-size: 16px; color: var(--color-text-secondary); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto;">We're working with fleet operators across every vertical. Tell us what's broken and we'll show you what we're building.</p>
-                <a href="mailto:anis@chargebotic.com" class="btn-primary" style="font-size: 16px; padding: 18px 40px;">
-                    Get in Touch <span class="btn-arrow">&rarr;</span>
-                </a>
+            <div class="cta-inner">
+                <div class="cta-glow"></div>
+                <div class="section-label">GET INVOLVED</div>
+                <h2>Let's build the future of persistent flight.</h2>
+                <p>We're looking for early partners, customers, and investors who believe in the power of persistent autonomy.</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary btn-large" onclick="openReserve()">Join the Waitlist →</button>
+                    <a href="mailto:anis@chargebotic.com" class="btn btn-ghost">Contact the Team</a>
+                </div>
             </div>
         </div>
     </section>
@@ -318,20 +371,169 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-inner">
-                <div class="footer-left">
-                    <div class="footer-logo">Chargebotic</div>
-                    <div class="footer-text">San Francisco, CA &middot; 2025</div>
+                <div class="footer-brand">
+                    <span class="logo-bolt">⚡</span>
+                    <span class="logo-text">POWERBIRD</span>
+                    <p>Persistent drone. Powered by the line.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
-                    <a href="#problem">Problem</a>
-                    <a href="#industries">Industries</a>
-                    <a href="#team">Team</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#use-cases">Use Cases</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="mailto:anis@chargebotic.com">Contact</a>
                 </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Powerbird. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <script src="main.js"></script>
+    <!-- Reserve Modal -->
+    <div class="modal-overlay" id="reserveModal" onclick="closeReserve(event)">
+        <div class="modal">
+            <button class="modal-close" onclick="closeReserveBtn()">✕</button>
+            <div class="modal-header">
+                <div class="modal-icon">⚡</div>
+                <h2>Join the Waitlist</h2>
+                <p>Be first in line when Powerbird ships. We'll keep you updated on progress and reach out when it's your turn.</p>
+            </div>
+            <form class="modal-form" id="reserveForm">
+                <div class="form-group">
+                    <label for="fname">Full Name *</label>
+                    <input type="text" id="fname" name="name" placeholder="Jane Smith" required>
+                </div>
+                <div class="form-group">
+                    <label for="femail">Email *</label>
+                    <input type="email" id="femail" name="email" placeholder="jane@company.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="fcompany">Company / Organization</label>
+                    <input type="text" id="fcompany" name="company" placeholder="Utility Corp, Defense Agency...">
+                </div>
+                <div class="form-group">
+                    <label for="fusecase">Primary Use Case</label>
+                    <select id="fusecase" name="usecase">
+                        <option value="">Select your use case</option>
+                        <option value="line-inspection">Line Inspection</option>
+                        <option value="wildfire">Wildfire Monitoring</option>
+                        <option value="comms">Communications Relay</option>
+                        <option value="surveillance">Border / Area Surveillance</option>
+                        <option value="renewables">Renewables Monitoring</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="submitBtn">
+                    <span class="btn-text">Join the Waitlist →</span>
+                    <span class="btn-loading" style="display:none">Sending...</span>
+                </button>
+                <p class="form-note">No spam. Updates only when there's something real to share.</p>
+            </form>
+            <div class="modal-success" id="reserveSuccess" style="display:none">
+                <div class="success-icon">✓</div>
+                <h3>You're on the list!</h3>
+                <p>We'll reach out as Powerbird gets closer to deployment. Stay tuned.</p>
+                <button class="btn btn-ghost" onclick="closeReserveBtn()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Nav scroll effect
+        const nav = document.querySelector('.nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Hamburger menu
+        const hamburger = document.querySelector('.nav-hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            hamburger.classList.toggle('active');
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    navLinks.classList.remove('open');
+                    hamburger.classList.remove('active');
+                }
+            });
+        });
+
+        // Intersection observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.problem-card, .cycle-step, .use-case-card, .rm-step, .team-card').forEach(el => {
+            el.classList.add('fade-in');
+            observer.observe(el);
+        });
+
+        // Reserve Modal
+        function openReserve() {
+            document.getElementById('reserveModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReserveBtn() {
+            document.getElementById('reserveModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeReserve(e) {
+            if (e.target === document.getElementById('reserveModal')) closeReserveBtn();
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeReserveBtn();
+        });
+
+        // Form submission → Google Apps Script → Google Sheet
+        const WAITLIST_URL = 'https://script.google.com/macros/s/AKfycbxJ4PjTmnF4aNpPYDjBqCrOCM2Ksf44Kt270dtFKJtCf79SwNWWW4E3yk6PMKj07TLl0Q/exec';
+
+        const form = document.getElementById('reserveForm');
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.querySelector('.btn-text').style.display = 'none';
+            btn.querySelector('.btn-loading').style.display = 'inline';
+            btn.disabled = true;
+
+            const payload = {
+                name:    document.getElementById('fname').value,
+                email:   document.getElementById('femail').value,
+                company: document.getElementById('fcompany').value,
+                usecase: document.getElementById('fusecase').value,
+            };
+
+            try {
+                // no-cors: Apps Script doesn't support CORS, but data still lands in the sheet
+                await fetch(WAITLIST_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                form.style.display = 'none';
+                document.getElementById('reserveSuccess').style.display = 'block';
+            } catch {
+                btn.querySelector('.btn-text').style.display = 'inline';
+                btn.querySelector('.btn-loading').style.display = 'none';
+                btn.disabled = false;
+                alert('Something went wrong. Please email anis@chargebotic.com directly.');
+            }
+        });
+    </script>
 </body>
 </html>
