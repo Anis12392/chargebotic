@@ -8,3 +8,6 @@ credentials.json
 *.mp4
 *.pdf
 .vercel
+~$*
+*.backup-*
+.pitch_text.html

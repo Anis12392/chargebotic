@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | White Paper — Energy From the Line</title>
+    <meta name="description" content="Chargebotic white paper: why field power is broken, why the grid is the answer, and how a drone that harvests energy from power lines changes energy logistics for defense.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e8490a'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-size='70' font-weight='800' fill='white'>C</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:    #0a0a0b;
+            --text:  #f5f5f3;
+            --muted: #b4b4b1;
+            --faint: #6a6a67;
+            --line:  rgba(255,255,255,0.12);
+            --brand: #e8490a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, sans-serif; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+        a { color: inherit; }
+
+        .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--bg); border-bottom: 1px solid var(--line); }
+        .nav-inner { max-width: 1320px; margin: 0 auto; padding: 18px 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-mark { width: 30px; height: 30px; border-radius: 6px; background: var(--brand); color: #fff; font-weight: 700; font-size: 1.04rem; display: flex; align-items: center; justify-content: center; }
+        .logo-name { font-weight: 700; letter-spacing: 0.14em; font-size: 0.95rem; text-transform: uppercase; }
+        .nav-back { font-size: 0.88rem; color: var(--muted); text-decoration: none; }
+        .nav-back:hover { color: var(--text); }
+
+        .doc { max-width: 740px; margin: 0 auto; padding: 160px 40px 120px; }
+        .eyebrow { font-size: 0.74rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand); margin-bottom: 24px; }
+        h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 18px; }
+        .meta { font-size: 0.85rem; color: var(--faint); margin-bottom: 72px; }
+        h2 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 64px 0 18px; padding-top: 40px; border-top: 1px solid var(--line); }
+        p { color: var(--muted); font-size: 1.02rem; margin-bottom: 16px; max-width: 65ch; }
+        p strong { color: var(--text); font-weight: 600; }
+        ul { margin: 0 0 16px 20px; color: var(--muted); }
+        li { margin-bottom: 10px; max-width: 60ch; }
+        .pull { font-size: 1.25rem; color: var(--text); font-weight: 500; line-height: 1.5; margin: 28px 0; max-width: 30ch; letter-spacing: -0.01em; }
+        .roadmap { border-top: 1px solid var(--line); margin-top: 8px; }
+        .step { display: grid; grid-template-columns: 140px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+        .step .when { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); padding-top: 3px; }
+        .step p { margin: 4px 0 0; font-size: 0.95rem; }
+        .step h3 { font-size: 1.02rem; font-weight: 600; }
+        .cta { margin-top: 72px; padding: 36px; border: 1px solid var(--line); }
+        .cta h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+        .cta p { font-size: 0.95rem; margin-bottom: 20px; }
+        .btn { display: inline-block; font-size: 0.92rem; font-weight: 600; padding: 15px 28px; background: var(--text); color: var(--bg); text-decoration: none; }
+        .btn:hover { opacity: 0.86; }
+        @media (max-width: 640px) { .doc { padding: 130px 24px 80px; } .step { grid-template-columns: 1fr; gap: 6px; } }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="/" class="logo"><div class="logo-mark">C</div><span class="logo-name">Chargebotic</span></a>
+            <a href="/" class="nav-back">Back to site</a>
+        </div>
+    </nav>
+
+    <article class="doc">
+        <div class="eyebrow">White Paper · July 2026</div>
+        <h1>Energy from the line.</h1>
+        <div class="meta">Chargebotic Inc · San Francisco, CA · anis@chargebotic.com</div>
+
+        <p><strong>Summary.</strong> Chargebotic builds a drone that perches on live power lines, harvests their energy through magnetic induction, and delivers it to systems on the ground. This document explains why field power is broken, why we believe the electrical grid is the answer, what we have demonstrated so far, and where we are going. We state plainly what is proven and what is not.</p>
+
+        <h2>The problem: power arrives on trucks</h2>
+        <p>Everything in the field runs on electricity. Drones, sensors, radios, vehicles, command posts. Today that electricity comes almost entirely from generators, and generators run on fuel that has to be moved to them.</p>
+        <p>Moving fuel is the most dangerous routine activity in modern logistics. In active theaters, roughly 1 fuel convoy in 24 ends in a casualty. At remote sites, the fully burdened cost of a gallon of fuel can reach 400 dollars. And a running generator is loud and hot, which means it can be found.</p>
+        <p>The fuel-free alternatives depend on the weather. Solar produces nothing at night and needs a large, visible footprint. Wind is intermittent. Neither can promise steady power on a schedule the mission controls.</p>
+
+        <h2>What we believe is coming</h2>
+        <p>The field is filling with electric machines, and the trend only accelerates. Every new autonomous system, every sensor field, every communications terminal adds demand, and battery energy density improves slowly. We believe energy, not compute, is becoming the bottleneck of autonomy.</p>
+        <p class="pull">Whoever solves field energy sets the pace for everything that runs on it.</p>
+        <p>At the same time, the largest energy infrastructure ever built is already in place. Power lines run through almost every operating area on earth, carrying more energy than any fleet of generators could produce. Until now, connecting to that infrastructure took years of permits and construction. The energy is there. The access was missing.</p>
+
+        <h2>Our approach: harvest from the line</h2>
+        <p>Chargebotic is the access. Our system has three parts:</p>
+        <ul>
+            <li><strong>Kestrel</strong>, a drone that a pilot flies onto a power line, where it perches and holds without using flight power.</li>
+            <li><strong>Magline</strong>, the harvesting device it carries. Magline draws energy from the magnetic field that surrounds a live conductor. There is no cutting, no splicing, and no physical contact with the wire. The line keeps operating exactly as before.</li>
+            <li><strong>A tether and ground station</strong> that carry the harvested power down and distribute it to whatever is connected: batteries, robots, radios, existing battlefield power hubs.</li>
+        </ul>
+        <p>The result is a charging point wherever a line runs. Silent, fuel free, weather independent, and invisible to the logistics chain because it needs nothing from it.</p>
+        <p>We do not replace what units already carry. Generators and solar stay in the kit. Chargebotic adds a source to the existing mix and reduces how often the generator has to run and how much fuel has to move forward.</p>
+
+        <h2>Where we are, stated plainly</h2>
+        <p>We hold ourselves to a rule: demonstrated fact first, then dated next step.</p>
+        <p><strong>Demonstrated today:</strong> Magline harvests energy from a power line in a controlled laboratory setup. The core physics works. Technology readiness is TRL 4 to 5. Flight and perching are piloted; autonomy is a roadmap item, and we will claim it the day it is real.</p>
+        <p><strong>Not yet demonstrated:</strong> perching on a live line in the field and harvesting from it. That is the next milestone, and the reason for everything on the roadmap below.</p>
+
+        <h2>Roadmap</h2>
+        <div class="roadmap">
+            <div class="step">
+                <div class="when">Today</div>
+                <div><h3>Energy harvesting proven in the lab.</h3><p>Magline draws power from a line in a controlled setup.</p></div>
+            </div>
+            <div class="step">
+                <div class="when">August 2026</div>
+                <div><h3>Planned field demonstration.</h3><p>Kestrel is preparing to demonstrate energy harvesting to a ground station at JIFX 26-4, Camp Roberts, California.</p></div>
+            </div>
+            <div class="step">
+                <div class="when">Next</div>
+                <div><h3>First harvest from a real power line.</h3><p>Perch on a live line in the field and deliver useful power to real equipment. Design target: 40 to 150 W to the ground.</p></div>
+            </div>
+            <div class="step">
+                <div class="when">Then</div>
+                <div><h3>A drone that recharges itself and flies on.</h3><p>Onboard battery, charged from the line, no tether. Every power line becomes a charging station, for our drone and for everything it powers.</p></div>
+            </div>
+        </div>
+
+        <h2>Safety</h2>
+        <p>Operating next to energized high voltage lines is a serious risk and we treat it as one. Our approach is non-contact by design: energy is drawn from the field around the conductor at a controlled standoff, and the drone never touches the wire. A formal safety case is part of the development program, alongside airspace and utility coordination requirements.</p>
+
+        <h2>The company</h2>
+        <p>Chargebotic Inc is based in San Francisco. Anis Cheriet (CEO) deployed EV charging infrastructure across Europe before founding the company. Bo Christopher Redfearn (CTO), formerly at Apple, designed Magline and leads engineering. The company is backed by Founders Inc and NVIDIA Inception.</p>
+
+        <div class="cta">
+            <h3>Talk to us.</h3>
+            <p>Defense programs, integrators, and investors: request a briefing and we will scope it against your platforms. Technical documentation is available under NDA.</p>
+            <a class="btn" href="/#contact">Request a briefing</a>
+        </div>
+    </article>
+</body>
+</html>

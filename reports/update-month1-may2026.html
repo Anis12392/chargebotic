@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Powerbird — Month 1 Update</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: #f4f4f4;
+      color: #1a1a1a;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+    .wrapper {
+      max-width: 680px;
+      margin: 32px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    }
+
+    /* HEADER */
+    .header {
+      background: #0a0a0a;
+      padding: 36px 40px 28px;
+      text-align: center;
+    }
+    .logo-text {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      color: #ffffff;
+    }
+    .logo-accent {
+      color: #f5c842;
+    }
+    .header-sub {
+      color: #888;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+
+    /* CONFIDENTIAL BANNER */
+    .confidential {
+      background: #fff3cd;
+      border-left: 4px solid #f5c842;
+      padding: 10px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #7a5f00;
+      letter-spacing: 0.5px;
+    }
+
+    /* BODY */
+    .body {
+      padding: 36px 40px;
+    }
+
+    .greeting {
+      font-size: 16px;
+      margin-bottom: 24px;
+      color: #333;
+    }
+
+    /* SECTION */
+    .section {
+      margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+    }
+
+    /* METRICS */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .metric-card {
+      background: #f9f9f9;
+      border-radius: 6px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0a0a0a;
+    }
+    .metric-label {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    /* WEEK BLOCKS */
+    .week-block {
+      margin-bottom: 20px;
+    }
+    .week-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #f5c842;
+      background: #0a0a0a;
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .week-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin-bottom: 6px;
+    }
+    ul.bullets {
+      list-style: none;
+      padding-left: 0;
+    }
+    ul.bullets li {
+      padding: 4px 0 4px 18px;
+      position: relative;
+      color: #333;
+      font-size: 14px;
+    }
+    ul.bullets li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #f5c842;
+      font-weight: 700;
+    }
+
+    /* HIGHLIGHT BOX */
+    .highlight-box {
+      background: #f0f9f0;
+      border-left: 4px solid #2ecc71;
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 12px 0;
+    }
+    .highlight-box p {
+      font-size: 14px;
+      color: #1a4a1a;
+    }
+
+    /* LOWLIGHTS */
+    .lowlight-box {
+      background: #fff8f0;
+      border-left: 4px solid #e67e22;
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      margin: 8px 0;
+    }
+    .lowlight-box p {
+      font-size: 14px;
+      color: #5a3a00;
+    }
+
+    /* FINANCIALS */
+    .finance-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .finance-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .finance-table td:last-child {
+      text-align: right;
+      font-weight: 700;
+      color: #0a0a0a;
+    }
+    .finance-table tr.total td {
+      border-top: 2px solid #0a0a0a;
+      font-weight: 800;
+      font-size: 15px;
+      color: #0a0a0a;
+    }
+
+    /* ASKS */
+    .ask-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .ask-number {
+      background: #0a0a0a;
+      color: #f5c842;
+      font-weight: 800;
+      font-size: 12px;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+    .ask-text {
+      font-size: 14px;
+      color: #333;
+    }
+    .ask-text strong {
+      color: #0a0a0a;
+    }
+
+    /* SHOUTOUTS */
+    .shoutout {
+      background: #f9f9f9;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #333;
+    }
+    .shoutout strong {
+      color: #0a0a0a;
+    }
+
+    /* WHAT'S NEXT */
+    .next-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+    .next-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 4px;
+      min-width: 72px;
+      text-align: center;
+      margin-top: 2px;
+    }
+    .tag-product { background: #e8f4fd; color: #1a5f8a; }
+    .tag-business { background: #fef9e7; color: #7a5f00; }
+    .tag-legal { background: #f0f0f0; color: #555; }
+    .next-text { font-size: 14px; color: #333; }
+
+    /* FOOTER */
+    .footer {
+      background: #f9f9f9;
+      border-top: 1px solid #eee;
+      padding: 20px 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+    }
+    .footer strong {
+      color: #555;
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 1px solid #eee;
+      margin: 0;
+    }
+
+    /* INVESTOR CALLOUT */
+    .investor-callout {
+      background: #0a0a0a;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin: 8px 0;
+    }
+    .investor-callout p {
+      color: #ccc;
+      font-size: 14px;
+    }
+    .investor-callout .investor-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .investor-badge {
+      background: #1e1e1e;
+      border: 1px solid #333;
+      color: #f5c842;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-text">Power<span class="logo-accent">bird</span></div>
+    <div class="header-sub">Month 1 Recap — May 12, 2026</div>
+  </div>
+
+  <!-- CONFIDENTIAL -->
+  <div class="confidential">
+    CONFIDENTIEL — Pour les personnes engagées dans le projet uniquement. Ne pas partager sans accord préalable.
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <p class="greeting">
+      Hello à tous,<br><br>
+      Voici le récap de notre premier mois. On a pivoté vite, on a appris encore plus vite. Voilà où on en est.
+    </p>
+
+    <!-- METRICS -->
+    <div class="section">
+      <div class="section-title">Métriques clés</div>
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-value">$4,850</div>
+          <div class="metric-label">Dépensé (R&D)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">3</div>
+          <div class="metric-label">Prototypes buildés</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">6</div>
+          <div class="metric-label">Calls investisseurs</div>
+        </div>
+      </div>
+      <div class="metrics-grid" style="margin-top: 8px;">
+        <div class="metric-card">
+          <div class="metric-value">5+</div>
+          <div class="metric-label">Discovery calls clients</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">2</div>
+          <div class="metric-label">Fondateurs à SF</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-value">4 sem.</div>
+          <div class="metric-label">Runway actuel</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 WEEKS -->
+    <div class="section">
+      <div class="section-title">Les 4 premières semaines</div>
+
+      <!-- WEEK 1 -->
+      <div class="week-block">
+        <div class="week-label">Semaine 1</div>
+        <div class="week-title">Entrée chez Founders Inc — Premier prototype</div>
+        <ul class="bullets">
+          <li>Acceptés chez <strong>Founders Inc</strong> — base opérationnelle à San Francisco</li>
+          <li>Bo quitte Apple pour rejoindre le projet à temps plein</li>
+          <li>Présentation de <strong>Sparke</strong>, notre premier prototype avec chargeur à induction pour robots de livraison</li>
+        </ul>
+      </div>
+
+      <!-- WEEK 2 -->
+      <div class="week-block">
+        <div class="week-label">Semaine 2</div>
+        <div class="week-title">Discovery clients — Pivot insight</div>
+        <ul class="bullets">
+          <li>Calls avec <strong>DoorDash, Robot.com</strong> et 3 autres acteurs de la livraison autonome</li>
+          <li>Discussion avec <strong>Steve Macenski</strong> (mainteneur NAV2) sur l'intégration logicielle</li>
+          <li><strong>Insight clé :</strong> le marché n'est pas encore prêt — le pain point sur le chargement par induction n'est pas assez fort pour justifier l'achat</li>
+          <li>Nouveau signal : le <strong>chargement rapide</strong> est ce qui intéresse le plus les opérateurs</li>
+          <li>Côté produit : construction d'un deuxième rover</li>
+        </ul>
+        <div class="lowlight-box">
+          <p><strong>Lowlight :</strong> Le marché delivery robots n'est pas prêt à payer pour une solution de charging autonome. On a stoppé tôt — c'est une victoire.</p>
+        </div>
+      </div>
+
+      <!-- WEEK 3 -->
+      <div class="week-block">
+        <div class="week-label">Semaine 3</div>
+        <div class="week-title">Hackathon Défense + Pivot Drones — Fort signal marché</div>
+        <ul class="bullets">
+          <li>Participation au <strong>hackathon défense avec Palantir</strong></li>
+          <li>Premier pivot : drone portant un <em>puck</em> (batterie + chargeur induction) pour recharger d'autres drones</li>
+          <li>Deuxième pivot (V2) : drone qui se recharge <strong>directement depuis les lignes électriques</strong> — sans batterie externe</li>
+          <li>Launch sur <strong>Twitter/X</strong> — forte traction organique, nombreuses demandes entrantes</li>
+        </ul>
+        <div class="highlight-box">
+          <p><strong>Signal fort :</strong> Les use cases qui ressortent spontanément — surveillance de sites, inspection d'infrastructure, illumination de zones isolées. Ce n'est pas nous qui les avons suggérés.</p>
+        </div>
+      </div>
+
+      <!-- WEEK 4 -->
+      <div class="week-block">
+        <div class="week-label">Semaine 4</div>
+        <div class="week-title">V3 en cours — Incorporation — Investisseurs</div>
+        <ul class="bullets">
+          <li>Décision de builder la <strong>V3</strong> : drone plus grand, plus résistant, conçu pour des tests réels sur powerlines</li>
+          <li>Commande passée pour le matériel V3 ($850)</li>
+          <li>Appartement pris à <strong>San Francisco</strong> — Anis et Bo ont emménagé ensemble</li>
+          <li><strong>Incorporation en cours</strong> — ouverture du compte bancaire cette semaine</li>
+        </ul>
+
+        <div class="investor-callout">
+          <p style="color:#aaa; font-size:12px; letter-spacing:1px; text-transform:uppercase; margin-bottom:4px;">6 calls investisseurs cette semaine</p>
+          <div class="investor-list">
+            <span class="investor-badge">Plug and Play</span>
+            <span class="investor-badge">a16z</span>
+            <span class="investor-badge">Lightspeed</span>
+            <span class="investor-badge">Founders Inc</span>
+            <span class="investor-badge">Angel #1</span>
+            <span class="investor-badge">Angel #2</span>
+          </div>
+          <p style="margin-top:12px; color:#aaa; font-size:13px;">L'idée suscite un fort intérêt. Pas de term sheet à ce stade, mais la traction est là.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIALS -->
+    <div class="section">
+      <div class="section-title">Finances — Dépenses mois 1</div>
+      <table class="finance-table">
+        <tr>
+          <td>Prototype Sparke (rover + induction)</td>
+          <td>$3,000</td>
+        </tr>
+        <tr>
+          <td>Drone V1</td>
+          <td>$1,000</td>
+        </tr>
+        <tr>
+          <td>Matériel Drone V3 (commande en cours)</td>
+          <td>$850</td>
+        </tr>
+        <tr>
+          <td>Appartement SF (part mensuelle)</td>
+          <td>$2,400 / mois</td>
+        </tr>
+        <tr class="total">
+          <td>Total R&D dépensé</td>
+          <td>$4,850</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- WHAT'S NEXT -->
+    <div class="section">
+      <div class="section-title">What's Next — Semaine 5</div>
+
+      <div class="next-item">
+        <span class="next-tag tag-product">Produit</span>
+        <div class="next-text">Assembler et tester la V3 — objectif : <strong>drone opérationnel qui vole et s'accroche à une powerline pour se recharger</strong> (premier vrai test terrain)</div>
+      </div>
+      <div class="next-item">
+        <span class="next-tag tag-business">Business</span>
+        <div class="next-text">Lancer notre <strong>Kickstarter</strong> — premier vecteur de revenus et signal de validation marché</div>
+      </div>
+      <div class="next-item">
+        <span class="next-tag tag-legal">Légal</span>
+        <div class="next-text">Finaliser l'incorporation + ouvrir le <strong>compte bancaire</strong> de l'entreprise</div>
+      </div>
+    </div>
+
+    <!-- ASKS -->
+    <div class="section">
+      <div class="section-title">Asks</div>
+
+      <div class="ask-item">
+        <div class="ask-number">1</div>
+        <div class="ask-text"><strong>Intros vers des opérateurs d'infrastructure</strong> (énergie, télécoms, surveillance) qui pourraient être early users pour des tests terrain réels</div>
+      </div>
+      <div class="ask-item">
+        <div class="ask-number">2</div>
+        <div class="ask-text"><strong>Contacts hardware / aérien</strong> — si vous connaissez des gens qui travaillent sur des drones ou systèmes embarqués, on prend les intros</div>
+      </div>
+      <div class="ask-item">
+        <div class="ask-number">3</div>
+        <div class="ask-text"><strong>Partagez notre launch</strong> sur X si vous l'avez vu — la distribution organique est notre meilleur ami en ce moment</div>
+      </div>
+    </div>
+
+    <!-- SHOUT-OUTS -->
+    <div class="section">
+      <div class="section-title">Shout-outs</div>
+      <div class="shoutout">🙏 <strong>Founders Inc</strong> — pour nous avoir acceptés et donné la structure pour avancer vite</div>
+      <div class="shoutout">🙏 <strong>Steve Macenski (NAV2)</strong> — pour les insights sur le marché robot et les intros</div>
+      <div class="shoutout">🙏 <strong>La communauté X</strong> — pour la traction organique sur notre launch drone</div>
+    </div>
+
+    <p style="font-size:14px; color:#555;">
+      On avance vite. On apprend encore plus vite.<br>
+      Comme toujours — toutes les idées, intros, et feedbacks sont les bienvenus.
+    </p>
+    <br>
+    <p style="font-size:14px; color:#0a0a0a; font-weight:700;">
+      Anis Cheriet<br>
+      <span style="font-weight:400; color:#888;">Co-fondateur & CEO, Powerbird</span>
+    </p>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>Powerbird</strong> · San Francisco, CA<br>
+    Rapport hebdomadaire interne · Semaine du 12 mai 2026<br>
+    <span style="margin-top:4px; display:block;">Ce document est confidentiel.</span>
+  </div>
+
+</div>
+
+</body>
+</html>
