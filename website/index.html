@@ -304,6 +304,101 @@
         </div>
     </section>
 
+    <!-- INDUCTION EXPLAINED -->
+    <section class="block" id="induction">
+        <div class="wrap">
+            <div class="eyebrow up" style="margin-bottom: 28px;">Induction, explained</div>
+            <h2 class="up">What harvesting actually means.</h2>
+            <p class="line up" style="margin-top: 24px;">No cutting, no tapping, no contact with the wire. The energy is taken from the field around the line, with physics you already use every day.</p>
+
+            <div class="up" style="margin-top: 56px;">
+                <svg class="schematic" viewBox="0 0 1200 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Induction diagram: a live wire creates a magnetic field, a coil placed in that field produces current, which flows out as usable power">
+                    <!-- Live wire cross-section -->
+                    <circle cx="230" cy="180" r="14" fill="#e8490a"/>
+                    <circle cx="230" cy="180" r="6" fill="#0a0a0b"/>
+                    <!-- Pulsing magnetic field rings -->
+                    <circle cx="230" cy="180" fill="none" stroke="#e8490a" stroke-width="1.4" opacity="0.5">
+                        <animate attributeName="r" values="24;120" dur="3s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.6;0" dur="3s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="230" cy="180" fill="none" stroke="#e8490a" stroke-width="1.4" opacity="0.5">
+                        <animate attributeName="r" values="24;120" dur="3s" begin="1s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.6;0" dur="3s" begin="1s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="230" cy="180" fill="none" stroke="#e8490a" stroke-width="1.4" opacity="0.5">
+                        <animate attributeName="r" values="24;120" dur="3s" begin="2s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.6;0" dur="3s" begin="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <!-- Static field guide rings -->
+                    <circle cx="230" cy="180" r="45" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1" stroke-dasharray="3 6"/>
+                    <circle cx="230" cy="180" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="3 6"/>
+                    <!-- Magline coil inside the field -->
+                    <g stroke="#f5f5f3" stroke-width="1.8" fill="none">
+                        <rect x="360" y="130" width="46" height="100" rx="8"/>
+                        <line x1="360" y1="150" x2="406" y2="150"/>
+                        <line x1="360" y1="170" x2="406" y2="170"/>
+                        <line x1="360" y1="190" x2="406" y2="190"/>
+                        <line x1="360" y1="210" x2="406" y2="210"/>
+                    </g>
+                    <!-- Induced current out -->
+                    <line x1="406" y1="180" x2="700" y2="180" stroke="rgba(255,255,255,0.25)" stroke-width="1.6"/>
+                    <line class="flow" x1="406" y1="180" x2="700" y2="180" stroke="#e8490a" stroke-width="1.6" opacity="0.8"/>
+                    <!-- Battery / load -->
+                    <g stroke="#f5f5f3" stroke-width="1.8" fill="none">
+                        <rect x="700" y="155" width="70" height="50" rx="6"/>
+                        <line x1="770" y1="168" x2="778" y2="168"/>
+                        <line x1="770" y1="192" x2="778" y2="192"/>
+                        <line x1="716" y1="180" x2="740" y2="180"/>
+                        <line x1="728" y1="168" x2="728" y2="192"/>
+                    </g>
+                    <!-- Labels -->
+                    <g font-family="Inter, Arial, sans-serif" font-size="12" letter-spacing="2">
+                        <text x="230" y="330" text-anchor="middle" fill="#6a6a67">LIVE WIRE · AC CURRENT</text>
+                        <text x="230" y="98" text-anchor="middle" fill="#e8490a">MAGNETIC FIELD</text>
+                        <text x="383" y="330" text-anchor="middle" fill="#6a6a67">MAGLINE COIL</text>
+                        <text x="553" y="160" text-anchor="middle" fill="#e8490a">INDUCED CURRENT</text>
+                        <text x="735" y="330" text-anchor="middle" fill="#6a6a67">USABLE POWER</text>
+                        <text x="985" y="150" fill="#6a6a67">SAME PRINCIPLE AS</text>
+                        <text x="985" y="180" fill="#b4b4b1">Wireless phone chargers</text>
+                        <text x="985" y="207" fill="#b4b4b1">Induction cooktops</text>
+                        <text x="985" y="234" fill="#b4b4b1">Every grid transformer</text>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="features" style="margin-top: 40px;">
+                <div class="feat up">
+                    <div class="k">01 / The field</div>
+                    <div>
+                        <h3>Every live wire is wrapped in a magnetic field.</h3>
+                        <p>Alternating current creates an invisible, oscillating field around the conductor. Known physics since Faraday, 1831.</p>
+                    </div>
+                </div>
+                <div class="feat up">
+                    <div class="k">02 / The coil</div>
+                    <div>
+                        <h3>A coil in that field produces current.</h3>
+                        <p>Place a coil inside the field and electricity flows in it. Nothing touches the wire. That is induction, and it is how Magline harvests.</p>
+                    </div>
+                </div>
+                <div class="feat up">
+                    <div class="k">03 / You use it daily</div>
+                    <div>
+                        <h3>You charged something with it this morning.</h3>
+                        <p>Wireless phone chargers, induction cooktops, electric toothbrushes, and every transformer on the grid work on exactly this principle.</p>
+                    </div>
+                </div>
+                <div class="feat up">
+                    <div class="k">04 / Already on the grid</div>
+                    <div>
+                        <h3>Utilities already power devices this way.</h3>
+                        <p>Line-mounted monitoring sensors clamp onto live conductors and run on induced power today. Magline applies the same proven method, at field power levels.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- SYSTEM SCHEMATIC -->
     <section class="block" id="how">
         <div class="wrap">
@@ -716,6 +811,10 @@
                 <details>
                     <summary>Is it dangerous to operate next to high voltage lines?</summary>
                     <p>Working near energized lines is a serious risk and we treat it as one. The platform never touches the conductor: energy is drawn from the magnetic field around the wire, at a controlled standoff. A formal safety case is part of the development program.</p>
+                </details>
+                <details>
+                    <summary>How does harvesting from a line actually work?</summary>
+                    <p>Every wire carrying alternating current is surrounded by an oscillating magnetic field. Magline is a coil placed inside that field: current flows in the coil without touching the wire. It is the same induction principle as a wireless phone charger or a grid transformer, applied to a transmission line.</p>
                 </details>
                 <details>
                     <summary>Does it damage or tap the line?</summary>
