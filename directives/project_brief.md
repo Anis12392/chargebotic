@@ -15,17 +15,28 @@
 
 ---
 
-## Product
+## Product (UPDATED Jul 24 2026 — two products + software)
 
-Tethered drone system with three parts:
+**Narrative frame:** range is the key constraint for every electric machine; Tesla's key innovation was the charging network, not the car. Chargebotic = the charging network for machines in the field. Power is everywhere (power lines), just historically not available.
 
-1. **The drone (device)** — platform name **Kestrel** (renamed from V-Drake, Jul 2026) — perches on power lines, harvests energy via magnetic induction (harvesting component: **Magline**). NOTE: flight and perching are currently **manual (piloted)** — autonomous line detection/perching was removed and is now a roadmap feature, not a current capability. Do not claim autonomy in decks/forms.
-2. **The tether/wire** — carries the harvested power down from the drone to the ground station
-3. **The ground station** — houses the battery. For the defense use case, this is Chariot Defense's **Amphora** (15kW variant), which stores and redistributes the power. Amphora also carries comms over the same tether line.
+**Product 1 — Kestrel: portable charging system, $65K, defense launch market**
+- Perch on the line (Magline harvester), power flows down a tether to a converter, then to a battery or direct to the machine
+- Kestrel 1 (now): 50-150W lines, demonstrated on Orca drone, remote piloted, BOM $15K
+- Kestrel 2 (ship Q3 2026): 50-250W, retrofit to multiple bodies, semi-autonomous find+attach, integrates with customer autonomy, BOM $20K
+- Traction: Chariot Defense, **Overland** (new customer name, details TBD)
+- Do not claim full autonomy; K1 is piloted, K2 is semi-autonomous find+attach
 
-Uses that harvested/delivered energy for two things:
-1. **Power line inspection** — vegetation encroachment, corrosion, aging components, predictive maintenance
-2. **Defense power distribution** — distributing harvested energy to ground systems, sensors, drones, directed energy weapons on the battlefield
+**Product 2 — Spark E: self-charging drone (lands on powerline, charges itself)**
+- Market: drone operators covering large areas; range extension improves unit economics
+- V1 on **Orca X30**: 30 min flight per charge, up to 80 km/h, BVLOS + autonomous modes
+- V2: 120 min flight, model TBD. Custom: engineering collab w/ customer sensors
+- Customers: Cupertino (largest utility inspector Argentina, 17,000 km to cover), reforestation drones, aerial imagery, defense
+
+**Product 3 — Software:** telemetry, power line health reporting, metering to pay for the energy
+
+**Business model:** hardware + software subscription, training & support
+**Legality slide:** advisor ex-PG&E (name TBD); utilities angle: safety first + redundancies, new revenue for utilities, line health reporting
+**Next 12 months target:** $6M revenue, Gen 3 Kestrel production scale (3 customers x 10 units), Gen 2 Spark E (30 sold), SBIR direct-to-phase-II
 
 **Current TRL:** 4 (per Anis, Jul 9 2026)  
 **Target TRL:** 6 by August 2026  

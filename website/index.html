@@ -7,9 +7,12 @@
     <meta name="description" content="Chargebotic builds Kestrel, an expeditionary field power platform. It harvests energy from live power lines and delivers silent, fuel free power to systems on the ground.">
     <meta property="og:title" content="Chargebotic | Expeditionary field power, drawn from the grid">
     <meta property="og:description" content="Kestrel, an expeditionary field power platform: it harvests energy from live power lines and delivers silent, fuel free power to systems on the ground.">
-    <meta property="og:url" content="https://powerbird.io">
+    <meta property="og:url" content="https://chargebotic.com">
+    <meta property="og:image" content="https://chargebotic.com/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e8490a'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-size='70' font-weight='800' fill='white'>C</text></svg>">
+    <script defer src="/_vercel/insights/script.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -451,24 +454,24 @@
             <div class="seq-overlay">
                 <div class="seq-labels">
                     <div class="seq-label active" data-index="0">
-                        <span class="seq-num">01 / Perch</span>
+                        <span class="seq-num">Perch</span>
                         <h3>Kestrel perches on a live power line.</h3>
                         <p>A pilot flies it up and it clamps onto the wire, like a bird. Once perched, it uses no flight power.</p>
                     </div>
                     <div class="seq-label" data-index="1">
-                        <span class="seq-num">02 / Harvest</span>
+                        <span class="seq-num">Harvest</span>
                         <h3>It harvests energy from the line.</h3>
                         <p>Power is drawn from the magnetic field around the wire. No cutting, no contact, no damage.</p>
                     </div>
                     <div class="seq-label" data-index="2">
-                        <span class="seq-num">03 / Deliver</span>
+                        <span class="seq-num">Deliver</span>
                         <h3>Energy flows down the tether to the ground.</h3>
                         <p>A ground station receives the power and charges whatever you connect. Batteries, robots, radios.</p>
                     </div>
                     <div class="seq-label" data-index="3">
-                        <span class="seq-num">04 / Next</span>
-                        <h3>Coming next: it recharges itself and flies on.</h3>
-                        <p>The next version carries a battery, charges it on the line, and flies free again. No tether, more range.</p>
+                        <span class="seq-num">Next: Spark E</span>
+                        <h3>Spark E: the aircraft that recharges itself.</h3>
+                        <p>It carries a battery, charges it on the line, and flies free again. No tether, more range, no return to base.</p>
                     </div>
                 </div>
             </div>
@@ -573,7 +576,7 @@
                 <div class="feat up">
                     <div class="k">Then</div>
                     <div>
-                        <h3>A platform that recharges itself and flies on.</h3>
+                        <h3>Spark E: a platform that recharges itself and flies on.</h3>
                         <p>Onboard battery, charged from the line. Every power line becomes a charging station, for Kestrel and for everything it powers.</p>
                     </div>
                 </div>
@@ -640,11 +643,6 @@
                 <h3>Armin Foroughi</h3><div class="role">Engineer</div>
                 <p></p>
             </div>
-            <div class="person">
-                <div class="person-photo"><div class="person-photo-placeholder"></div></div>
-                <h3>Beckett</h3><div class="role">Engineer</div>
-                <p></p>
-            </div>
         </div>
         <div class="wrap" style="margin-top: 60px;">
             <div class="advisors-label">Advisors</div>
@@ -670,13 +668,12 @@
     <!-- TRUST -->
     <section class="trust">
         <div class="wrap">
-            <div class="eyebrow" style="margin-bottom: 40px;">They trust us</div>
+            <div class="eyebrow" style="margin-bottom: 40px;">Working with</div>
             <div class="logos">
                 <span>Nvidia Inception</span>
                 <span>Founders Inc</span>
                 <span>Naval Postgraduate School</span>
                 <span>Chariot Defense</span>
-                <img src="logo-orqa.png" alt="Orqa" style="height: 28px; opacity: 0.55; filter: grayscale(100%) brightness(2);">
             </div>
         </div>
     </section>
@@ -686,7 +683,7 @@
         <div class="wrap">
             <div class="eyebrow up" style="margin-bottom: 28px;">Press</div>
             <h2 class="up">For journalists and analysts.</h2>
-            <p class="line up" style="margin-top: 32px;">Chargebotic Inc is a San Francisco defense energy company. It builds Kestrel, an expeditionary field power platform that perches on live power lines and harvests their energy through Magline, its contactless induction device, then delivers that power to systems on the ground. The company is backed by Founders Inc and NVIDIA Inception and is preparing a field demonstration at JIFX 26-4, Camp Roberts, California, in August 2026.</p>
+            <p class="line up" style="margin-top: 32px;">Chargebotic Inc is a San Francisco defense energy company. It builds Kestrel, an expeditionary field power platform that perches on live power lines and harvests their energy through Magline, its contactless induction device, then delivers that power to systems on the ground. Its second product, Spark E, an aircraft that recharges itself on the line, is in development. The company is backed by Founders Inc and NVIDIA Inception and is preparing a field demonstration at JIFX 26-4, Camp Roberts, California, in August 2026.</p>
             <div class="spec-rows up" style="margin-top: 48px;">
                 <div class="spec-row">
                     <div class="spec-item">
@@ -867,14 +864,22 @@
                 dots.forEach((d, i) => d.classList.toggle('active', i === labelIndex));
             }
 
-            // Try loading sequence frames, fall back to hero-drone.jpg
-            for (let i = 0; i < totalFrames; i++) {
-                const img = new Image();
-                img.onload = () => { loaded++; if (loaded === 1) drawFrame(0); };
-                img.onerror = () => { img.src = 'hero-drone.jpg'; };
-                img.src = `frames/vdrake_${String(i).padStart(3,'0')}.jpg`;
-                frames.push(img);
+            // Frames load only when the visitor approaches the section
+            let framesRequested = false;
+            function loadFrames() {
+                if (framesRequested) return;
+                framesRequested = true;
+                for (let i = 0; i < totalFrames; i++) {
+                    const img = new Image();
+                    img.onload = () => { loaded++; if (loaded === 1) drawFrame(currentFrame); };
+                    img.onerror = () => { img.src = 'hero-drone.jpg'; };
+                    img.src = `frames/vdrake_${String(i).padStart(3,'0')}.jpg`;
+                    frames.push(img);
+                }
             }
+            new IntersectionObserver((es, obs) => {
+                if (es[0].isIntersecting) { loadFrames(); obs.disconnect(); }
+            }, { rootMargin: '200% 0px' }).observe(section);
 
             window.addEventListener('scroll', onScroll);
             window.addEventListener('resize', resizeCanvas);

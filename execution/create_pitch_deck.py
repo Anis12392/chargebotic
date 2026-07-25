@@ -1,7 +1,7 @@
 """
-Chargebotic Inc — Investor Pitch Deck (Pre-Seed, June 2026)
-7 slides: Cover, Problem, Opportunity, Solution, Team, Traction, Milestones.
-Creates PPTX locally, then uploads to Google Slides.
+Chargebotic — Investor Pitch Deck (Jul 2026)
+13 slides. Two products (Kestrel charging system, Spark E self-charging drone)
+plus software layer. Placeholder values render in amber brackets.
 
 Usage:
     python3 execution/create_pitch_deck.py
@@ -15,22 +15,21 @@ from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
 
 # ── Palette ───────────────────────────────────────────────────────────────────
-DEEP_SPACE  = RGBColor(0x05, 0x08, 0x14)
-CARD_BG     = RGBColor(0x0D, 0x11, 0x1C)
-GRID_LINE   = RGBColor(0x22, 0x26, 0x33)
-ELECTRIC    = RGBColor(0x00, 0xB4, 0xFF)
-AMBER       = RGBColor(0xF9, 0x73, 0x16)
-DANGER_RED  = RGBColor(0xFC, 0x3D, 0x21)
+DEEP_SPACE  = RGBColor(0x0A, 0x0A, 0x0B)
+CARD_BG     = RGBColor(0x12, 0x13, 0x16)
+GRID_LINE   = RGBColor(0x26, 0x27, 0x2B)
+BRAND       = RGBColor(0xE8, 0x49, 0x0A)
+GOLD        = RGBColor(0xFF, 0xB8, 0x4D)
 GREEN_CHECK = RGBColor(0x22, 0xC5, 0x5E)
-WHITE       = RGBColor(0xFF, 0xFF, 0xFF)
-LIGHT_GRAY  = RGBColor(0xD4, 0xD4, 0xD4)
-MID_GRAY    = RGBColor(0x9A, 0x9A, 0x9A)
-DARK_GRAY   = RGBColor(0x55, 0x55, 0x55)
+WHITE       = RGBColor(0xF5, 0xF5, 0xF3)
+LIGHT_GRAY  = RGBColor(0xB4, 0xB4, 0xB1)
+MID_GRAY    = RGBColor(0x8A, 0x8A, 0x87)
+DARK_GRAY   = RGBColor(0x5A, 0x5A, 0x57)
 
 HEAD_FONT    = "Helvetica"
 BODY_FONT    = "Helvetica"
-TOTAL_SLIDES = 7
-COMPANY      = "CHARGEBOTIC INC"
+TOTAL_SLIDES = 13
+COMPANY      = "CHARGEBOTIC"
 EMAIL        = "anis@chargebotic.com"
 DOMAIN       = "chargebotic.com"
 
@@ -41,7 +40,6 @@ SW = prs.slide_width
 SH = prs.slide_height
 
 
-# ── Helpers ───────────────────────────────────────────────────────────────────
 def blank():
     return prs.slides.add_slide(prs.slide_layouts[6])
 
@@ -52,20 +50,19 @@ def bg(slide, color=DEEP_SPACE):
     f.fore_color.rgb = color
 
 
-def txt(slide, left, top, w, h, text,
-        size=14, color=WHITE, bold=False,
+def txt(slide, left, top, w, h, text, size=14, color=WHITE, bold=False,
         align=PP_ALIGN.LEFT, font=BODY_FONT):
     box = slide.shapes.add_textbox(left, top, w, h)
-    tf  = box.text_frame
+    tf = box.text_frame
     tf.word_wrap = True
     tf.margin_left = tf.margin_right = tf.margin_top = tf.margin_bottom = 0
     p = tf.paragraphs[0]
     p.text = text
-    p.font.size      = Pt(size)
+    p.font.size = Pt(size)
     p.font.color.rgb = color
-    p.font.bold      = bold
-    p.font.name      = font
-    p.alignment      = align
+    p.font.bold = bold
+    p.font.name = font
+    p.alignment = align
     return box
 
 
@@ -82,430 +79,364 @@ def rect(slide, left, top, w, h, fill=CARD_BG, line=None, lw=0.75):
     return s
 
 
+def eyebrow(slide, label, color=BRAND):
+    txt(slide, Inches(0.6), Inches(0.5), Inches(11), Inches(0.3),
+        label.upper(), size=10, color=color, bold=True, font=HEAD_FONT)
+
+
+def title(slide, text, size=38):
+    txt(slide, Inches(0.6), Inches(1.0), Inches(12.1), Inches(1.0),
+        text, size=size, bold=True, font=HEAD_FONT)
+
+
 def footer(slide, n):
     rect(slide, Inches(0.5), Inches(6.95), Inches(12.333), Pt(0.75), fill=GRID_LINE)
     txt(slide, Inches(0.5), Inches(7.05), Inches(3), Inches(0.3),
         COMPANY, size=8, color=MID_GRAY, bold=True, font=HEAD_FONT)
     txt(slide, Inches(4.5), Inches(7.05), Inches(4.3), Inches(0.3),
-        f"{EMAIL}  ·  {DOMAIN}",
-        size=8, color=DARK_GRAY, align=PP_ALIGN.CENTER)
+        f"{EMAIL}  ·  {DOMAIN}", size=8, color=DARK_GRAY, align=PP_ALIGN.CENTER)
     txt(slide, Inches(10.5), Inches(7.05), Inches(2.333), Inches(0.3),
-        f"{n:02d} / {TOTAL_SLIDES:02d}",
-        size=8, color=MID_GRAY, bold=True, align=PP_ALIGN.RIGHT, font=HEAD_FONT)
+        f"{n:02d} / {TOTAL_SLIDES:02d}", size=8, color=MID_GRAY, bold=True,
+        align=PP_ALIGN.RIGHT, font=HEAD_FONT)
 
 
-def bullet_row(slide, x, y, dot_color, text, size=12):
-    rect(slide, x, y + Inches(0.13), Inches(0.05), Inches(0.32), fill=dot_color)
-    txt(slide, x + Inches(0.2), y + Inches(0.06),
-        Inches(12.0 - x.inches if hasattr(x, 'inches') else 11.5), Inches(0.45),
-        text, size=size, color=LIGHT_GRAY)
+def rows(slide, items, y0=2.2, dy=0.62, label_w=2.6, size=12):
+    for i, (k, v) in enumerate(items):
+        y = Inches(y0 + i * dy)
+        rect(slide, Inches(0.6), y + Inches(0.1), Inches(0.05), Inches(0.34), fill=BRAND)
+        txt(slide, Inches(0.85), y + Inches(0.05), Inches(label_w), Inches(0.5),
+            k, size=size, color=WHITE, bold=True)
+        txt(slide, Inches(0.85 + label_w + 0.2), y + Inches(0.05), Inches(11.4 - label_w), Inches(0.5),
+            v, size=size, color=LIGHT_GRAY)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 1 — COVER
+# 1 — COVER
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
-
-txt(slide, Inches(0.6), Inches(0.55), Inches(9), Inches(0.25),
-    "PRE-SEED  ·  JUNE 2026  ·  CONFIDENTIAL",
-    size=9, color=MID_GRAY, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.3), Inches(12.1), Inches(2.0),
-    "CHARGEBOTIC\nINC",
-    size=66, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(3.55), Inches(12.1), Inches(0.5),
-    "Perch on power lines. Harvest energy. Deliver it anywhere.",
-    size=18, color=ELECTRIC, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(4.2), Inches(9.5), Inches(0.5),
-    "A drone that lands on power lines, extracts energy inductively, and powers "
-    "defense systems or inspects the grid — with zero infrastructure changes.",
-    size=12, color=LIGHT_GRAY)
-
-rect(slide, 0, Inches(5.3), SW, Inches(1.25), fill=RGBColor(0x06, 0x10, 0x24))
-stats = [
-    ("$6.5M/yr",  "Active defense deal"),
-    ("$30B+/yr",  "Inspection market"),
-    ("7.3M km",   "Power lines worldwide"),
-    ("0",         "Direct competitors"),
-]
+s = blank(); bg(s)
+txt(s, Inches(0.6), Inches(0.55), Inches(9), Inches(0.3),
+    "PRE-SEED  ·  JULY 2026  ·  CONFIDENTIAL", size=9, color=MID_GRAY, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.6), Inches(1.6), Inches(12.1), Inches(1.4),
+    "CHARGEBOTIC", size=64, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.6), Inches(3.15), Inches(12.1), Inches(0.5),
+    "The charging network for machines in the field.", size=20, color=GOLD, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.6), Inches(3.85), Inches(10.5), Inches(0.8),
+    "Kestrel, a portable charging system that draws power from live power lines.\n"
+    "Spark E, a drone that charges itself on the line. Software that meters every watt.",
+    size=13, color=LIGHT_GRAY)
+stats = [("$65K", "Kestrel unit price"), ("50-150W", "Harvested today (K1)"),
+         ("$6M", "12-month revenue target"), ("2", "Products, one platform")]
+rect(s, 0, Inches(5.35), SW, Inches(1.2), fill=RGBColor(0x0E, 0x0F, 0x12))
 for i, (v, l) in enumerate(stats):
-    x = Inches(1.0 + i * 3.0)
-    txt(slide, x, Inches(5.42), Inches(2.6), Inches(0.44),
-        v, size=24, color=WHITE, bold=True, font=HEAD_FONT)
-    txt(slide, x, Inches(5.88), Inches(2.8), Inches(0.32),
-        l, size=9, color=LIGHT_GRAY)
-
-footer(slide, 1)
-
+    x = Inches(0.9 + i * 3.05)
+    txt(s, x, Inches(5.5), Inches(2.7), Inches(0.45), v, size=22, color=WHITE, bold=True, font=HEAD_FONT)
+    txt(s, x, Inches(5.97), Inches(2.8), Inches(0.35), l, size=9, color=LIGHT_GRAY)
+footer(s, 1)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 2 — THE PROBLEM
+# 2 — PROBLEM
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
-
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "PROBLEM", size=9, color=DANGER_RED, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(12), Inches(1.3),
-    "Two industries. Same\nunsolved problem.",
-    size=48, bold=True, font=HEAD_FONT)
-
-# Defense card
-rect(slide, Inches(0.6), Inches(2.6), Inches(5.85), Inches(3.7),
-     fill=CARD_BG, line=DANGER_RED, lw=1.2)
-txt(slide, Inches(0.88), Inches(2.82), Inches(5.3), Inches(0.3),
-    "DEFENSE", size=12, color=DANGER_RED, bold=True, font=HEAD_FONT)
-txt(slide, Inches(0.88), Inches(3.25), Inches(5.35), Inches(0.8),
-    "Autonomous systems go dark when batteries die. "
-    "There is no silent, persistent way to recharge them in the field.",
-    size=12, color=LIGHT_GRAY)
-for j, b in enumerate([
-    "$400/gal fuel cost at forward operating bases",
-    "1 in 24 fuel convoy casualties (US Army study)",
-    "250,000 Army vehicles, no field recharge solution",
-]):
-    txt(slide, Inches(0.88), Inches(4.35 + j * 0.6), Inches(5.35), Inches(0.5),
-        f"·  {b}", size=12, color=WHITE)
-
-# Utility card
-rect(slide, Inches(6.88), Inches(2.6), Inches(5.85), Inches(3.7),
-     fill=CARD_BG, line=AMBER, lw=1.2)
-txt(slide, Inches(7.16), Inches(2.82), Inches(5.3), Inches(0.3),
-    "UTILITY INSPECTION", size=12, color=AMBER, bold=True, font=HEAD_FONT)
-txt(slide, Inches(7.16), Inches(3.25), Inches(5.35), Inches(0.8),
-    "7.3M km of power lines, aging fast. Inspection is still done "
-    "by helicopter or manual crew — slow, expensive, dangerous.",
-    size=12, color=LIGHT_GRAY)
-for j, b in enumerate([
-    "Helicopter inspection: $500–1,000 per mile",
-    "Vegetation encroachment causes 60%+ of outages",
-    "$30B/year spent — mostly manual, not preventive",
-]):
-    txt(slide, Inches(7.16), Inches(4.35 + j * 0.6), Inches(5.35), Inches(0.5),
-        f"·  {b}", size=12, color=WHITE)
-
-footer(slide, 2)
-
+s = blank(); bg(s)
+eyebrow(s, "Problem")
+title(s, "Range is the constraint on every electric machine.")
+txt(s, Inches(0.6), Inches(2.0), Inches(11.8), Inches(0.6),
+    "Ground: robots, cars, tractors. Air: drones, eVTOL. Useful life is capped by the battery, "
+    "and every mission ends the same way: go back to base and charge.",
+    size=13, color=LIGHT_GRAY)
+# Tesla insight card
+rect(s, Inches(0.6), Inches(3.0), Inches(11.9), Inches(1.7), fill=CARD_BG, line=GOLD, lw=1.2)
+txt(s, Inches(0.95), Inches(3.25), Inches(11.2), Inches(0.4),
+    "The key innovation of Tesla was not the car. It was the charging network.",
+    size=18, color=WHITE, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.95), Inches(3.85), Inches(11.2), Inches(0.6),
+    "The network made EVs valuable and useful for the first time. Machines in the field are "
+    "waiting for the same unlock.", size=13, color=LIGHT_GRAY)
+txt(s, Inches(0.6), Inches(5.2), Inches(11.8), Inches(0.5),
+    "In the field there is no charging network. There are generators, fuel convoys, and missions cut short.",
+    size=14, color=GOLD)
+footer(s, 2)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 3 — THE OPPORTUNITY
+# 3 — SOLUTION
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
-
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "OPPORTUNITY", size=9, color=ELECTRIC, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(12), Inches(0.8),
-    "Two $30B markets. Nobody has touched them.",
-    size=40, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.95), Inches(11.5), Inches(0.4),
-    "Power lines run through every battlefield, every grid, every disaster zone. "
-    "They carry enormous energy — and nobody is tapping it.",
-    size=12, color=LIGHT_GRAY)
-
-# Two TAM cards
-markets = [
-    ("$30B+", DANGER_RED, "Defense TAM",
-     "Military field power for UGVs, sensors, and\nforward operating bases — US + NATO forces."),
-    ("$30B+", AMBER, "Utility TAM",
-     "Power line inspection market worldwide —\n7.3M km of lines, aging fast."),
-]
-for i, (value, color, label, desc) in enumerate(markets):
-    x = Inches(0.6 + i * 6.2)
-    rect(slide, x, Inches(2.6), Inches(5.85), Inches(2.0), fill=CARD_BG, line=color, lw=1.5)
-    txt(slide, x + Inches(0.3), Inches(2.82), Inches(3.5), Inches(0.8),
-        value, size=52, color=color, bold=True, font=HEAD_FONT)
-    txt(slide, x + Inches(0.3), Inches(3.72), Inches(5.2), Inches(0.28),
-        label, size=12, color=WHITE, bold=True, font=HEAD_FONT)
-    txt(slide, x + Inches(0.3), Inches(4.05), Inches(5.3), Inches(0.5),
-        desc, size=11, color=LIGHT_GRAY)
-
-# SAM / SOM as text rows, not cards
-txt(slide, Inches(0.6), Inches(5.0), Inches(11), Inches(0.3),
-    "OUR PATH IN", size=9, color=MID_GRAY, bold=True, font=HEAD_FONT)
-for i, (label, val) in enumerate([
-    ("SAM — 5 years", "$50–200M  ·  B2B2G via Chariot + direct DoD; utility via Cupertino and Terna"),
-    ("SOM — Year 3", "$25M  ·  30–100 units across both markets at $150–250K blended ASP"),
-]):
-    y = Inches(5.4 + i * 0.6)
-    rect(slide, Inches(0.6), y + Inches(0.13), Inches(0.05), Inches(0.3), fill=ELECTRIC)
-    txt(slide, Inches(0.85), y + Inches(0.06), Inches(2.6), Inches(0.4),
-        label, size=12, color=WHITE, bold=True)
-    txt(slide, Inches(3.3), y + Inches(0.06), Inches(9.3), Inches(0.4),
-        val, size=11, color=LIGHT_GRAY)
-
-footer(slide, 3)
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 4 — THE SOLUTION
-# ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
-
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "SOLUTION", size=9, color=GREEN_CHECK, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(12), Inches(1.1),
-    "One drone.\nTwo markets.",
-    size=52, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(2.3), Inches(11), Inches(0.38),
-    "Chargebotic perches on any power line, harvests energy via magnetic induction, "
-    "and uses it for two missions — with the same hardware.",
-    size=12, color=LIGHT_GRAY)
-
-# Steps — text rows, no boxes
+s = blank(); bg(s)
+eyebrow(s, "Solution")
+title(s, "Power is everywhere. It just was never available.")
+txt(s, Inches(0.6), Inches(2.0), Inches(11.5), Inches(0.6),
+    "Power lines already run through nearly every operating area on earth. "
+    "Kestrel makes them a charging point.",
+    size=13, color=LIGHT_GRAY)
 steps = [
-    (ELECTRIC,    "DEPLOY",   "Launch from any ground vehicle. No permits. No infrastructure changes."),
-    (AMBER,       "PERCH",    "Computer vision locks onto the line. The drone clamps on and holds indefinitely."),
-    (GREEN_CHECK, "HARVEST",  "Induction coil extracts AC energy from the line. No wire contact."),
-    (WHITE,       "DELIVER",  "Defense: DC power down the tether to robots, sensors, comms.  "
-                              "Utility: AI inspection data in real time."),
+    ("PERCH",   "Kestrel lands on the line and holds, using no flight power."),
+    ("HARVEST", "It draws energy directly from the live power line."),
+    ("DELIVER", "Power flows down a tether: into a battery, or direct to the machine."),
 ]
-
-for i, (color, title, desc) in enumerate(steps):
-    y = Inches(3.0 + i * 0.92)
-    txt(slide, Inches(0.6), y, Inches(0.7), Inches(0.55),
-        f"0{i+1}", size=26, color=color, bold=True, font=HEAD_FONT)
-    txt(slide, Inches(1.45), y + Inches(0.08), Inches(1.7), Inches(0.3),
-        title, size=13, color=color, bold=True, font=HEAD_FONT)
-    txt(slide, Inches(3.3), y + Inches(0.08), Inches(9.4), Inches(0.7),
-        desc, size=13, color=LIGHT_GRAY)
-    if i < 3:
-        rect(slide, Inches(0.6), y + Inches(0.78), Inches(12.1), Pt(0.75), fill=GRID_LINE)
-
-footer(slide, 4)
-
+for i, (k, v) in enumerate(steps):
+    x = Inches(0.6 + i * 4.15)
+    rect(s, x, Inches(2.9), Inches(3.95), Inches(2.2), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.25), Inches(3.15), Inches(1.2), Inches(0.5),
+        f"0{i+1}", size=26, color=BRAND, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.25), Inches(3.75), Inches(3.4), Inches(0.35),
+        k, size=13, color=GOLD, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.25), Inches(4.15), Inches(3.5), Inches(0.8),
+        v, size=12, color=LIGHT_GRAY)
+txt(s, Inches(0.6), Inches(5.5), Inches(11.8), Inches(0.5),
+    "No fuel. No generator. No signature. A charging network that is already built.",
+    size=14, color=WHITE, bold=True)
+footer(s, 3)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 5 — THE TEAM
+# 4 — SPARK E TEASER
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
+s = blank(); bg(s)
+eyebrow(s, "And then the network charges itself")
+title(s, "Spark E: drones that charge themselves on the line.")
+txt(s, Inches(0.6), Inches(2.1), Inches(11.5), Inches(0.9),
+    "A drone that lands on a power line, recharges its own battery, and flies on. "
+    "No ground crew, no battery swaps, no return to base. Every power line on earth "
+    "becomes its charging station.",
+    size=14, color=LIGHT_GRAY)
+stats = [("30 min", "V1 flight per charge (Orca X30)"), ("80 km/h", "V1 top speed"),
+         ("120 min", "V2 flight target"), ("17,000 km", "One customer's coverage need")]
+for i, (v, l) in enumerate(stats):
+    x = Inches(0.6 + i * 3.1)
+    rect(s, x, Inches(3.4), Inches(2.9), Inches(1.7), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.22), Inches(3.65), Inches(2.5), Inches(0.5), v, size=24, color=GOLD, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.22), Inches(4.25), Inches(2.5), Inches(0.7), l, size=10, color=LIGHT_GRAY)
+txt(s, Inches(0.6), Inches(5.5), Inches(11.8), Inches(0.5),
+    "Range extension changes the unit economics of every drone operation.",
+    size=14, color=WHITE, bold=True)
+footer(s, 4)
 
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "WHO WE ARE", size=9, color=AMBER, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(12), Inches(0.75),
-    "Built to prototype, sell, and win contracts.",
-    size=40, bold=True, font=HEAD_FONT)
-
+# ══════════════════════════════════════════════════════════════════════════════
+# 5 — TEAM
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Team")
+title(s, "Built to ship hardware and win contracts.")
 team = [
-    (ELECTRIC,    "ANIS CHERIET",              "Co-Founder & CEO",
-     ["EV charging infrastructure background",
-      "Fundraising, BD, investor relations",
-      "Driving Chariot deal, Cupertino LOI, Terna deep dive"]),
-    (AMBER,       "BO CHRISTOPHER REDFEARN",   "Co-Founder & CTO — Formerly Apple",
-     ["Hardware and electrical engineering",
-      "Leads prototype: inductive harvesting + tether",
-      "BOM, suppliers, bench validation, certs roadmap"]),
-    (GREEN_CHECK, "ARMIN FOROUGHI",             "Co-Founder — AI/ML",
-     ["Computer vision and autonomy",
-      "Power line detection and perch algorithms",
-      "Real-time inspection data pipeline"]),
-    (MID_GRAY,    "STEVE MACENSKI",             "Technical Advisor",
-     ["Maintainer of Nav2 — most deployed open-source",
-      "robotics navigation stack worldwide",
-      "Autonomy and defense ecosystem access"]),
+    ("ANIS CHERIET", "Co-Founder & CEO",
+     "EV charging infrastructure across Europe. Strategy, defense partnerships, fundraising."),
+    ("BO REDFEARN", "Co-Founder & CTO",
+     "Formerly Apple. Designed Magline, the harvesting core. Hardware and systems."),
+    ("AMIN FOROUGHI", "Engineer",
+     "Computer vision and autonomy. Line detection and semi-autonomous attach."),
+    ("BECKETT", "Engineer",
+     "Mechanical engineering. FPV champion pilot. Flight testing."),
 ]
-
-for i, (color, name, title, bullets) in enumerate(team):
+for i, (n, r, d) in enumerate(team):
     x = Inches(0.6 + i * 3.15)
-    rect(slide, x, Inches(2.1), Inches(3.0), Inches(4.5),
-         fill=CARD_BG, line=color, lw=1.0)
-    txt(slide, x + Inches(0.18), Inches(2.25), Inches(2.75), Inches(0.32),
-        name, size=11, color=WHITE, bold=True, font=HEAD_FONT)
-    txt(slide, x + Inches(0.18), Inches(2.62), Inches(2.75), Inches(0.35),
-        title, size=9, color=color, bold=True, font=HEAD_FONT)
-    for j, b in enumerate(bullets):
-        txt(slide, x + Inches(0.18), Inches(3.1 + j * 0.8), Inches(2.78), Inches(0.72),
-            f"·  {b}", size=10, color=LIGHT_GRAY)
-
-rect(slide, Inches(0.6), Inches(6.72), Inches(11.7), Inches(0.42),
-     fill=RGBColor(0x0D, 0x1F, 0x0D), line=GREEN_CHECK, lw=0.75)
-txt(slide, Inches(0.88), Inches(6.82), Inches(11.0), Inches(0.26),
-    "Founders Inc Accelerator  ·  NVIDIA Inception  ·  Demo Day completed May 2026",
-    size=11, color=WHITE)
-
-footer(slide, 5)
-
+    rect(s, x, Inches(2.1), Inches(2.95), Inches(2.6), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.2), Inches(2.32), Inches(2.6), Inches(0.35), n, size=12, color=WHITE, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.2), Inches(2.68), Inches(2.6), Inches(0.3), r, size=9, color=BRAND, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.2), Inches(3.05), Inches(2.6), Inches(1.5), d, size=10, color=LIGHT_GRAY)
+rect(s, Inches(0.6), Inches(5.0), Inches(11.9), Inches(1.1), fill=CARD_BG, line=GREEN_CHECK, lw=0.75)
+txt(s, Inches(0.9), Inches(5.15), Inches(11.2), Inches(0.3),
+    "ADVISORS", size=9, color=GREEN_CHECK, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.9), Inches(5.5), Inches(11.2), Inches(0.5),
+    "Patrick Consorti (Silicon Valley operator, Bridge2)  ·  Arne Stoschek (ex Volkswagen, Better Place)  ·  "
+    "[Ex-PG&E utility advisor, name TBD]",
+    size=11, color=LIGHT_GRAY)
+footer(s, 5)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 6 — TRACTION
+# 6 — LAUNCH PRODUCT: KESTREL
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
+s = blank(); bg(s)
+eyebrow(s, "Launch product 01")
+title(s, "Kestrel. Portable charging system. $65K.")
+txt(s, Inches(0.6), Inches(2.0), Inches(11.5), Inches(0.5),
+    "For defense: missions and vehicles operating far from any base.",
+    size=13, color=LIGHT_GRAY)
+flow = ["Lands on the powerline", "Tether sends power down", "Converter conditions the power", "[Optional] battery buffer"]
+for i, f in enumerate(flow):
+    x = Inches(0.6 + i * 3.1)
+    rect(s, x, Inches(2.7), Inches(2.9), Inches(1.0), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.2), Inches(2.85), Inches(0.6), Inches(0.4), f"{i+1}", size=18, color=BRAND, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.7), Inches(2.88), Inches(2.1), Inches(0.75), f, size=11, color=WHITE)
+rect(s, Inches(0.6), Inches(4.1), Inches(11.9), Inches(1.9), fill=CARD_BG, line=GOLD, lw=1.0)
+txt(s, Inches(0.9), Inches(4.3), Inches(11), Inches(0.3), "TRACTION", size=9, color=GOLD, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.9), Inches(4.65), Inches(11.2), Inches(0.4),
+    "Chariot Defense — battlefield power hubs, a16z-backed. Pilot in negotiation.",
+    size=12, color=WHITE)
+txt(s, Inches(0.9), Inches(5.15), Inches(11.2), Inches(0.4),
+    "Overland — [customer details TBD]",
+    size=12, color=WHITE)
+footer(s, 6)
 
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "TRACTION", size=9, color=GREEN_CHECK, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(12), Inches(0.75),
-    "Three live deals. One demo secured.",
-    size=40, bold=True, font=HEAD_FONT)
-
-traction_items = [
-    (AMBER,       "Chariot Defense",
-     "$6.5M/year commercial order pending JIFX pilot success. Adam Warmoth, CEO: "
-     "\"The hardest part is keeping them charged.\" $41M raised, a16z Series A."),
-    (ELECTRIC,    "Cupertino — Letter of Interest confirmed",
-     "Largest utility inspector in the US. Power line inspection use case. "
-     "Pilot scope in discussion."),
-    (ELECTRIC,    "Terna Forward — Italian national grid CVC",
-     "Italy's national power grid operator reached out. Deep dive scheduled Jun 30, 2026."),
-    (GREEN_CHECK, "JIFX 26-4 secured — Aug 10–14, Camp Roberts CA",
-     "Joint demo with Chariot Defense. Hardware ordered from ORQA, delivery Jul 1. "
-     "Goal: energy harvest → Chariot Amphora ground system."),
+# ══════════════════════════════════════════════════════════════════════════════
+# 7 — PRODUCT 2: SPARK E
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Launch product 02")
+title(s, "Spark E. The self-charging drone.")
+cols = [
+    ("V1  ·  ORCA X30", GOLD,
+     ["30 min flight per charge", "Up to 80 km/h", "Payload up to [X] kg", "Autonomous modes + BVLOS"]),
+    ("V2  ·  [MODEL TBD]", WHITE,
+     ["120 min flight per charge", "Payload [TBD]", "Extended autonomy", "In development"]),
+    ("CUSTOM", MID_GRAY,
+     ["Engineering collaboration", "Customer sensors + electronics", "Integration with their autonomy", "Per-program pricing"]),
 ]
-
-for i, (color, title, desc) in enumerate(traction_items):
-    y = Inches(2.15 + i * 1.12)
-    rect(slide, Inches(0.6), y + Inches(0.05), Inches(0.05), Inches(0.78), fill=color)
-    txt(slide, Inches(0.85), y, Inches(11.5), Inches(0.32),
-        title, size=15, color=WHITE, bold=True)
-    txt(slide, Inches(0.85), y + Inches(0.42), Inches(11.5), Inches(0.5),
-        desc, size=12, color=LIGHT_GRAY)
-    if i < 3:
-        rect(slide, Inches(0.6), y + Inches(0.95), Inches(12.1), Pt(0.75), fill=GRID_LINE)
-
-footer(slide, 6)
-
+for i, (h, c, items) in enumerate(cols):
+    x = Inches(0.6 + i * 4.15)
+    rect(s, x, Inches(2.0), Inches(3.95), Inches(2.5), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.22), Inches(2.2), Inches(3.5), Inches(0.3), h, size=11, color=c, bold=True, font=HEAD_FONT)
+    for j, it in enumerate(items):
+        txt(s, x + Inches(0.22), Inches(2.62 + j * 0.44), Inches(3.55), Inches(0.4),
+            f"·  {it}", size=10, color=LIGHT_GRAY)
+txt(s, Inches(0.6), Inches(4.85), Inches(11), Inches(0.3), "WHO BUYS IT", size=9, color=GOLD, bold=True, font=HEAD_FONT)
+buyers = [
+    "Cupertino — largest utility inspector in Argentina. 17,000 km of lines to cover.",
+    "Automated reforestation drone fleets  ·  Aerial imagery collection  ·  Defense",
+]
+for i, b in enumerate(buyers):
+    txt(s, Inches(0.6), Inches(5.25 + i * 0.5), Inches(11.9), Inches(0.45), b, size=12, color=WHITE)
+footer(s, 7)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SLIDE 7 — NEXT MILESTONES + ASK
+# 8 — SOFTWARE
 # ══════════════════════════════════════════════════════════════════════════════
-slide = blank()
-bg(slide, DEEP_SPACE)
-
-txt(slide, Inches(0.6), Inches(0.5), Inches(9), Inches(0.25),
-    "WHAT'S NEXT", size=9, color=ELECTRIC, bold=True, font=HEAD_FONT)
-
-txt(slide, Inches(0.6), Inches(1.0), Inches(8), Inches(0.7),
-    "18 months to seed-raise ready.",
-    size=40, bold=True, font=HEAD_FONT)
-
-milestones = [
-    ("Aug 2026",   AMBER,       "JIFX 26-4 demo",
-     "Energy harvest → Chariot Amphora. Camp Roberts CA."),
-    ("Oct 2026",   AMBER,       "TRL 6 — working prototype",
-     "Bench-validated. First real power line test."),
-    ("Q4 2026",    ELECTRIC,    "First paid pilots",
-     "2–3 units deployed — defense + utility."),
-    ("Q1 2027",    ELECTRIC,    "SBIR Phase I",
-     "$250K non-dilutive. Army + SOCOM applications."),
-    ("Q3 2027",    GREEN_CHECK, "$100–200K ARR",
-     "5–8 units contracted. Seed round launched."),
+s = blank(); bg(s)
+eyebrow(s, "The layer on top")
+title(s, "Software: every watt measured, every line known.")
+sw = [
+    ("TELEMETRY", "Live status of every Kestrel and Spark E in the field: position, power, health."),
+    ("LINE HEALTH", "Every perch is an inspection. Line condition data utilities do not have today."),
+    ("METERING", "Measure the energy drawn, bill for it. The mechanism that makes grid partnerships pay."),
 ]
+for i, (k, v) in enumerate(sw):
+    x = Inches(0.6 + i * 4.15)
+    rect(s, x, Inches(2.3), Inches(3.95), Inches(2.4), fill=CARD_BG, line=GRID_LINE)
+    txt(s, x + Inches(0.25), Inches(2.55), Inches(3.4), Inches(0.35), k, size=13, color=GOLD, bold=True, font=HEAD_FONT)
+    txt(s, x + Inches(0.25), Inches(3.05), Inches(3.45), Inches(1.5), v, size=12, color=LIGHT_GRAY)
+footer(s, 8)
 
-for i, (date, color, title, desc) in enumerate(milestones):
-    y = Inches(2.1 + i * 0.82)
-    rect(slide, Inches(0.62), y + Inches(0.04), Inches(0.16), Inches(0.16), fill=color)
-    txt(slide, Inches(1.0), y, Inches(1.4), Inches(0.28),
-        date, size=10, color=color, bold=True, font=HEAD_FONT)
-    txt(slide, Inches(2.5), y, Inches(5.4), Inches(0.28),
-        title, size=13, color=WHITE, bold=True)
-    txt(slide, Inches(2.5), y + Inches(0.32), Inches(5.6), Inches(0.3),
-        desc, size=11, color=LIGHT_GRAY)
+# ══════════════════════════════════════════════════════════════════════════════
+# 9 — BUSINESS MODEL
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Business model")
+title(s, "Hardware plus subscription.")
+rows(s, [
+    ("Hardware unit", "Kestrel at $65K. Spark E priced per configuration."),
+    ("Software subscription", "Telemetry, line health, metering. Recurring, attached to every unit."),
+    ("Training & support", "Operator training, field support, hardware upgrade path."),
+], y0=2.3, dy=0.85, label_w=3.4, size=14)
+footer(s, 9)
 
-# Ask box
-rect(slide, Inches(8.5), Inches(1.85), Inches(4.25), Inches(4.75),
-     fill=CARD_BG, line=ELECTRIC, lw=1.5)
-txt(slide, Inches(8.75), Inches(2.05), Inches(3.75), Inches(0.28),
-    "THE ASK", size=10, color=ELECTRIC, bold=True, font=HEAD_FONT)
-txt(slide, Inches(8.75), Inches(2.45), Inches(3.75), Inches(0.75),
-    "Raising $2M", size=36, color=WHITE, bold=True, font=HEAD_FONT)
-txt(slide, Inches(8.75), Inches(3.28), Inches(3.75), Inches(0.28),
-    "$10M cap SAFE  ·  18 months runway", size=10, color=LIGHT_GRAY)
+# ══════════════════════════════════════════════════════════════════════════════
+# 10 — TAM
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Market")
+title(s, "Two markets, one charging network.")
+rect(s, Inches(0.6), Inches(2.2), Inches(5.85), Inches(3.2), fill=CARD_BG, line=BRAND, lw=1.2)
+txt(s, Inches(0.9), Inches(2.45), Inches(5.2), Inches(0.3), "CHARGING SYSTEMS — DEFENSE", size=11, color=BRAND, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.9), Inches(2.9), Inches(5.2), Inches(0.9), "250,000", size=44, color=WHITE, bold=True, font=HEAD_FONT)
+txt(s, Inches(0.9), Inches(3.85), Inches(5.2), Inches(1.2),
+    "Vehicles in the US fleet that operate away from fixed power. "
+    "Every one is a candidate for line-drawn charging.", size=12, color=LIGHT_GRAY)
+rect(s, Inches(6.85), Inches(2.2), Inches(5.85), Inches(3.2), fill=CARD_BG, line=GOLD, lw=1.2)
+txt(s, Inches(7.15), Inches(2.45), Inches(5.2), Inches(0.3), "SELF-CHARGING DRONES", size=11, color=GOLD, bold=True, font=HEAD_FONT)
+txt(s, Inches(7.15), Inches(2.9), Inches(5.2), Inches(0.9), "[TAM TBD]", size=44, color=GOLD, bold=True, font=HEAD_FONT)
+txt(s, Inches(7.15), Inches(3.85), Inches(5.2), Inches(1.2),
+    "Inspection, reforestation, imagery, defense. Every operator whose economics "
+    "are capped by battery range.", size=12, color=LIGHT_GRAY)
+footer(s, 10)
 
-ask_items = [
-    (GREEN_CHECK, "JIFX demo + pilot units"),
-    (GREEN_CHECK, "TRL 6 prototype by Oct 2026"),
-    (GREEN_CHECK, "Utility pilots: Cupertino + Terna"),
-    (GREEN_CHECK, "SBIR Phase I submitted"),
-    (ELECTRIC,   "Seed-raise ready at $20–30M"),
-]
-for i, (color, item) in enumerate(ask_items):
-    y = Inches(3.72 + i * 0.5)
-    rect(slide, Inches(8.75), y + Inches(0.1), Inches(0.05), Inches(0.28), fill=color)
-    txt(slide, Inches(8.95), y + Inches(0.06), Inches(3.6), Inches(0.38),
-        item, size=11,
-        color=ELECTRIC if color == ELECTRIC else WHITE,
-        bold=(color == ELECTRIC))
+# ══════════════════════════════════════════════════════════════════════════════
+# 11 — IS THIS LEGAL?
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "The question everyone asks")
+title(s, "Is this legal?")
+txt(s, Inches(0.6), Inches(2.0), Inches(11.5), Inches(0.5),
+    "Yes, built the right way: with the utilities, not around them. Our advisor spent a career at PG&E.",
+    size=14, color=LIGHT_GRAY)
+rows(s, [
+    ("Safety first", "Non-contact harvesting, controlled standoff, redundancies, formal safety case."),
+    ("New revenue for utilities", "Metered energy drawn from their lines becomes a new revenue stream."),
+    ("Line health reporting", "Every perch inspects the line. Utilities get condition data they lack today."),
+], y0=2.9, dy=0.85, label_w=3.6, size=14)
+txt(s, Inches(0.6), Inches(5.7), Inches(11.8), Inches(0.5),
+    "Advisor: [name TBD], ex PG&E.", size=12, color=GOLD, bold=True)
+footer(s, 11)
 
-txt(slide, Inches(0.6), Inches(6.25), Inches(4), Inches(0.26),
-    "Anis Cheriet — anis@chargebotic.com", size=11, color=MID_GRAY)
+# ══════════════════════════════════════════════════════════════════════════════
+# 12 — MILESTONES
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Where the product is")
+title(s, "Kestrel 1 works. Kestrel 2 ships Q3.", size=34)
+rect(s, Inches(0.6), Inches(2.0), Inches(5.85), Inches(4.3), fill=CARD_BG, line=GREEN_CHECK, lw=1.0)
+txt(s, Inches(0.9), Inches(2.2), Inches(5.2), Inches(0.3), "KESTREL 1  ·  NOW", size=11, color=GREEN_CHECK, bold=True, font=HEAD_FONT)
+k1 = ["Works on powerlines, 50 to 150 W", "Demonstrated on Orca drone", "Remote piloted", "BOM $15K",
+      "Pulls [X] W in [Y] minutes", "1 hr replaces a [P] generator / 300L of fuel"]
+for j, it in enumerate(k1):
+    txt(s, Inches(0.9), Inches(2.65 + j * 0.58), Inches(5.3), Inches(0.5), f"·  {it}", size=12, color=LIGHT_GRAY)
+rect(s, Inches(6.85), Inches(2.0), Inches(5.85), Inches(4.3), fill=CARD_BG, line=GOLD, lw=1.0)
+txt(s, Inches(7.15), Inches(2.2), Inches(5.2), Inches(0.3), "KESTREL 2  ·  SHIPPING Q3 2026", size=11, color=GOLD, bold=True, font=HEAD_FONT)
+k2 = ["Powerlines 50 to 250 W", "Retrofit to multiple airframes", "Semi-autonomous: finds and attaches to the line",
+      "Integrates with customer autonomy", "BOM $20K", "1 hr replaces a [P] generator / 900L of fuel"]
+for j, it in enumerate(k2):
+    txt(s, Inches(7.15), Inches(2.65 + j * 0.58), Inches(5.3), Inches(0.5), f"·  {it}", size=12, color=LIGHT_GRAY)
+footer(s, 12)
 
-footer(slide, 7)
+# ══════════════════════════════════════════════════════════════════════════════
+# 13 — NEXT 12 MONTHS
+# ══════════════════════════════════════════════════════════════════════════════
+s = blank(); bg(s)
+eyebrow(s, "Next 12 months")
+title(s, "$6M revenue. Two products in the field.")
+rows(s, [
+    ("Revenue", "$6M over the next 12 months."),
+    ("Kestrel Gen 3", "In production at scale: 3 customers, 10 units each."),
+    ("Spark E Gen 2", "30 drones sold and flying in the field."),
+    ("Spark E prototype", "Proven: BOM, charge time, flight time [figures TBD]."),
+    ("Non-dilutive", "SBIR Direct to Phase II."),
+], y0=2.2, dy=0.72, label_w=3.2, size=14)
+txt(s, Inches(0.6), Inches(6.2), Inches(11), Inches(0.35),
+    "Anis Cheriet  ·  anis@chargebotic.com  ·  chargebotic.com", size=12, color=GOLD, bold=True)
+footer(s, 13)
 
-
-# ── Save PPTX ─────────────────────────────────────────────────────────────────
+# ── Save ──────────────────────────────────────────────────────────────────────
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pptx_path = os.path.join(ROOT, "chargebotic-pitch-deck.pptx")
 prs.save(pptx_path)
 print(f"PPTX saved: {pptx_path}")
 
-
-# ── Upload to Google Slides ────────────────────────────────────────────────────
+# ── Optional Google Slides upload (skipped gracefully if auth unavailable) ────
 def upload_to_google_slides(local_pptx_path):
     from google.oauth2.credentials import Credentials
     from google.auth.transport.requests import Request
     from googleapiclient.discovery import build
     from googleapiclient.http import MediaFileUpload
 
-    creds_root  = os.path.dirname(os.path.dirname(ROOT))
-    token_path  = os.path.join(creds_root, "token.json")
-    creds_path  = os.path.join(creds_root, "credentials.json")
-
-    SCOPES = [
-        "https://www.googleapis.com/auth/drive",
-        "https://www.googleapis.com/auth/drive.file",
-    ]
-
+    creds_root = os.path.dirname(os.path.dirname(ROOT))
+    token_path = os.path.join(creds_root, "token.json")
     creds = None
     if os.path.exists(token_path):
-        creds = Credentials.from_authorized_user_file(token_path, SCOPES)
-
+        creds = Credentials.from_authorized_user_file(token_path, [
+            "https://www.googleapis.com/auth/drive",
+            "https://www.googleapis.com/auth/drive.file",
+        ])
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            from google_auth_oauthlib.flow import InstalledAppFlow
-            flow = InstalledAppFlow.from_client_secrets_file(creds_path, SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open(token_path, "w") as f:
-            f.write(creds.to_json())
-
+            raise RuntimeError("no valid token")
     drive = build("drive", "v3", credentials=creds)
-
-    file_metadata = {
-        "name": "Chargebotic Inc — Investor Pitch Deck (June 2026)",
+    media = MediaFileUpload(local_pptx_path, mimetype=(
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation"), resumable=True)
+    file = drive.files().create(body={
+        "name": "Chargebotic — Investor Pitch Deck (July 2026)",
         "mimeType": "application/vnd.google-apps.presentation",
-    }
-    media = MediaFileUpload(
-        local_pptx_path,
-        mimetype=(
-            "application/vnd.openxmlformats-officedocument"
-            ".presentationml.presentation"
-        ),
-        resumable=True,
-    )
-
-    print("Uploading to Google Slides...")
-    file = (
-        drive.files()
-        .create(body=file_metadata, media_body=media, fields="id,webViewLink")
-        .execute()
-    )
-
-    url = file.get("webViewLink")
-    print(f"Google Slides URL: {url}")
-    return url
+    }, media_body=media, fields="id,webViewLink").execute()
+    print(f"Google Slides URL: {file.get('webViewLink')}")
 
 
-upload_to_google_slides(pptx_path)
+try:
+    upload_to_google_slides(pptx_path)
+except Exception as e:
+    print(f"Google Slides upload skipped ({type(e).__name__}). PPTX is ready locally.")
