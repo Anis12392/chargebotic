@@ -8,9 +8,10 @@ enables a destructive or costly behaviour.
 from __future__ import annotations
 
 from functools import lru_cache
+from typing import Annotated
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -28,7 +29,13 @@ class Settings(BaseSettings):
     debug: bool = Field(default=False)
 
     # --- HTTP -------------------------------------------------------------
-    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
+    # NoDecode is load-bearing: without it pydantic-settings tries to JSON-parse
+    # any complex-typed field coming from the environment, so the natural
+    # `CORS_ORIGINS=http://localhost:3000` crashes the process at import time
+    # before the validator below ever runs.
+    cors_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:3000"]
+    )
     max_upload_bytes: int = Field(default=15 * 1024 * 1024)  # 15 MB
 
     # --- Database ---------------------------------------------------------

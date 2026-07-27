@@ -71,6 +71,9 @@ cd gridline/backend  && .venv/bin/pytest -q && .venv/bin/ruff check app tests
 cd gridline/frontend && npm run typecheck && npm test && npm run build
 ```
 
+Frontend tests default to the Node environment; the ones needing a DOM opt in
+with a `@vitest-environment jsdom` docblock.
+
 ---
 
 ## Architecture
@@ -243,3 +246,6 @@ only irreplaceable asset here.
 - **HIFLD covers US transmission only.** Non-US captures rely on OSM alone.
 - **The harvest model is a design-point estimate**, not a bench measurement of
   Chargebotic hardware. Every assumption ships with the number.
+- **The map needs outbound access to `tile.openstreetmap.org`.** Behind a
+  restrictive egress policy the basemap tiles fail and the map renders markers
+  on an empty dark canvas. Markers, legend and the asset list still work.

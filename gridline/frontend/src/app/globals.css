@@ -62,8 +62,12 @@ body {
   }
 }
 
-/* Leaflet renders a light basemap chrome by default; match the app shell. */
-.leaflet-container {
+/* Leaflet renders a light basemap chrome by default; match the app shell.
+   The class is doubled to out-specify Leaflet's own single-class rule: GridMap
+   is dynamically imported, so leaflet.css lands in a later chunk than this file
+   and would otherwise win on source order. Without this, every tile gap and
+   tile-loading state flashes #ddd in an otherwise dark app. */
+.leaflet-container.leaflet-container {
   background: #07090c;
   font-family: inherit;
 }

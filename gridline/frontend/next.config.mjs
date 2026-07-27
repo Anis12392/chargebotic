@@ -25,9 +25,18 @@ const nextConfig = {
   },
 
   async rewrites() {
-    // Same-origin proxy to the API. Keeps the service worker, CORS and cookie
-    // stories simple, and means the PWA has exactly one origin to trust.
-    return [{ source: '/api/:path*', destination: `${apiBase}/:path*` }];
+    return [
+      // Same-origin proxy to the API. Keeps the service worker, CORS and cookie
+      // stories simple, and means the PWA has exactly one origin to trust.
+      { source: '/api/:path*', destination: `${apiBase}/:path*` },
+      // With no S3 credentials the backend stores photos on disk and returns
+      // relative `/media/...` URLs, which the browser resolves against *this*
+      // origin. Without this rewrite every thumbnail 404s in local mode — the
+      // exact path `docker compose up` takes before S3 is configured. The
+      // backend stays unaware of the frontend's routing, and clients calling
+      // the API directly still get a URL that works for them.
+      { source: '/media/:path*', destination: `${apiBase}/media/:path*` },
+    ];
   },
 };
 

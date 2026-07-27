@@ -111,6 +111,80 @@ def parse_voltages(raw: str | None) -> list[int]:
     return sorted(set(values), reverse=True)
 
 
+class CacheHandle:
+    """Serialised access to the request's session for cache reads and writes.
+
+    ``collect`` fans out to three GIS sources with ``asyncio.gather``, and they
+    all share one ``AsyncSession``. AsyncSession does not permit concurrent
+    operations — overlapping calls raise "this session is provisioning a new
+    connection". Because cache errors are deliberately swallowed so they can
+    never fail a request, that surfaced only as a log line while the cache
+    silently never worked, sending every request to Overpass.
+
+    The lock is per-collect, not per-engine, so concurrent requests still run
+    independently.
+    """
+
+    def __init__(self, session: AsyncSession | None) -> None:
+        self.session = session
+        self._lock = asyncio.Lock()
+
+    async def read(self, key: str) -> dict[str, Any] | None:
+        if self.session is None:
+            return None
+        async with self._lock:
+            try:
+                result = await self.session.execute(
+                    select(GISCacheEntry).where(GISCacheEntry.cache_key == key)
+                )
+                entry = result.scalar_one_or_none()
+            except Exception as exc:  # pragma: no cover - cache must never break a request
+                logger.warning("GIS cache read failed: %s", exc)
+                return None
+        if entry is None or entry.expires_at <= datetime.now(UTC):
+            return None
+        return entry.payload
+
+    async def write(
+        self,
+        key: str,
+        source: str,
+        lat: float,
+        lon: float,
+        radius: int,
+        payload: dict[str, Any],
+    ) -> None:
+        if self.session is None:
+            return
+        async with self._lock:
+            try:
+                existing = await self.session.execute(
+                    select(GISCacheEntry).where(GISCacheEntry.cache_key == key)
+                )
+                entry = existing.scalar_one_or_none()
+                expires = datetime.now(UTC) + timedelta(
+                    seconds=settings.gis_cache_ttl_seconds
+                )
+                if entry is None:
+                    self.session.add(
+                        GISCacheEntry(
+                            cache_key=key,
+                            source=source,
+                            latitude=lat,
+                            longitude=lon,
+                            radius_m=radius,
+                            payload=payload,
+                            expires_at=expires,
+                        )
+                    )
+                else:
+                    entry.payload = payload
+                    entry.expires_at = expires
+                await self.session.flush()
+            except Exception as exc:  # pragma: no cover
+                logger.warning("GIS cache write failed: %s", exc)
+
+
 def _cache_key(source: str, lat: float, lon: float, radius: int) -> str:
     # ~11 m grid at 4 decimal places; enough to dedupe a pole-by-pole walk.
     payload = f"{source}:{lat:.4f}:{lon:.4f}:{radius}"
@@ -137,10 +211,11 @@ class GISEngine:
             context.errors.append("External GIS lookups are disabled by configuration")
             return context
 
+        cache = CacheHandle(session)
         results = await asyncio.gather(
-            self._overpass(session, latitude, longitude, radius),
+            self._overpass(cache, latitude, longitude, radius),
             self._arcgis(
-                session,
+                cache,
                 settings.usgs_hifld_transmission_url,
                 "hifld_transmission",
                 latitude,
@@ -149,7 +224,7 @@ class GISEngine:
                 "line",
             ),
             self._arcgis(
-                session,
+                cache,
                 settings.usgs_hifld_substation_url,
                 "hifld_substation",
                 latitude,
@@ -178,13 +253,13 @@ class GISEngine:
 
     async def _overpass(
         self,
-        session: AsyncSession | None,
+        cache: CacheHandle,
         lat: float,
         lon: float,
         radius: int,
     ) -> tuple[list[GISAsset], bool]:
         key = _cache_key("overpass", lat, lon, radius)
-        cached_payload = await self._read_cache(session, key)
+        cached_payload = await cache.read(key)
         if cached_payload is not None:
             return self._parse_overpass(cached_payload, lat, lon), True
 
@@ -200,7 +275,7 @@ class GISEngine:
             data={"data": query},
             headers={"User-Agent": settings.overpass_user_agent},
         )
-        await self._write_cache(session, key, "overpass", lat, lon, radius, payload)
+        await cache.write(key, "overpass", lat, lon, radius, payload)
         return self._parse_overpass(payload, lat, lon), False
 
     def _parse_overpass(self, payload: dict[str, Any], lat: float, lon: float) -> list[GISAsset]:
@@ -252,7 +327,7 @@ class GISEngine:
 
     async def _arcgis(
         self,
-        session: AsyncSession | None,
+        cache: CacheHandle,
         url: str | None,
         source_name: str,
         lat: float,
@@ -264,7 +339,7 @@ class GISEngine:
             return [], False
 
         key = _cache_key(source_name, lat, lon, radius)
-        cached_payload = await self._read_cache(session, key)
+        cached_payload = await cache.read(key)
         if cached_payload is not None:
             return self._parse_arcgis(cached_payload, lat, lon, source_name, kind), True
 
@@ -282,7 +357,7 @@ class GISEngine:
             "resultRecordCount": "50",
         }
         payload = await self._get(url, params=params)
-        await self._write_cache(session, key, source_name, lat, lon, radius, payload)
+        await cache.write(key, source_name, lat, lon, radius, payload)
         return self._parse_arcgis(payload, lat, lon, source_name, kind), False
 
     def _parse_arcgis(
@@ -403,62 +478,6 @@ class GISEngine:
         finally:
             if owns:
                 await client.aclose()
-
-    async def _read_cache(self, session: AsyncSession | None, key: str) -> dict[str, Any] | None:
-        if session is None:
-            return None
-        try:
-            result = await session.execute(
-                select(GISCacheEntry).where(GISCacheEntry.cache_key == key)
-            )
-            entry = result.scalar_one_or_none()
-        except Exception as exc:  # pragma: no cover - cache must never break a request
-            logger.warning("GIS cache read failed: %s", exc)
-            return None
-        if entry is None:
-            return None
-        if entry.expires_at <= datetime.now(UTC):
-            return None
-        return entry.payload
-
-    async def _write_cache(
-        self,
-        session: AsyncSession | None,
-        key: str,
-        source: str,
-        lat: float,
-        lon: float,
-        radius: int,
-        payload: dict[str, Any],
-    ) -> None:
-        if session is None:
-            return
-        try:
-            existing = await session.execute(
-                select(GISCacheEntry).where(GISCacheEntry.cache_key == key)
-            )
-            entry = existing.scalar_one_or_none()
-            expires = datetime.now(UTC) + timedelta(
-                seconds=settings.gis_cache_ttl_seconds
-            )
-            if entry is None:
-                session.add(
-                    GISCacheEntry(
-                        cache_key=key,
-                        source=source,
-                        latitude=lat,
-                        longitude=lon,
-                        radius_m=radius,
-                        payload=payload,
-                        expires_at=expires,
-                    )
-                )
-            else:
-                entry.payload = payload
-                entry.expires_at = expires
-            await session.flush()
-        except Exception as exc:  # pragma: no cover
-            logger.warning("GIS cache write failed: %s", exc)
 
 
 def _arcgis_representative_point(geometry: dict[str, Any]) -> tuple[float | None, float | None]:

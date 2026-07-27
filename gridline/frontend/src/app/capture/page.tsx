@@ -208,7 +208,7 @@ export default function CapturePage() {
     <div className="relative">
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-black">
         <video
-          ref={camera.videoRef}
+          ref={camera.setVideoElement}
           playsInline
           muted
           autoPlay
