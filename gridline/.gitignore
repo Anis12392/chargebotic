@@ -1,0 +1,19 @@
+# Environments
+.env
+.env.local
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local storage fallback for photos
+.storage/
+
+# Build output
+dist/
+build/
