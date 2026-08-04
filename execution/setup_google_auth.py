@@ -16,9 +16,20 @@ SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
 ]
 
-ROOT = os.path.dirname(os.path.dirname(__file__))
-CREDS_PATH = os.path.join(ROOT, "credentials.json")
-TOKEN_PATH = os.path.join(ROOT, "token.json")
+# credentials.json and token.json live at the repo root (~/claude-code-official-memory),
+# which is where every Drive/Docs/Slides script reads them from. The project folder is
+# checked as a fallback so an older layout keeps working.
+REPO_ROOT = os.path.expanduser("~/claude-code-official-memory")
+PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
+
+CREDS_PATH = next(
+    (p for p in (
+        os.path.join(REPO_ROOT, "credentials.json"),
+        os.path.join(PROJECT_ROOT, "credentials.json"),
+    ) if os.path.exists(p)),
+    os.path.join(REPO_ROOT, "credentials.json"),
+)
+TOKEN_PATH = os.path.join(os.path.dirname(CREDS_PATH), "token.json")
 
 
 def main():
