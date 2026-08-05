@@ -1,0 +1,22 @@
+{
+  "name": "GridLine AI",
+  "short_name": "GridLine",
+  "description": "Identify overhead power lines from a photograph and a GPS fix. Evidence-based estimates, never measurements.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#07090c",
+  "theme_color": "#07090c",
+  "categories": ["utilities", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Capture", "url": "/capture", "description": "Photograph a structure" },
+    { "name": "Map", "url": "/map", "description": "Nearby infrastructure" },
+    { "name": "History", "url": "/history", "description": "Past inspections" }
+  ]
+}
