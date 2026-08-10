@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  @apply bg-surface-950 text-slate-200 antialiased;
+  /* The app is used one-handed outdoors; overscroll bounce fights the camera. */
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-surface-700 bg-surface-900/70 p-4 shadow-lg shadow-black/30;
+  }
+
+  .card-tight {
+    @apply rounded-lg border border-surface-700 bg-surface-900/60 p-3;
+  }
+
+  .label {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-slate-500;
+  }
+
+  .value {
+    @apply text-base font-medium text-slate-100;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold
+      transition-colors disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply btn bg-grid-distribution text-surface-950 hover:bg-sky-300;
+  }
+
+  .btn-secondary {
+    @apply btn border border-surface-600 bg-surface-800 text-slate-200 hover:bg-surface-700;
+  }
+
+  .btn-ghost {
+    @apply btn text-slate-400 hover:text-slate-100;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-surface-600 bg-surface-800 px-3 py-2 text-sm text-slate-100
+      placeholder:text-slate-500 focus:border-grid-distribution focus:outline-none;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1 rounded-full border border-surface-600 bg-surface-800 px-2.5
+      py-1 text-xs font-medium text-slate-300;
+  }
+}
+
+/* Leaflet renders a light basemap chrome by default; match the app shell.
+   The class is doubled to out-specify Leaflet's own single-class rule: GridMap
+   is dynamically imported, so leaflet.css lands in a later chunk than this file
+   and would otherwise win on source order. Without this, every tile gap and
+   tile-loading state flashes #ddd in an otherwise dark app. */
+.leaflet-container.leaflet-container {
+  background: #07090c;
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: #151b23;
+  color: #e2e8f0;
+  border-radius: 0.5rem;
+}
+
+.leaflet-control-attribution {
+  background: rgba(13, 17, 23, 0.85) !important;
+  color: #64748b !important;
+}
+
+.leaflet-control-attribution a {
+  color: #94a3b8 !important;
+}
+
+/* Respect a user's reduced-motion preference for the analysing spinner. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
