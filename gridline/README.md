@@ -36,33 +36,37 @@ Nothing in this system is a clearance authorisation.
 
 ## Quick start
 
+Two ways in. Both end at <http://localhost:3000>.
+
+**With Docker** — one command, brings up PostGIS and MinIO too:
+
 ```bash
 cd gridline
 cp .env.example .env          # optional: add OPENAI_API_KEY for real vision
 docker compose up --build
 ```
 
-- App: <http://localhost:3000>
-- API docs: <http://localhost:8000/docs>
-- MinIO console: <http://localhost:9001>
+**Without Docker** — needs PostgreSQL 16 + PostGIS on the host, nothing else:
+
+```bash
+cd gridline
+./run-local.sh                # ./run-local.sh stop  to shut down
+```
+
+`run-local.sh` creates the role and database, applies migrations, installs both
+dependency sets, builds the web app and starts everything. It finds a working
+Postgres admin connection rather than assuming one, so it works with Homebrew,
+Debian peer auth and container setups alike.
+
+| | App | API docs | Object store |
+| --- | --- | --- | --- |
+| Docker | <http://localhost:3000> | <http://localhost:8000/docs> | <http://localhost:9001> |
+| Local script | <http://localhost:3000> | <http://localhost:8000/docs> | photos on local disk |
 
 Without an `OPENAI_API_KEY` the stack runs on the deterministic fallback
 analyzer, which observes nothing and says so in every report. That is the
-intended offline and CI mode — it is honest degradation, not a stub.
-
-### Running the pieces directly
-
-```bash
-# Backend
-cd gridline/backend
-python -m venv .venv && .venv/bin/pip install -r requirements-dev.txt
-.venv/bin/alembic upgrade head
-.venv/bin/uvicorn app.main:app --reload
-
-# Frontend
-cd gridline/frontend
-npm install && npm run dev
-```
+intended offline and CI mode — it is honest degradation, not a stub. Reports
+will read "Undetermined" at 0% confidence until you supply a key.
 
 ### Tests
 
