@@ -41,12 +41,40 @@ sleep 1
 # --- Prerequisites -----------------------------------------------------------
 command -v python3 >/dev/null || fail "python3 is required"
 command -v node    >/dev/null || fail "node 20+ is required"
-command -v psql    >/dev/null || fail "the postgresql client is required"
+
+# Homebrew's versioned Postgres formulae are keg-only: `brew install
+# postgresql@16` succeeds and yet psql is nowhere on PATH, so a naive
+# `command -v psql` reports it missing on a machine that has it. Look in the
+# keg before believing that.
+if ! command -v psql >/dev/null 2>&1 && command -v brew >/dev/null 2>&1; then
+  for formula in postgresql@17 postgresql@16 postgresql@15 postgresql libpq; do
+    prefix="$(brew --prefix "$formula" 2>/dev/null || true)"
+    if [[ -n "$prefix" && -x "$prefix/bin/psql" ]]; then
+      export PATH="$prefix/bin:$PATH"
+      note "Found Postgres in the Homebrew keg: $prefix/bin"
+      break
+    fi
+  done
+fi
+
+command -v psql >/dev/null || fail "psql was not found.
+
+  macOS:
+    brew install postgresql@16 postgis
+    brew services start postgresql@16
+    ./start.sh
+
+  Ubuntu/Debian:
+    sudo apt install postgresql-16 postgresql-16-postgis-3
+    sudo pg_ctlcluster 16 main start
+
+  Or skip Postgres entirely by starting Docker Desktop and re-running ./start.sh"
 
 if ! pg_isready -q 2>/dev/null; then
-  fail "PostgreSQL is not running.
-  macOS:  brew install postgresql@16 postgis && brew services start postgresql@16
-  Ubuntu: sudo apt install postgresql-16 postgresql-16-postgis-3 && sudo pg_ctlcluster 16 main start"
+  fail "psql is installed but the PostgreSQL server is not running.
+
+  macOS:  brew services start postgresql@16
+  Ubuntu: sudo pg_ctlcluster 16 main start"
 fi
 
 # --- Database ----------------------------------------------------------------
@@ -127,9 +155,12 @@ for _ in $(seq 1 60); do
     echo "      api docs  http://localhost:8000/docs"
     echo "      logs      $LOG_DIR/"
     echo
-    echo "  Vision is off (no OPENAI_API_KEY), so reports will say so and return"
-    echo "  'unknown' rather than guessing. Export OPENAI_API_KEY before running"
-    echo "  to enable image analysis."
+    if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+      echo "  Image analysis: on"
+    else
+      echo "  Image analysis: off (no OPENAI_API_KEY) — every report will read"
+      echo "  \"Undetermined, 0% confidence\" because the engine refuses to guess."
+    fi
     echo
     echo "  Stop with: ./run-local.sh stop"
     exit 0
