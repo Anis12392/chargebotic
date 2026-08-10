@@ -49,6 +49,7 @@ function CaptureHarness() {
       )}
       {showViewfinder && <video data-testid="viewfinder" ref={camera.setVideoElement} />}
       <span data-testid="status">{camera.status}</span>
+      <span data-testid="ready">{camera.ready ? 'ready' : 'not-ready'}</span>
       <span data-testid="resolution">
         {camera.resolution ? `${camera.resolution.width}x${camera.resolution.height}` : 'none'}
       </span>
@@ -122,6 +123,28 @@ describe('useCamera stream binding', () => {
     });
 
     expect((screen.getByTestId('viewfinder') as HTMLVideoElement).srcObject).toBe(stream);
+  });
+
+  it('is not ready until the element has decoded a frame', async () => {
+    // The regression: `status` flips to 'live' as soon as getUserMedia resolves,
+    // but the element may still have videoWidth 0. Gating the shutter on status
+    // alone lets an operator tap it into a canvas draw that yields nothing.
+    render(<CaptureHarness />);
+    await act(async () => {
+      screen.getByRole('button', { name: /Grant and open viewfinder/ }).click();
+    });
+
+    expect(screen.getByTestId('status').textContent).toBe('live');
+    expect(screen.getByTestId('ready').textContent).toBe('not-ready');
+
+    const video = screen.getByTestId('viewfinder') as HTMLVideoElement;
+    Object.defineProperty(video, 'videoWidth', { configurable: true, value: 2560 });
+    Object.defineProperty(video, 'videoHeight', { configurable: true, value: 1920 });
+    await act(async () => {
+      video.dispatchEvent(new Event('loadeddata'));
+    });
+
+    expect(screen.getByTestId('ready').textContent).toBe('ready');
   });
 
   it('surfaces a denied permission instead of silently showing a black frame', async () => {

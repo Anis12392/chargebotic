@@ -289,10 +289,10 @@ export default function CapturePage() {
           <button
             type="button"
             onClick={onShutter}
-            disabled={phase === 'analysing' || camera.status !== 'live' || !gps.fix}
+            disabled={phase === 'analysing' || camera.status !== 'live' || !camera.ready || !gps.fix}
             className="btn-primary flex-1 py-4 text-base"
           >
-            {gps.fix ? 'Capture' : 'Waiting for GPS…'}
+            {!gps.fix ? 'Waiting for GPS…' : !camera.ready ? 'Starting camera…' : 'Capture'}
           </button>
           <button
             type="button"

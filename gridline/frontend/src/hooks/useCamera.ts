@@ -27,23 +27,38 @@ function attachStream(node: HTMLVideoElement, stream: MediaStream): void {
  * `videoWidth` stays 0 and whose captures always fail. The callback ref binds
  * whenever the node appears, and `start()` binds when the node is already
  * there (the "capture another" path). Between them, either ordering works.
+ *
+ * `ready` is separate from `status`. A stream can be live while the element has
+ * not yet decoded a frame, and a canvas draw in that window silently produces
+ * nothing — the operator taps the shutter and is told the camera returned no
+ * frame. The shutter must gate on `ready`, not on `status === 'live'`.
  */
 export function useCamera() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [status, setStatus] = useState<CameraStatus>('idle');
+  const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resolution, setResolution] = useState<{ width: number; height: number } | null>(null);
 
   const setVideoElement = useCallback((node: HTMLVideoElement | null) => {
     videoRef.current = node;
-    if (node && streamRef.current) attachStream(node, streamRef.current);
+    if (!node) return;
+    const markReady = () => {
+      if (node.videoWidth > 0 && node.videoHeight > 0) setReady(true);
+    };
+    node.addEventListener('loadeddata', markReady);
+    node.addEventListener('canplay', markReady);
+    node.addEventListener('playing', markReady);
+    if (streamRef.current) attachStream(node, streamRef.current);
+    markReady();
   }, []);
 
   const stop = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
     if (videoRef.current) videoRef.current.srcObject = null;
+    setReady(false);
     setStatus('idle');
   }, []);
 
@@ -94,6 +109,14 @@ export function useCamera() {
     const video = videoRef.current;
     if (!video || status !== 'live') return null;
 
+    // Belt and braces for the gap between "stream attached" and "first frame
+    // decoded". The shutter is already gated on `ready`, but a backgrounded tab
+    // or a slow sensor can still land here with nothing to draw.
+    const deadline = Date.now() + 2000;
+    while ((!video.videoWidth || !video.videoHeight) && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+
     const width = video.videoWidth;
     const height = video.videoHeight;
     if (!width || !height) return null;
@@ -112,5 +135,5 @@ export function useCamera() {
 
   useEffect(() => stop, [stop]);
 
-  return { videoRef, setVideoElement, status, error, resolution, start, stop, capture };
+  return { videoRef, setVideoElement, status, ready, error, resolution, start, stop, capture };
 }
