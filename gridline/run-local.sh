@@ -31,6 +31,13 @@ stop() {
 
 [[ "${1:-}" == "stop" ]] && stop
 
+# Any previous run is replaced, not duplicated. A second uvicorn on a held port
+# just dies, leaving the old one serving stale configuration — which looks
+# exactly like "my new API key did nothing".
+pkill -f "uvicorn app.main:app --host 127.0.0.1 --port 8000" 2>/dev/null || true
+pkill -f "next start -p 3000" 2>/dev/null || true
+sleep 1
+
 # --- Prerequisites -----------------------------------------------------------
 command -v python3 >/dev/null || fail "python3 is required"
 command -v node    >/dev/null || fail "node 20+ is required"
@@ -90,8 +97,10 @@ DATABASE_URL="$DB_URL" ./.venv/bin/alembic upgrade head
 mkdir -p "$LOG_DIR"
 note "Starting the API on :8000"
 DATABASE_URL="$DB_URL" \
-CORS_ORIGINS="http://localhost:3000" \
+CORS_ORIGINS="${CORS_ORIGINS:-http://localhost:3000}" \
 LOCAL_STORAGE_DIR="$BACKEND/.storage" \
+OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
+VISION_MODEL="${VISION_MODEL:-gpt-4o}" \
   nohup ./.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8000 \
   > "$LOG_DIR/backend.log" 2>&1 &
 

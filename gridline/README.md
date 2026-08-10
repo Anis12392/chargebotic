@@ -36,37 +36,66 @@ Nothing in this system is a clearance authorisation.
 
 ## Quick start
 
-Two ways in. Both end at <http://localhost:3000>.
-
-**With Docker** — one command, brings up PostGIS and MinIO too:
-
 ```bash
 cd gridline
-cp .env.example .env          # optional: add OPENAI_API_KEY for real vision
-docker compose up --build
+./start.sh
 ```
 
-**Without Docker** — needs PostgreSQL 16 + PostGIS on the host, nothing else:
+That is the whole thing. It asks once for an OpenAI API key (optional — skip it
+and the app still runs), brings up Postgres/PostGIS, the API and the web app,
+and prints where to open it. Uses Docker if it is running; otherwise falls back
+to a host PostgreSQL install.
+
+```
+GridLine AI is running.
+   On this machine:  http://localhost:3000
+   API docs:         http://localhost:8000/docs
+   Image analysis:   on
+```
+
+Stop with `./start.sh --stop`.
+
+### On a phone
 
 ```bash
-cd gridline
-./run-local.sh                # ./run-local.sh stop  to shut down
+./start.sh --phone
 ```
 
-`run-local.sh` creates the role and database, applies migrations, installs both
-dependency sets, builds the web app and starts everything. It finds a working
-Postgres admin connection rather than assuming one, so it works with Homebrew,
-Debian peer auth and container setups alike.
+Prints an `https://….trycloudflare.com` URL to open in Safari or Chrome on the
+handset. Allow camera and location when asked; **Share ▸ Add to Home Screen**
+installs it as a real app with its own icon.
 
-| | App | API docs | Object store |
-| --- | --- | --- | --- |
-| Docker | <http://localhost:3000> | <http://localhost:8000/docs> | <http://localhost:9001> |
-| Local script | <http://localhost:3000> | <http://localhost:8000/docs> | photos on local disk |
+The tunnel is not a convenience — it is required. iOS Safari refuses
+`getUserMedia` and high-accuracy geolocation on any non-secure origin, so
+browsing to your laptop's LAN address over plain HTTP gives you a dead shutter
+and no GPS fix. The tunnel supplies a genuine HTTPS origin, which is what
+unlocks both. Needs `cloudflared` (`brew install cloudflared`).
 
-Without an `OPENAI_API_KEY` the stack runs on the deterministic fallback
-analyzer, which observes nothing and says so in every report. That is the
-intended offline and CI mode — it is honest degradation, not a stub. Reports
-will read "Undetermined" at 0% confidence until you supply a key.
+That URL is public for as long as the tunnel runs. `./start.sh --stop` closes it.
+
+### Without the key
+
+Everything works, but each report reads **"Undetermined, 0% confidence"** with
+no current range, because the engine refuses to guess from an image it could not
+analyse. That is the intended degradation, not a failure — but it does mean the
+app looks inert until you supply a key.
+
+### Storage
+
+Photos go to a local volume by default, so their URLs are relative and resolve
+against whatever origin the browser used — which is what makes the phone case
+work. To exercise the S3 path instead:
+
+```bash
+docker compose --profile s3 up --build
+```
+
+### Running the pieces by hand
+
+```bash
+./run-local.sh          # Postgres on the host, no containers
+./run-local.sh stop
+```
 
 ### Tests
 
