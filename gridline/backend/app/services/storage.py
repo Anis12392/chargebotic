@@ -205,6 +205,28 @@ def make_thumbnail(data: bytes) -> bytes | None:
         return None
 
 
+def storage_status() -> str:
+    """Report whether photos can actually be written.
+
+    Worth a dedicated check because the failure mode is silent until the first
+    upload: a Docker named volume mounted over a directory that does not exist
+    in the image is created root-owned, so a non-root container gets
+    PermissionError on write and the user sees only "internal server error".
+    """
+    backend = get_backend()
+    if not isinstance(backend, LocalStorage):
+        return "s3"
+    try:
+        probe = backend.root / ".writable"
+        probe.parent.mkdir(parents=True, exist_ok=True)
+        probe.write_bytes(b"ok")
+        probe.unlink(missing_ok=True)
+        return "local"
+    except OSError as exc:
+        logger.error("Photo storage is not writable at %s: %s", backend.root, exc)
+        return f"unwritable: {backend.root} ({exc.__class__.__name__})"
+
+
 async def store_photo(data: bytes, inspection_id: uuid.UUID) -> StoredPhoto:
     backend = get_backend()
     digest = hashlib.sha256(data).hexdigest()

@@ -30,9 +30,9 @@ async def health(session: Annotated[AsyncSession, Depends(get_db)]) -> HealthRes
 
     vision_status = "ok" if (settings.vision_enabled and settings.openai_api_key) else "disabled"
     gis_status = "ok" if settings.external_gis_enabled else "disabled"
-    storage_status = "s3" if settings.storage_is_s3 else "local"
+    storage_status = storage.storage_status()
 
-    degraded = database != "ok"
+    degraded = database != "ok" or storage_status.startswith("unwritable")
     return HealthResponse(
         status="degraded" if degraded else "ok",
         version=settings.app_version,

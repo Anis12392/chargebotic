@@ -35,6 +35,13 @@ RUN apt-get update \
 
 COPY --from=builder /opt/venv /opt/venv
 
+# Create the photo directory in the image, owned by the runtime user, BEFORE
+# anything mounts over it. Docker seeds a named volume from the image's
+# directory — including its ownership — but only when that directory exists. If
+# it does not, the volume is created root-owned and the non-root process gets
+# PermissionError on the very first upload, surfacing as an opaque 500.
+RUN mkdir -p /data/photos && chown -R gridline:gridline /data
+
 WORKDIR /app
 COPY --chown=gridline:gridline alembic.ini ./
 COPY --chown=gridline:gridline alembic ./alembic
