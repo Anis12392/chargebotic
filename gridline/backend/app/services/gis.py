@@ -45,7 +45,7 @@ OVERPASS_QUERY = """\
   node(around:{radius},{lat},{lon})["utility"="power"];
   way(around:{radius},{lat},{lon})["man_made"="utility_pole"];
 );
-out tags center {maxsize};
+out body geom {maxsize};
 """
 
 #: OSM ``power=*`` values we care about, mapped to our internal asset kinds.
@@ -294,6 +294,25 @@ class GISEngine:
             a_lat = element.get("lat", centre.get("lat"))
             a_lon = element.get("lon", centre.get("lon"))
 
+            # `out body geom` returns every node of a way, which is what lets the
+            # map draw an actual line instead of a dot at its midpoint. Without
+            # it a power line is invisible at any useful zoom.
+            geometry = None
+            nodes = element.get("geometry")
+            if nodes:
+                coords = [
+                    [n["lon"], n["lat"]]
+                    for n in nodes
+                    if isinstance(n, dict) and n.get("lat") is not None and n.get("lon") is not None
+                ]
+                if len(coords) >= 2:
+                    geometry = {"type": "MultiLineString", "coordinates": [coords]}
+                    if a_lat is None or a_lon is None:
+                        midpoint = coords[len(coords) // 2]
+                        a_lon, a_lat = midpoint[0], midpoint[1]
+                elif len(coords) == 1:
+                    geometry = {"type": "Point", "coordinates": coords[0]}
+
             distance = None
             bearing = None
             if a_lat is not None and a_lon is not None:
@@ -319,6 +338,7 @@ class GISEngine:
                     distance_m=distance,
                     bearing_deg=bearing,
                     tags=tags,
+                    geometry=geometry,
                 )
             )
         return assets

@@ -16,7 +16,10 @@ export interface Fix {
 export type PermissionState = 'unknown' | 'prompt' | 'granted' | 'denied' | 'unsupported';
 
 interface State {
+  /** Most accurate fix seen recently — what a one-shot capture should use. */
   fix: Fix | null;
+  /** Most recent fix, however accurate — what a moving map should follow. */
+  live: Fix | null;
   error: string | null;
   permission: PermissionState;
   watching: boolean;
@@ -34,6 +37,7 @@ interface State {
 export function useGeolocation(enabled = true): State & { request: () => void } {
   const [state, setState] = useState<State>({
     fix: null,
+    live: null,
     error: null,
     permission: 'unknown',
     watching: false,
@@ -61,6 +65,9 @@ export function useGeolocation(enabled = true): State & { request: () => void } 
     setState((current) => ({
       ...current,
       fix: bestFix.current,
+      // A navigation view must track where you are now, not where you got the
+      // cleanest fix a minute ago — otherwise the marker sticks while you walk.
+      live: fix,
       error: null,
       permission: 'granted',
       watching: true,

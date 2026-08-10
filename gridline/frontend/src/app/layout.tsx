@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 
-import { NavBar } from '@/components/NavBar';
 import { ServiceWorkerRegistrar } from '@/components/ServiceWorkerRegistrar';
 
 import './globals.css';
@@ -8,7 +7,7 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'GridLine AI',
   description:
-    'Identify overhead power lines from a photograph and a GPS fix. Evidence-based estimates with confidence scores — never a claim of measured voltage or current.',
+    'A live map of the overhead power network around you. Lines coloured by voltage class, drawn from surveyed OpenStreetMap and HIFLD data — never an estimate presented as a measurement.',
   manifest: '/manifest.webmanifest',
   applicationName: 'GridLine AI',
   appleWebApp: { capable: true, statusBarStyle: 'black-translucent', title: 'GridLine' },
@@ -31,12 +30,11 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-dvh bg-surface-950">
+      {/* The map fills the viewport, so the shell contributes no chrome and
+          never scrolls — a page that rubber-bands under a map feels broken. */}
+      <body className="h-dvh overflow-hidden bg-surface-950">
         <ServiceWorkerRegistrar />
-        <div className="mx-auto flex min-h-dvh w-full max-w-2xl flex-col">
-          <main className="flex-1 pb-20">{children}</main>
-          <NavBar />
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -74,6 +74,56 @@ class TestOverpassParsing:
         assert line.operator == "Pacific Gas and Electric Company"
         assert line.distance_m is not None and line.distance_m < 20
 
+    def test_way_geometry_becomes_a_drawable_line(self):
+        """`out body geom` gives every node; without it a line is just a dot."""
+        payload = {
+            "elements": [
+                {
+                    "type": "way",
+                    "id": 42,
+                    "tags": {"power": "line", "voltage": "115000"},
+                    "geometry": [
+                        {"lat": 37.7749, "lon": -122.4194},
+                        {"lat": 37.7755, "lon": -122.4180},
+                        {"lat": 37.7761, "lon": -122.4166},
+                    ],
+                }
+            ]
+        }
+        asset = GISEngine()._parse_overpass(payload, 37.7749, -122.4194)[0]
+        assert asset.geometry is not None
+        assert asset.geometry["type"] == "MultiLineString"
+        assert len(asset.geometry["coordinates"][0]) == 3
+        # GeoJSON is lon/lat, not lat/lon — getting this backwards puts San
+        # Francisco in the Southern Ocean.
+        assert asset.geometry["coordinates"][0][0] == [-122.4194, 37.7749]
+        # With no explicit centre, the midpoint stands in for distance sorting.
+        assert asset.latitude is not None and asset.longitude is not None
+
+    def test_a_single_node_way_is_not_drawn_as_a_line(self):
+        payload = {
+            "elements": [
+                {
+                    "type": "way",
+                    "id": 43,
+                    "tags": {"power": "line"},
+                    "geometry": [{"lat": 37.7749, "lon": -122.4194}],
+                }
+            ]
+        }
+        asset = GISEngine()._parse_overpass(payload, 37.7749, -122.4194)[0]
+        assert asset.geometry["type"] == "Point"
+
+    def test_nodes_without_geometry_still_parse(self):
+        payload = {
+            "elements": [
+                {"type": "node", "id": 44, "lat": 37.775, "lon": -122.419, "tags": {"power": "pole"}}
+            ]
+        }
+        asset = GISEngine()._parse_overpass(payload, 37.7749, -122.4194)[0]
+        assert asset.geometry is None
+        assert asset.asset_kind == "pole"
+
     def test_utility_pole_man_made_tag_is_recognised(self):
         payload = {
             "elements": [
