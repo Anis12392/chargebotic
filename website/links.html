@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | Links</title>
+    <meta name="description" content="Chargebotic turns any power line into a charging point. Silent, fuel free power for equipment and robots in the field.">
+    <meta property="og:title" content="Chargebotic">
+    <meta property="og:description" content="We turn any power line into a charging point. Silent, fuel free power for equipment and robots in the field.">
+    <meta property="og:url" content="https://chargebotic.com/links">
+    <meta property="og:image" content="https://chargebotic.com/og-image.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e8490a'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-size='70' font-weight='800' fill='white'>C</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;0,800;1,600;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --paper:  #fbf6ec;
+            --ink:    #141414;
+            --purple: #7b4397;
+            --orange: #ec8a20;
+            --font:   'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--paper); color: var(--ink); font-family: var(--font);
+            -webkit-font-smoothing: antialiased; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 46px 22px 44px;
+            background-image: radial-gradient(rgba(20,20,20,0.09) 1.4px, transparent 1.4px);
+            background-size: 17px 17px;
+        }
+        a { color: inherit; text-decoration: none; }
+        .col { width: 100%; max-width: 470px; }
+
+        /* ---- Wordmark ---- */
+        .wordmark { width: 100%; display: block; margin-bottom: 10px; }
+        .stack { width: 100%; display: block; margin: 0 auto 26px; }
+
+        .tag {
+            text-align: center; font-weight: 600; font-size: 1.02rem; line-height: 1.45;
+            color: #3a3a3a; margin-bottom: 34px; padding: 0 6px;
+        }
+        .tag b { color: var(--ink); font-weight: 800; }
+
+        /* ---- Link rows ---- */
+        .set { display: flex; flex-direction: column; gap: 16px; }
+        .set + .set { margin-top: 34px; }
+        .eyebrow {
+            font-weight: 800; font-style: italic; font-size: 0.82rem; letter-spacing: 0.12em;
+            text-transform: uppercase; color: var(--purple); margin-bottom: 16px; padding-left: 4px;
+        }
+        .row {
+            display: flex; align-items: center; gap: 14px;
+            padding: 16px 18px; background: #fff;
+            border: 3px solid var(--ink); border-radius: 15px;
+            box-shadow: 7px 7px 0 var(--purple);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+        }
+        .row:hover, .row:active { transform: translate(4px, 4px); box-shadow: 3px 3px 0 var(--purple); }
+        .row.primary { background: linear-gradient(180deg, #f2ae3e, #e2620d); color: #fff; }
+        .row.primary .note { color: rgba(255,255,255,0.9); }
+        .row.primary .chip { background: #fff; color: var(--ink); }
+        .row.primary .soon { color: #fff; background: rgba(20,20,20,0.28); padding: 4px 9px; border-radius: 7px; }
+        .row .chip {
+            width: 38px; height: 38px; flex: 0 0 38px; border-radius: 10px;
+            border: 2.5px solid var(--ink); background: var(--paper);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .row .chip svg { width: 19px; height: 19px; display: block; fill: currentColor; }
+        .row .avatar {
+            width: 44px; height: 44px; flex: 0 0 44px; border-radius: 11px;
+            border: 2.5px solid var(--ink); object-fit: cover; display: block; background: var(--paper);
+        }
+        .row .initials {
+            width: 44px; height: 44px; flex: 0 0 44px; border-radius: 11px;
+            border: 2.5px solid var(--ink); background: linear-gradient(180deg, #f4b544, #e1600c);
+            color: #fff; font-weight: 800; font-style: italic; font-size: 0.92rem; letter-spacing: -0.02em;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .row.static { cursor: default; }
+        .row.static:hover { transform: none; box-shadow: 7px 7px 0 var(--purple); }
+        .row .soon { font-weight: 700; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--purple); }
+        .row .txt { flex: 1; min-width: 0; }
+        .row .lbl { font-weight: 800; font-style: italic; font-size: 1.02rem; letter-spacing: -0.01em; text-transform: uppercase; line-height: 1.15; }
+        .row .note { font-weight: 500; font-size: 0.79rem; color: #5d5d5d; margin-top: 4px; line-height: 1.35; font-style: normal; }
+        .row .arw { font-weight: 800; font-size: 1.2rem; }
+
+        /* ---- Follow card ---- */
+        .duo {
+            border: 3px solid var(--ink); border-radius: 15px; overflow: hidden;
+            box-shadow: 7px 7px 0 var(--purple); background: #fff;
+        }
+        .duo-title {
+            background: var(--purple); color: #fff; text-align: center;
+            font-weight: 800; font-style: italic; text-transform: uppercase;
+            font-size: 0.92rem; letter-spacing: 0.06em; padding: 9px 12px;
+            border-bottom: 3px solid var(--ink);
+        }
+        .duo-split { display: grid; grid-template-columns: 1fr 1fr; }
+        .duo-half {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            padding: 15px 10px; font-weight: 800; font-style: italic; text-transform: uppercase;
+            font-size: 0.95rem; transition: background 0.12s ease;
+        }
+        .duo-half + .duo-half { border-left: 3px solid var(--ink); }
+        a.duo-half:hover { background: var(--paper); }
+        .duo-half .chip {
+            width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px;
+            border: 2.5px solid var(--ink); background: var(--paper);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .duo-half .chip svg { width: 16px; height: 16px; }
+        .duo-half .soon { margin-left: 2px; }
+
+        /* ---- Footer ---- */
+        .foot { margin-top: 40px; text-align: center; font-size: 0.84rem; font-weight: 600; color: #5d5d5d; line-height: 1.9; }
+        .foot a { border-bottom: 2px solid var(--orange); }
+        .foot a:hover { color: var(--ink); }
+        .foot .sep { color: var(--purple); margin: 0 8px; }
+
+        @media (max-width: 420px) {
+            body { padding: 34px 16px 36px; }
+            .row { box-shadow: 5px 5px 0 var(--purple); }
+        }
+    </style>
+</head>
+<body>
+<div class="col">
+
+    <!-- CHARGEBOTIC -->
+    <svg class="wordmark" viewBox="0 0 1040 190" role="img" aria-label="Chargebotic">
+        <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#f4b544"/>
+                <stop offset="52%"  stop-color="#ee9024"/>
+                <stop offset="100%" stop-color="#e1600c"/>
+            </linearGradient>
+            <filter id="ds" x="-12%" y="-12%" width="130%" height="140%">
+                <feDropShadow dx="7" dy="10" stdDeviation="7" flood-color="#141414" flood-opacity="0.28"/>
+            </filter>
+        </defs>
+        <g filter="url(#ds)" font-family="Poppins, Arial Black, sans-serif" font-weight="900" font-style="italic" font-size="150">
+            <text x="34" y="150" textLength="990" lengthAdjust="spacingAndGlyphs"
+                  fill="#7b4397" stroke="#141414" stroke-width="13" stroke-linejoin="round" paint-order="stroke">CHARGEBOTIC</text>
+            <text x="16" y="132" textLength="990" lengthAdjust="spacingAndGlyphs"
+                  fill="url(#g1)" stroke="#141414" stroke-width="13" stroke-linejoin="round" paint-order="stroke">CHARGEBOTIC</text>
+        </g>
+    </svg>
+
+    <!-- DEEPTECH / HARDWARE / DEFENSE -->
+    <svg class="stack" viewBox="0 0 1040 330" role="img" aria-label="Deeptech hardware defense">
+        <g font-family="Poppins, Arial Black, sans-serif" font-weight="900" font-style="italic" font-size="112" filter="url(#ds)">
+            <text x="34" y="112" textLength="500" lengthAdjust="spacingAndGlyphs" fill="#7b4397" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">DEEPTECH</text>
+            <text x="20" y="98"  textLength="500" lengthAdjust="spacingAndGlyphs" fill="url(#g1)" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">DEEPTECH</text>
+
+            <text x="304" y="222" textLength="580" lengthAdjust="spacingAndGlyphs" fill="#7b4397" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">HARDWARE</text>
+            <text x="290" y="208" textLength="580" lengthAdjust="spacingAndGlyphs" fill="url(#g1)" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">HARDWARE</text>
+
+            <text x="574" y="322" textLength="450" lengthAdjust="spacingAndGlyphs" fill="#7b4397" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">DEFENSE</text>
+            <text x="560" y="308" textLength="450" lengthAdjust="spacingAndGlyphs" fill="url(#g1)" stroke="#141414" stroke-width="12" stroke-linejoin="round" paint-order="stroke">DEFENSE</text>
+        </g>
+    </svg>
+
+    <p class="tag">We turn any power line into a <b>charging point</b>.<br>Silent, fuel free power for equipment and robots in the field.</p>
+
+    <div id="links"></div>
+
+    <div class="foot">
+        <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
+        <span class="sep">/</span>
+        San Francisco, CA
+        <br>
+        Chargebotic Inc
+    </div>
+
+</div>
+
+<script>
+/* ============================================================
+   EDIT HERE. One entry per link.
+   Set enabled: true and fill url to publish a row.
+   Rows with enabled: false are not rendered.
+   ============================================================ */
+/* Paste your Stripe payment link (or Donorbox, Ko-fi, whatever you use) here.
+   While it is empty the Support button shows as "Soon" instead of a dead link. */
+const SUPPORT_URL = '';
+
+/* Company accounts. Paste the two URLs and the Follow card goes live. */
+const X_URL        = 'https://x.com/Charegebotic';
+const LINKEDIN_URL = 'https://www.linkedin.com/company/chargebotic/';
+
+const LINKS = [
+    { group: 'Start here', items: [
+        { label: 'Support us',             note: 'Back the build. Every contribution goes into hardware.', url: SUPPORT_URL, icon: 'flag', primary: true, enabled: true },
+        { type: 'duo', label: 'Follow us', enabled: true, halves: [
+            { label: 'X',        icon: 'x',        url: X_URL },
+            { label: 'LinkedIn', icon: 'linkedin', url: LINKEDIN_URL },
+        ]},
+        { label: 'What we are building',   note: 'The problem, the platform, the world after it', url: '/manifesto.html', icon: 'doc', enabled: true },
+        { label: 'Read about the journey', note: 'Full Beat: our drones recharge like birds, sitting on a powerline', url: 'https://fullbeat.substack.com/p/this-startups-drones-recharge-like', icon: 'press', enabled: true },
+        /* chargebotic.com sits behind the access-key wall. Flip to true only when the wall comes off,
+           otherwise a QR visitor lands on the lock screen. */
+        { label: 'chargebotic.com',        note: 'Product, specs, and mission',        url: 'https://chargebotic.com', icon: 'globe', enabled: false },
+        { label: 'Book a call',            note: '15 minute discovery call, pick a slot in my calendar', url: 'https://calendly.com/anischeriet/discovery-call-15-minutes', icon: 'calendar', enabled: true },
+    ]},
+    { group: 'Team', items: [
+        { label: 'Anis Cheriet', note: 'Founder and CEO', initials: 'AC', url: 'https://www.linkedin.com/in/anischeriet/',         enabled: true },
+        { label: 'Bo Redfearn',  note: 'CTO',             initials: 'BR', url: 'https://www.linkedin.com/in/christopherredfearn/', enabled: true },
+        /* Send me their photos and LinkedIn URLs and these become full cards. */
+        { label: 'Ryan',         note: '',                initials: 'RY', url: '', enabled: true },
+        { label: 'Beckett',      note: '',                initials: 'BK', url: '', enabled: true },
+    ]},
+];
+
+const ICONS = {
+    globe: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.6a15.6 15.6 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8zM12 4c.8 1.1 1.4 2.5 1.8 4h-3.6c.4-1.5 1-2.9 1.8-4zM4.3 14a7.9 7.9 0 0 1 0-4h3a17.6 17.6 0 0 0 0 4zm.8 2h2.6c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16zm2.6-8H5.1a8 8 0 0 1 4-3.6A15.6 15.6 0 0 0 7.7 8zM12 20c-.8-1.1-1.4-2.5-1.8-4h3.6c-.4 1.5-1 2.9-1.8 4zm2.2-6H9.8a15.7 15.7 0 0 1 0-4h4.4a15.7 15.7 0 0 1 0 4zm.7 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.6a8 8 0 0 1-4 3.6zm1.8-5.6a17.6 17.6 0 0 0 0-4h3a7.9 7.9 0 0 1 0 4z"/></svg>',
+    flag: '<svg viewBox="0 0 24 24"><rect width="24" height="24" fill="#fff"/><g fill="#B22234"><rect y="0" width="24" height="3.43"/><rect y="6.86" width="24" height="3.43"/><rect y="13.71" width="24" height="3.43"/><rect y="20.57" width="24" height="3.43"/></g><rect width="10.3" height="13.71" fill="#3C3B6E"/><g fill="#fff"><circle cx="2.4" cy="3" r="0.85"/><circle cx="5.15" cy="3" r="0.85"/><circle cx="7.9" cy="3" r="0.85"/><circle cx="3.8" cy="6.8" r="0.85"/><circle cx="6.5" cy="6.8" r="0.85"/><circle cx="2.4" cy="10.6" r="0.85"/><circle cx="5.15" cy="10.6" r="0.85"/><circle cx="7.9" cy="10.6" r="0.85"/></g></svg>',
+    heart: '<svg viewBox="0 0 24 24"><path d="M12 21s-7.6-4.9-9.6-9.2C.9 8.4 2.6 4.8 6 3.9c2.2-.6 4.4.3 6 2.2 1.6-1.9 3.8-2.8 6-2.2 3.4.9 5.1 4.5 3.6 7.9C19.6 16.1 12 21 12 21z"/></svg>',
+    doc: '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2.5L17.5 8H14V4.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2zm0-8h3v2H8V8z"/></svg>',
+    press: '<svg viewBox="0 0 24 24"><path d="M20 3H4a2 2 0 0 0-2 2v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a2 2 0 0 0-2-2zM5 19a1 1 0 0 1-1-1V5h12v13c0 .35.06.69.18 1H5zm15-1a1 1 0 0 1-2 0V5h2v13zM6 7h8v2H6V7zm0 4h8v1.5H6V11zm0 3.5h8V16H6v-1.5z"/></svg>',
+    calendar: '<svg viewBox="0 0 24 24"><path d="M7 2h2v2h6V2h2v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2V2zM5 10v10h14V10H5zm2 2h4v4H7v-4z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.24 8.25h4.5V24h-4.5V8.25zM8.5 8.25h4.3v2.15h.06c.6-1.1 2.06-2.26 4.24-2.26 4.53 0 5.37 2.9 5.37 6.68V24h-4.5v-7.3c0-1.74-.03-3.98-2.48-3.98-2.49 0-2.87 1.9-2.87 3.86V24H8.5V8.25z"/></svg>',
+    x: '<svg viewBox="0 0 24 24"><path d="M18.24 2.25h3.31l-7.23 8.26L22.75 21.75h-6.6l-5.17-6.76-5.92 6.76H1.75l7.73-8.84L1.25 2.25h6.77l4.67 6.18 5.55-6.18zm-1.16 17.52h1.83L7.02 4.13H5.06l12.02 15.64z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07zM12 7.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4zm0 6.93a2.73 2.73 0 1 1 0-5.46 2.73 2.73 0 0 1 0 5.46zm5.35-7.1a.98.98 0 1 1-1.96 0 .98.98 0 0 1 1.96 0z"/></svg>',
+};
+
+document.getElementById('links').innerHTML = LINKS.map(function (g) {
+    var rows = g.items.filter(function (i) { return i.enabled && (i.type === 'duo' || i.url || i.photo || i.initials || i.icon); }).map(function (i) {
+        if (i.type === 'duo') {
+            var halves = i.halves.map(function (h) {
+                var e = /^https?:/.test(h.url) ? ' target="_blank" rel="noopener"' : '';
+                var inner = '<span class="chip">' + (ICONS[h.icon] || ICONS.globe) + '</span>'
+                          + '<span class="lbl">' + h.label + '</span>'
+                          + (h.url ? '' : '<span class="soon">Soon</span>');
+                return h.url ? '<a class="duo-half" href="' + h.url + '"' + e + '>' + inner + '</a>'
+                             : '<div class="duo-half static">' + inner + '</div>';
+            }).join('');
+            return '<div class="duo"><div class="duo-title">' + i.label + '</div>'
+                 + '<div class="duo-split">' + halves + '</div></div>';
+        }
+        var face = i.photo    ? '<img class="avatar" src="' + i.photo + '" alt="' + i.label + '">'
+                 : i.initials ? '<span class="initials">' + i.initials + '</span>'
+                 :              '<span class="chip">' + (ICONS[i.icon] || ICONS.globe) + '</span>';
+        var body = face
+                 + '<span class="txt"><span class="lbl">' + i.label + '</span>'
+                 + (i.note ? '<div class="note">' + i.note + '</div>' : '') + '</span>'
+                 + (i.url ? '<span class="arw">&rarr;</span>' : '<span class="soon">Soon</span>');
+        if (!i.url) return '<div class="row static' + (i.primary ? ' primary' : '') + '">' + body + '</div>';
+        var ext = /^https?:/.test(i.url) ? ' target="_blank" rel="noopener"' : '';
+        return '<a class="row' + (i.primary ? ' primary' : '') + '" href="' + i.url + '"' + ext + '>' + body + '</a>';
+    }).join('');
+    return rows ? '<div class="set"><div class="eyebrow">' + g.group + '</div>' + rows + '</div>' : '';
+}).join('');
+</script>
+
+</body>
+</html>

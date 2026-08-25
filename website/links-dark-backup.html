@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | Links</title>
+    <meta name="description" content="Chargebotic turns any power line into a charging point. Silent, fuel free power for equipment and robots in the field.">
+    <meta property="og:title" content="Chargebotic">
+    <meta property="og:description" content="We turn any power line into a charging point. Silent, fuel free power for equipment and robots in the field.">
+    <meta property="og:url" content="https://chargebotic.com/links">
+    <meta property="og:image" content="https://chargebotic.com/og-image.png">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e8490a'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-size='70' font-weight='800' fill='white'>C</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:    #0a0a0b;
+            --text:  #f5f5f3;
+            --muted: #b4b4b1;
+            --faint: #6a6a67;
+            --line:  rgba(255,255,255,0.12);
+            --brand: #e8490a;
+            --font:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg); color: var(--text); font-family: var(--font);
+            -webkit-font-smoothing: antialiased; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            padding: 64px 24px 48px;
+        }
+        body::before {
+            content: ''; position: fixed; top: -220px; left: 50%; transform: translateX(-50%);
+            width: 620px; height: 460px; pointer-events: none; z-index: 0;
+            background: radial-gradient(ellipse at center, rgba(232,73,10,0.16), transparent 68%);
+        }
+        a { color: inherit; text-decoration: none; }
+        .col { position: relative; z-index: 1; width: 100%; max-width: 460px; }
+
+        /* ---- Identity ---- */
+        .id { text-align: center; margin-bottom: 40px; }
+        .mark {
+            width: 60px; height: 60px; border-radius: 13px; background: var(--brand); color: #fff;
+            font-weight: 700; font-size: 2rem; letter-spacing: -0.04em;
+            display: flex; align-items: center; justify-content: center; margin: 0 auto 22px;
+        }
+        .name { font-weight: 600; font-size: 1.12rem; letter-spacing: 0.22em; text-transform: uppercase; }
+        .tag { color: var(--text); font-size: 1.16rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.35; margin-top: 18px; }
+        .sub { color: var(--muted); font-size: 0.94rem; line-height: 1.55; margin-top: 12px; }
+
+        /* ---- Link rows ---- */
+        .set { display: flex; flex-direction: column; gap: 10px; }
+        .set + .set { margin-top: 26px; }
+        .eyebrow {
+            font-size: 0.68rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--faint); margin-bottom: 14px; padding-left: 2px;
+        }
+        .row {
+            display: flex; align-items: center; gap: 14px;
+            padding: 17px 20px; border: 1px solid var(--line); background: rgba(255,255,255,0.02);
+            transition: background 0.18s, border-color 0.18s, transform 0.18s;
+        }
+        .row:hover, .row:active { background: var(--text); color: var(--bg); border-color: var(--text); }
+        .row.primary { border-color: rgba(232,73,10,0.55); background: rgba(232,73,10,0.09); }
+        .row.primary:hover, .row.primary:active { background: var(--brand); border-color: var(--brand); color: #fff; }
+        .row .ico { width: 20px; height: 20px; flex: 0 0 20px; opacity: 0.9; }
+        .row .ico svg { width: 100%; height: 100%; display: block; fill: currentColor; }
+        .row .txt { flex: 1; min-width: 0; }
+        .row .lbl { font-size: 0.97rem; font-weight: 500; letter-spacing: -0.01em; }
+        .row .note { font-size: 0.79rem; color: var(--faint); margin-top: 3px; }
+        .row:hover .note, .row:active .note { color: inherit; opacity: 0.65; }
+        .row .arw { font-size: 0.95rem; opacity: 0.45; }
+        .row:hover .arw { opacity: 1; }
+
+        /* ---- Footer ---- */
+        .foot { margin-top: 40px; text-align: center; font-size: 0.82rem; color: var(--faint); line-height: 1.9; }
+        .foot a:hover { color: var(--text); }
+        .foot .sep { opacity: 0.4; margin: 0 8px; }
+
+        @media (max-width: 420px) {
+            body { padding: 44px 18px 36px; }
+            .tag { font-size: 1.06rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="col">
+
+    <div class="id">
+        <div class="mark">C</div>
+        <div class="name">Chargebotic</div>
+        <div class="tag">We turn any power line into a charging point.</div>
+        <div class="sub">Silent, fuel free power for equipment and robots in the field.</div>
+    </div>
+
+    <div id="links"></div>
+
+    <div class="foot">
+        <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
+        <span class="sep">/</span>
+        San Francisco, CA
+        <br>
+        Chargebotic Inc
+    </div>
+
+</div>
+
+<script>
+/* ============================================================
+   EDIT HERE. One entry per link.
+   Set enabled: true and fill url to publish a row.
+   Rows with enabled: false are not rendered.
+   ============================================================ */
+const LINKS = [
+    { group: 'Start here', items: [
+        { label: 'What we are building',  note: 'The problem, the platform, the world after it', url: '/manifesto.html', icon: 'doc', primary: true, enabled: true },
+        { label: 'Read about the journey', note: 'Full Beat: our drones recharge like birds, sitting on a powerline', url: 'https://fullbeat.substack.com/p/this-startups-drones-recharge-like', icon: 'press', enabled: true },
+        /* chargebotic.com sits behind the access-key wall. Flip to true only when the wall comes off,
+           otherwise a QR visitor lands on the lock screen. */
+        { label: 'chargebotic.com',       note: 'Product, specs, and mission',                    url: 'https://chargebotic.com', icon: 'globe', enabled: false },
+        { label: 'Book a call',           note: '15 minute discovery call, pick a slot in my calendar', url: 'https://calendly.com/anischeriet/discovery-call-15-minutes', icon: 'mail', enabled: true },
+    ]},
+    { group: 'Follow', items: [
+        { label: 'LinkedIn',  note: 'Company page',  url: 'https://www.linkedin.com/company/chargebotic/', icon: 'linkedin', enabled: true },
+        { label: 'X',         note: '@Charegebotic', url: 'https://x.com/Charegebotic', icon: 'x', enabled: true },
+        { label: 'YouTube',   note: 'Field footage', url: '', icon: 'youtube',   enabled: false },
+        { label: 'Instagram', note: '',              url: '', icon: 'instagram', enabled: false },
+    ]},
+    { group: 'Team', items: [
+        { label: 'Anis Cheriet',  note: 'Founder and CEO', url: 'https://www.linkedin.com/in/anischeriet/',         icon: 'linkedin', enabled: true },
+        { label: 'Bo Redfearn',   note: 'CTO',             url: 'https://www.linkedin.com/in/christopherredfearn/', icon: 'linkedin', enabled: true },
+    ]},
+];
+
+const ICONS = {
+    globe: '<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 6h-2.6a15.6 15.6 0 0 0-1.4-3.6A8 8 0 0 1 18.9 8zM12 4c.8 1.1 1.4 2.5 1.8 4h-3.6c.4-1.5 1-2.9 1.8-4zM4.3 14a7.9 7.9 0 0 1 0-4h3a17.6 17.6 0 0 0 0 4zm.8 2h2.6c.3 1.3.8 2.5 1.4 3.6A8 8 0 0 1 5.1 16zm2.6-8H5.1a8 8 0 0 1 4-3.6A15.6 15.6 0 0 0 7.7 8zM12 20c-.8-1.1-1.4-2.5-1.8-4h3.6c-.4 1.5-1 2.9-1.8 4zm2.2-6H9.8a15.7 15.7 0 0 1 0-4h4.4a15.7 15.7 0 0 1 0 4zm.7 5.6c.6-1.1 1.1-2.3 1.4-3.6h2.6a8 8 0 0 1-4 3.6zm1.8-5.6a17.6 17.6 0 0 0 0-4h3a7.9 7.9 0 0 1 0 4z"/></svg>',
+    doc: '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2.5L17.5 8H14V4.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2zm0-8h3v2H8V8z"/></svg>',
+    press: '<svg viewBox="0 0 24 24"><path d="M20 3H4a2 2 0 0 0-2 2v13a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V5a2 2 0 0 0-2-2zM5 19a1 1 0 0 1-1-1V5h12v13c0 .35.06.69.18 1H5zm15-1a1 1 0 0 1-2 0V5h2v13zM6 7h8v2H6V7zm0 4h8v1.5H6V11zm0 3.5h8V16H6v-1.5z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24"><path d="M4.98 3.5A2.5 2.5 0 1 1 0 3.5a2.5 2.5 0 0 1 4.98 0zM.24 8.25h4.5V24h-4.5V8.25zM8.5 8.25h4.3v2.15h.06c.6-1.1 2.06-2.26 4.24-2.26 4.53 0 5.37 2.9 5.37 6.68V24h-4.5v-7.3c0-1.74-.03-3.98-2.480-3.98-2.49 0-2.87 1.9-2.87 3.86V24H8.5V8.25z"/></svg>',
+    x: '<svg viewBox="0 0 24 24"><path d="M18.24 2.25h3.31l-7.23 8.26L22.75 21.75h-6.6l-5.17-6.76-5.92 6.76H1.75l7.73-8.84L1.25 2.25h6.77l4.67 6.18 5.55-6.18zm-1.16 17.52h1.83L7.02 4.13H5.06l12.02 15.64z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41 1.27-.06 1.65-.07 4.85-.07zM12 7.8a4.2 4.2 0 1 0 0 8.4 4.2 4.2 0 0 0 0-8.4zm0 6.93a2.73 2.73 0 1 1 0-5.46 2.73 2.73 0 0 1 0 5.46zm5.35-7.1a.98.98 0 1 1-1.96 0 .98.98 0 0 1 1.96 0z"/></svg>',
+};
+
+document.getElementById('links').innerHTML = LINKS.map(function (g) {
+    var rows = g.items.filter(function (i) { return i.enabled && i.url; }).map(function (i) {
+        var ext = /^https?:/.test(i.url) ? ' target="_blank" rel="noopener"' : '';
+        return '<a class="row' + (i.primary ? ' primary' : '') + '" href="' + i.url + '"' + ext + '>'
+             + '<span class="ico">' + (ICONS[i.icon] || ICONS.globe) + '</span>'
+             + '<span class="txt"><span class="lbl">' + i.label + '</span>'
+             + (i.note ? '<div class="note">' + i.note + '</div>' : '') + '</span>'
+             + '<span class="arw">&rarr;</span></a>';
+    }).join('');
+    return rows ? '<div class="set"><div class="eyebrow">' + g.group + '</div>' + rows + '</div>' : '';
+}).join('');
+</script>
+
+<noscript>
+    <div class="col">
+        <div class="set">
+            <a class="row primary" href="/manifesto.html"><span class="txt"><span class="lbl">What we are building</span></span></a>
+            <a class="row" href="mailto:anis@chargebotic.com"><span class="txt"><span class="lbl">anis@chargebotic.com</span></span></a>
+        </div>
+    </div>
+</noscript>
+</body>
+</html>

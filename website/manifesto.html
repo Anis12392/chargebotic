@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chargebotic | What we are building</title>
+    <meta name="description" content="Every machine in the field runs on electricity, and that electricity still comes from diesel. Power lines already reach almost everywhere. Chargebotic turns them into charging points.">
+    <meta property="og:title" content="Chargebotic | What we are building">
+    <meta property="og:description" content="Power lines already reach almost everywhere. We turn them into charging points for machines in the field.">
+    <meta property="og:url" content="https://chargebotic.com/manifesto">
+    <meta property="og:image" content="https://chargebotic.com/og-image.png">
+    <meta property="og:type" content="article">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23e8490a'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='Arial,sans-serif' font-size='70' font-weight='800' fill='white'>C</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg:    #0a0a0b;
+            --text:  #f5f5f3;
+            --muted: #b4b4b1;
+            --faint: #6a6a67;
+            --line:  rgba(255,255,255,0.12);
+            --brand: #e8490a;
+            --font:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--font); -webkit-font-smoothing: antialiased; }
+        a { color: inherit; text-decoration: none; }
+        .wrap { max-width: 720px; margin: 0 auto; padding: 0 28px; }
+
+        /* ---- Nav ---- */
+        .nav { position: sticky; top: 0; z-index: 10; background: rgba(10,10,11,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+        .nav-in { max-width: 720px; margin: 0 auto; padding: 18px 28px; display: flex; align-items: center; justify-content: space-between; }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-mark { width: 28px; height: 28px; border-radius: 6px; background: var(--brand); color: #fff; font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+        .logo-name { font-weight: 600; font-size: 0.92rem; letter-spacing: 0.2em; text-transform: uppercase; }
+        .nav-back { font-size: 0.85rem; color: var(--muted); }
+        .nav-back:hover { color: var(--text); }
+
+        /* ---- Hero ---- */
+        .hero { padding-top: 96px; padding-bottom: 72px; }
+        .eyebrow { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--brand); margin-bottom: 26px; }
+        h1 { font-size: clamp(2.2rem, 6vw, 3.4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.06; }
+        .lede { color: var(--muted); font-size: 1.14rem; line-height: 1.6; margin-top: 28px; }
+
+        /* ---- Chapters ---- */
+        .ch { padding-top: 60px; padding-bottom: 60px; border-top: 1px solid var(--line); }
+        .ch-num { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); margin-bottom: 22px; }
+        .ch h2 { font-size: clamp(1.6rem, 3.6vw, 2.15rem); font-weight: 600; letter-spacing: -0.03em; line-height: 1.16; margin-bottom: 22px; }
+        .ch p { color: var(--muted); font-size: 1.04rem; line-height: 1.68; }
+        .ch p + p { margin-top: 18px; }
+        .ch strong { color: var(--text); font-weight: 600; }
+
+        /* ---- Pull quote ---- */
+        .pull { border-left: 2px solid var(--brand); padding: 4px 0 4px 22px; margin: 32px 0; }
+        .pull p { color: var(--text); font-size: 1.2rem; font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; }
+
+        /* ---- Steps ---- */
+        .steps { margin-top: 34px; border-top: 1px solid var(--line); }
+        .step { display: grid; grid-template-columns: 108px 1fr; gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+        .step .k { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--brand); padding-top: 4px; }
+        .step h3 { font-size: 1.02rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+        .step p { color: var(--muted); font-size: 0.96rem; line-height: 1.55; }
+        @media (max-width: 560px) { .step { grid-template-columns: 1fr; gap: 8px; } .step .k { padding-top: 0; } }
+
+        /* ---- Product cards ---- */
+        .prods { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 34px; }
+        .prod { border: 1px solid var(--line); padding: 26px 22px; background: rgba(255,255,255,0.02); }
+        .prod .cat { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 12px; }
+        .prod h3 { font-size: 1.35rem; font-weight: 600; letter-spacing: -0.025em; margin-bottom: 10px; }
+        .prod p { color: var(--muted); font-size: 0.94rem; line-height: 1.55; }
+        @media (max-width: 560px) { .prods { grid-template-columns: 1fr; } }
+
+        /* ---- Status ---- */
+        .status { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-top: 34px; background: var(--line); border: 1px solid var(--line); }
+        .status div { background: var(--bg); padding: 22px; }
+        .status .lab { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+        .status .val { font-size: 0.98rem; color: var(--text); }
+
+        /* ---- CTA ---- */
+        .cta { padding-top: 72px; padding-bottom: 96px; border-top: 1px solid var(--line); }
+        .cta h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 700; letter-spacing: -0.035em; line-height: 1.12; margin-bottom: 24px; }
+        .btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+        .btn-solid { font-size: 0.92rem; font-weight: 600; padding: 15px 28px; background: var(--text); color: var(--bg); transition: opacity 0.2s; }
+        .btn-solid:hover { opacity: 0.86; }
+        .btn-line { font-size: 0.92rem; font-weight: 500; padding: 15px 28px; border: 1px solid var(--line); transition: border-color 0.2s; }
+        .btn-line:hover { border-color: var(--text); }
+        .foot { border-top: 1px solid var(--line); padding-top: 28px; padding-bottom: 44px; font-size: 0.82rem; color: var(--faint); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .foot a:hover { color: var(--text); }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="nav-in">
+        <a class="logo" href="/links.html">
+            <span class="logo-mark">C</span>
+            <span class="logo-name">Chargebotic</span>
+        </a>
+        <a class="nav-back" href="/links.html">All links</a>
+    </div>
+</nav>
+
+<header class="hero wrap">
+    <div class="eyebrow">What we are building</div>
+    <h1>Every machine runs on electricity. In the field, that electricity still comes from diesel.</h1>
+    <p class="lede">Chargebotic turns any power line into a charging point. Machines take the energy they need from the grid that is already there, wherever they are working.</p>
+</header>
+
+<section class="ch wrap">
+    <div class="ch-num">01 / The constraint</div>
+    <h2>Range is the limit on every electric machine.</h2>
+    <p>Drones, robots, sensors, radios, vehicles. The machines doing real work outside are electric, and the moment they leave a building their endurance is set by a battery. When the battery runs out, the mission stops or someone drives out to swap it.</p>
+    <p>Today the answer is a generator. Fuel to truck in, noise, heat, exhaust, and people spending their day moving energy around instead of doing the work. Solar and wind help, then the weather changes and the power stops.</p>
+    <div class="pull"><p>Tesla's hard problem was never the car. It was the charging network.</p></div>
+    <p>Electric machines in the field have the same problem, and no network.</p>
+</section>
+
+<section class="ch wrap">
+    <div class="ch-num">02 / The opening</div>
+    <h2>The network already exists. Nobody could plug into it.</h2>
+    <p>Power lines run through nearly every place where work happens. Farmland, forests, highways, industrial sites, remote terrain. They carry more energy than the machines below them could ever use.</p>
+    <p>Connecting to that energy used to mean permits, substations, trenching, and years of construction. So the grid stayed invisible to anything that moves.</p>
+    <p><strong>We make the connection portable.</strong> A machine flies up, perches on the line, harvests energy from the magnetic field around the wire, and brings it down. Nothing is cut. Nothing touches the conductor. It is induction, the same physics as a wireless phone charger, an induction cooktop, and every transformer on the grid.</p>
+</section>
+
+<section class="ch wrap">
+    <div class="ch-num">03 / How it works</div>
+    <h2>Four steps, no infrastructure.</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="k">01 Perch</div>
+            <div><h3>Land on a live line</h3><p>The platform flies to an overhead conductor and clamps on. Once perched, it uses no flight power.</p></div>
+        </div>
+        <div class="step">
+            <div class="k">02 Harvest</div>
+            <div><h3>Draw energy from the field</h3><p>An inductive harvester takes power from the magnetic field around the wire. No contact, no cutting, no damage to the line.</p></div>
+        </div>
+        <div class="step">
+            <div class="k">03 Deliver</div>
+            <div><h3>Send it where it is needed</h3><p>Energy flows down a tether to a ground station, or into the aircraft's own battery.</p></div>
+        </div>
+        <div class="step">
+            <div class="k">04 Power</div>
+            <div><h3>Keep the work running</h3><p>Batteries, robots, sensors, and comms recharge in place. Silent, fuel free, no heat signature.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="ch wrap">
+    <div class="ch-num">04 / The platform</div>
+    <h2>Two machines and the software that flies them.</h2>
+    <div class="prods">
+        <div class="prod">
+            <div class="cat">Portable charging system</div>
+            <h3>Kestrel</h3>
+            <p>Perches on the line and sends power down a tether to a ground station. It charges batteries, vehicles, and equipment where they already are.</p>
+        </div>
+        <div class="prod">
+            <div class="cat">Self charging aircraft</div>
+            <h3>Spark E</h3>
+            <p>Lands on the line, recharges itself, and flies on. No return to base, no crew waiting with spare batteries, far more ground covered per day.</p>
+        </div>
+    </div>
+    <p style="margin-top:22px">The software finds the line, flies the approach, attaches, and harvests. It also reports what it learns: how much energy was taken, and the health of the line it was taken from.</p>
+</section>
+
+<section class="ch wrap">
+    <div class="ch-num">05 / The world after this</div>
+    <h2>Machines that never have to come home.</h2>
+    <p>When energy is available anywhere a line runs, the rules change. A drone inspecting thousands of kilometers of infrastructure stops being a logistics exercise. A robot working a remote site keeps its sensors and comms alive for days with no fuel delivered to it. A crew in the field stops planning its day around batteries.</p>
+    <p>Fewer fuel convoys. Less noise and less heat where quiet matters. Energy that comes from the grid instead of a tank, so the work gets cleaner as the grid does.</p>
+    <div class="pull"><p>Power is everywhere already. It has simply never been available.</p></div>
+    <p>We are building the layer that makes it available. An outlet wherever a line runs, and machines that know how to use it.</p>
+</section>
+
+<section class="ch wrap">
+    <div class="ch-num">06 / Where we are</div>
+    <h2>Proof before promise.</h2>
+    <p>We do not claim more than we have flown. Harvesting is validated in the lab and demonstrated on aircraft. The next milestone is sustained field operation.</p>
+    <div class="status">
+        <div><div class="lab">Energy source</div><div class="val">Live AC power lines</div></div>
+        <div><div class="lab">Harvesting</div><div class="val">Inductive, no contact with the wire</div></div>
+        <div><div class="lab">Power output</div><div class="val">40 to 150 W design target</div></div>
+        <div><div class="lab">Status</div><div class="val">Lab validated, field demo Aug 2026</div></div>
+    </div>
+</section>
+
+<section class="cta wrap">
+    <h2>If you move machines, energy, or infrastructure, we should talk.</h2>
+    <p class="lede" style="margin-top:0">We work with operators covering large areas, teams running equipment far from power, and utilities that own the lines.</p>
+    <div class="btns">
+        <a class="btn-solid" href="https://calendly.com/anischeriet/discovery-call-15-minutes" target="_blank" rel="noopener">Book a 15 minute call</a>
+        <a class="btn-line" href="https://fullbeat.substack.com/p/this-startups-drones-recharge-like" target="_blank" rel="noopener">Read about the journey</a>
+        <a class="btn-line" href="/links.html">All links</a>
+    </div>
+</section>
+
+<div class="wrap">
+    <div class="foot">
+        <span>Chargebotic Inc, San Francisco CA</span>
+        <a href="mailto:anis@chargebotic.com">anis@chargebotic.com</a>
+    </div>
+</div>
+
+</body>
+</html>

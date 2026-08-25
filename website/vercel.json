@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/links", "destination": "/links.html" },
+    { "source": "/manifesto", "destination": "/manifesto.html" }
+  ]
+}
