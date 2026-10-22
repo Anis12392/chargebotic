@@ -1,0 +1,259 @@
+# GridLine AI — Kubernetes manifests.
+#
+# Assumes managed Postgres with PostGIS (RDS/Cloud SQL) and managed object
+# storage. Running a stateful database inside the cluster is out of scope here
+# on purpose: the inspection record is the product's only irreplaceable asset.
+#
+# Secrets are referenced, never defined. Create them with your secret manager:
+#   kubectl create secret generic gridline-secrets \
+#     --from-literal=database-url=... \
+#     --from-literal=openai-api-key=... \
+#     --from-literal=s3-access-key-id=... \
+#     --from-literal=s3-secret-access-key=... \
+#     --from-literal=admin-api-key=...
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gridline
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gridline-config
+  namespace: gridline
+data:
+  ENVIRONMENT: production
+  DEBUG: 'false'
+  CORS_ORIGINS: https://gridline.chargebotic.com
+  S3_BUCKET: gridline-inspections
+  S3_REGION: us-west-2
+  VISION_MODEL: gpt-4o
+  VISION_ENABLED: 'true'
+  EXTERNAL_GIS_ENABLED: 'true'
+  GIS_DEFAULT_RADIUS_M: '400'
+  GIS_CACHE_TTL_SECONDS: '86400'
+  RATE_LIMIT_ANALYZE_PER_MINUTE: '20'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gridline-backend
+  namespace: gridline
+  labels: { app: gridline, component: backend }
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels: { app: gridline, component: backend }
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxSurge: 1, maxUnavailable: 0 }
+  template:
+    metadata:
+      labels: { app: gridline, component: backend }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: backend
+          image: ghcr.io/chargebotic/gridline-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - { name: http, containerPort: 8000 }
+          envFrom:
+            - configMapRef: { name: gridline-config }
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: database-url }
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: openai-api-key }
+            - name: S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: s3-access-key-id }
+            - name: S3_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: s3-secret-access-key }
+            - name: ADMIN_API_KEY
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: admin-api-key }
+          resources:
+            requests: { cpu: 200m, memory: 384Mi }
+            limits: { cpu: '1', memory: 1Gi }
+          # /health touches the database; /ready is the gate for traffic.
+          livenessProbe:
+            httpGet: { path: /health, port: http }
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet: { path: /ready, port: http }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          # A vision call can take tens of seconds; do not cut it off mid-flight.
+          lifecycle:
+            preStop:
+              exec: { command: ['sleep', '10'] }
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ['ALL'] }
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      terminationGracePeriodSeconds: 90
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gridline-frontend
+  namespace: gridline
+  labels: { app: gridline, component: frontend }
+spec:
+  replicas: 2
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels: { app: gridline, component: frontend }
+  template:
+    metadata:
+      labels: { app: gridline, component: frontend }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: frontend
+          image: ghcr.io/chargebotic/gridline-frontend:latest
+          ports:
+            - { name: http, containerPort: 3000 }
+          env:
+            - name: NEXT_PUBLIC_API_BASE_URL
+              value: http://gridline-backend.gridline.svc.cluster.local:8000
+          resources:
+            requests: { cpu: 100m, memory: 192Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+          readinessProbe:
+            httpGet: { path: /, port: http }
+            initialDelaySeconds: 8
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ['ALL'] }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gridline-backend
+  namespace: gridline
+spec:
+  selector: { app: gridline, component: backend }
+  ports:
+    - { name: http, port: 8000, targetPort: http }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gridline-frontend
+  namespace: gridline
+spec:
+  selector: { app: gridline, component: frontend }
+  ports:
+    - { name: http, port: 3000, targetPort: http }
+---
+# Schema migrations run as a Job before the rollout, not in an init container:
+# three replicas racing `alembic upgrade` is a deadlock waiting to happen.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gridline-migrate
+  namespace: gridline
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+      containers:
+        - name: migrate
+          image: ghcr.io/chargebotic/gridline-backend:latest
+          command: ['alembic', 'upgrade', 'head']
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef: { name: gridline-secrets, key: database-url }
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: gridline-backend
+  namespace: gridline
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gridline-backend
+  minReplicas: 3
+  maxReplicas: 12
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 70 } }
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: gridline-backend
+  namespace: gridline
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels: { app: gridline, component: backend }
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gridline
+  namespace: gridline
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # Field photos from a modern phone are several megabytes before the client
+    # downscales them.
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '120'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [gridline.chargebotic.com]
+      secretName: gridline-tls
+  rules:
+    - host: gridline.chargebotic.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: gridline-backend
+                port: { number: 8000 }
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gridline-frontend
+                port: { number: 3000 }
