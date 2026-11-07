@@ -188,6 +188,19 @@ Robotic combat vehicle (e.g., with Starlink + acoustic sensor) drives 10km into 
 
 ---
 
+## Market signal: combat line perching (Nov 4 2026) — NDA ONLY, never public
+
+- Source: Serhii "Flash" Beskrestnov (EW advisor to Ukrainian govt), reposted by @wartranslated (4.7K likes, 941 bookmarks, 98 replies) and @Maks_NAFO_FELLA. Claim: Russia copied a Ukrainian tactic and now perches "waiter" (ambush) drones on high-voltage lines. Single source, video unverified.
+- Both sides now perch on lines in combat. No evidence either side harvests power. They appear to use the line as a high ambush perch only.
+- Top question in replies (about a dozen times): "Can they charge there?" Nobody in the thread answered. We are the answer: lab-validated 50 to 150 W by induction.
+- Misconceptions to correct in our content: "you need two poles to recharge" (induction works on one conductor); "battery won't last" (that is the problem we solve).
+- Skepticism to pre-empt: "AI video", icing in winter, visible and easy to shoot, fiber-optic tether tangling.
+- Prior art people cited: MIT Moore 2009 (CSAIL power-line perching), SDU arXiv 2403.06533 (2024, "vampire drone", Fast Company). The idea is not ownable. Moat = harvester performance, attach, tether-to-DC-bus integration (Chariot Amphora), NDAA-compliant supply, metering, utility relationships.
+- New demand surfaced: counter-perch (detect/remove foreign objects on lines) and grid-sabotage fear. Utilities (Terna) will care. Position Kestrel as the known, authorized, metered device on the line.
+- Use: private DoD, Chariot, investor, and Ukraine conversations. Never on site, deck, or posts (rule 5).
+
+---
+
 ## What NOT to confuse
 
 - The company is **Chargebotic Inc** — not Wirebird (that was a temporary concept name, no longer used)
